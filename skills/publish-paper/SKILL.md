@@ -23,11 +23,15 @@ Also create `CLAUDE.md` containing `@AGENTS.md`.
 ### 4. Organize (if needed)
 If the repo is messy, propose reorganizing into `paper/`, `code/`, `data/` directories. Only do this with researcher approval.
 
-### 5. Tag a release
+### 5. Create a GitHub Release
 Once the researcher approves:
 ```bash
 git add AGENTS.md CLAUDE.md
 git commit -m "Add paper agent"
 git tag -a v1.0.0 -m "Paper agent v1.0.0"
 ```
-**Ask for confirmation** before pushing to remote.
+**Ask for confirmation** before pushing and creating the release:
+```bash
+git push origin main --tags
+gh release create v1.0.0 --title "v1.0.0" --notes "Paper agent publication"
+```

@@ -4,7 +4,7 @@
 
 ## What
 
-Publish your paper repo with an `AGENTS.md` file. That file tells any AI coding agent how to represent your work. Tag a release → it's published.
+Publish your paper repo with an `AGENTS.md` file. Create a GitHub Release. Now any AI coding agent can represent your work.
 
 APP builds on [agents.md](https://agents.md) (the cross-platform standard, 25+ tools) and is inspired by [MCP](https://modelcontextprotocol.io).
 
@@ -12,17 +12,37 @@ APP builds on [agents.md](https://agents.md) (the cross-platform standard, 25+ t
 
 A published paper should come with an agent that can explain the work, reproduce results, and discuss with other paper agents. Today there's no convention for this.
 
+## Get Started
+
+Install the `/publish-paper` plugin — it walks you through everything interactively:
+
+```bash
+# Claude Code
+claude plugin marketplace add https://github.com/LionSR/PaperProtocol.git
+claude plugin install paper-protocol@paper-protocol
+
+# Codex
+git clone https://github.com/LionSR/PaperProtocol.git ~/.codex/paper-protocol
+ln -s ~/.codex/paper-protocol/skills/publish-paper ~/.agents/skills/publish-paper
+
+# Other tools
+git clone https://github.com/LionSR/PaperProtocol.git
+# Point your tool at the skills/ directory
+```
+
+Then run `/publish-paper` in your coding agent. It will:
+1. Read your repo and discuss what to include
+2. Create `AGENTS.md` — the agent definition
+3. Create `CLAUDE.md` containing `@AGENTS.md` (for Claude Code compatibility)
+4. Create a GitHub Release
+
 ## The Protocol
 
-### 1. Add `AGENTS.md` to your paper repo
+What `/publish-paper` does under the hood:
 
-Your paper repo already has code, data, LaTeX — whatever. Just add `AGENTS.md` at the root. That's the agent definition.
+### AGENTS.md
 
-For Claude Code compatibility, also add `CLAUDE.md` containing `@AGENTS.md`.
-
-### 2. AGENTS.md format
-
-Standard Markdown (compatible with agents.md). Optional YAML frontmatter for machine-readable metadata — most tools ignore it gracefully, but the protocol works without it:
+The core of the protocol. One file at the repo root that tells any coding agent how to represent your paper. Standard Markdown (compatible with agents.md). Optional YAML frontmatter for machine-readable metadata:
 
 ```markdown
 ---
@@ -61,50 +81,27 @@ IMPORTANT: Warn the user BEFORE attempting heavy computation.
 [bibtex]
 ```
 
-Sections are flexible — add what makes sense for your paper. The above are recommended.
+Sections are flexible — add what makes sense for your paper.
 
-### 3. Tag a release
+### GitHub Release
 
-```bash
-git tag -a v1.0.0 -m "Paper agent v1.0.0"
-git push origin main --tags
-```
+A published version is a GitHub Release (which creates a git tag). The `version` in AGENTS.md frontmatter should match the release tag. Main branch keeps evolving; the release is the frozen published version.
 
-The `version` in AGENTS.md frontmatter should match the tag. Main branch keeps evolving; the tag is the frozen published version. Readers clone a specific tag.
-
-### 4. Others use it
+### Using a published paper
 
 | Method | How |
 |--------|-----|
-| **Direct** | `git clone --branch v1.0.0 <url>` then open in any coding agent |
+| **Direct** | Clone the release, open in any coding agent — it reads AGENTS.md |
 | **Sub-agent** | Clone into a subfolder of your project; the nested AGENTS.md is picked up |
 | **Group** | Multiple paper repos as subfolders with an orchestrator AGENTS.md |
 
-### 5. Optional extras
+### Optional extras
 
-These are NOT required. Add them if they help:
+Not required. Add them if they help:
 
-- **`skills/`** — Agent capabilities as SKILL.md files (same format as [leanprover/skills](https://github.com/leanprover/skills)). E.g., figure-generation, presentation, domain-specific skills.
-- **`environment/`** — Dependencies file + platform metadata for reproducibility.
-- **`code/`**, **`data/`** — Organized source code and datasets.
-
-## Publishing Tools
-
-Install the `/publish-paper` skill to get an interactive assistant that helps create your AGENTS.md and organize your repo:
-
-```bash
-# Claude Code
-claude plugin marketplace add https://github.com/LionSR/PaperProtocol.git
-claude plugin install paper-protocol@paper-protocol
-
-# Codex
-git clone https://github.com/LionSR/PaperProtocol.git ~/.codex/paper-protocol
-ln -s ~/.codex/paper-protocol/skills/publish-paper ~/.agents/skills/publish-paper
-
-# Other tools
-git clone https://github.com/LionSR/PaperProtocol.git
-# Point your tool at the skills/ directory
-```
+- **`skills/`** — Agent capabilities as SKILL.md files (same format as [leanprover/skills](https://github.com/leanprover/skills))
+- **`environment/`** — Dependencies file + platform metadata
+- **`code/`**, **`data/`** — Organized source code and datasets
 
 ## Future Directions
 

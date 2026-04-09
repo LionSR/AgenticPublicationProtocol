@@ -2,17 +2,11 @@
 
 **Publish papers as AI agents.**
 
-Add `AGENTS.md` to your paper repo. Tag a release. Now any AI coding agent can represent your work.
+Add `AGENTS.md` to your paper repo. Create a GitHub Release. Now any AI coding agent can represent your work.
 
-## Quick Start
+## Publish your paper
 
-### Publish your paper
-
-1. Add `AGENTS.md` to your paper repo (see [template](template/AGENTS.md))
-2. Add `CLAUDE.md` containing `@AGENTS.md`
-3. `git tag -a v1.0.0 -m "Paper agent v1.0.0" && git push --tags`
-
-Or install the `/publish-paper` skill for an interactive assistant:
+Install the `/publish-paper` skill — it walks you through everything interactively:
 
 ```bash
 # Claude Code
@@ -26,19 +20,20 @@ ln -s ~/.codex/paper-protocol/skills/publish-paper ~/.agents/skills/publish-pape
 # Other tools — clone and point at skills/
 ```
 
-### Use a published paper
+Then run `/publish-paper` in your coding agent.
+
+## Use a published paper
 
 ```bash
-git clone --branch v1.0.0 https://github.com/author/their-paper.git
+git clone https://github.com/author/their-paper.git
 # Open in Claude Code, Codex, Cursor, etc. — agent reads AGENTS.md
 ```
 
 ## What's in this repo
 
 - [PROTOCOL.md](PROTOCOL.md) — the spec
-- [skills/](skills/) — publishing skills (`/publish-paper`, `/load-paper-agent`)
-- [template/](template/) — starter files for a new publication
-- [.claude-plugin/](.claude-plugin/) + [.codex/](.codex/) — cross-platform install metadata
+- [skills/](skills/) — `/publish-paper` and `/load-paper-agent`
+- [template/](template/) — starter `AGENTS.md` and `CLAUDE.md`
 
 ## License
 
