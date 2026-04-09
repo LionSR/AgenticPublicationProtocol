@@ -1,11 +1,11 @@
 {
   "name": "paper-protocol",
-  "description": "Publish academic papers as AI agents following the Agentic Publication Protocol",
+  "description": "Publish academic papers as AI agents",
   "version": "0.1.0",
   "author": {
-    "name": "Paper Protocol"
+    "name": "LionSR"
   },
-  "repository": "https://github.com/LionSR/PaperProtocol",
+  "repository": "https://github.com/LionSR/AgenticPublicationProtocol",
   "license": "MIT",
-  "keywords": ["paper", "publication", "agent", "research", "reproducibility"]
+  "keywords": ["paper", "publication", "agent", "research"]
 }

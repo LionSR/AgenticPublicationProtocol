@@ -4,23 +4,34 @@
 
 Add `AGENTS.md` to your paper repo. Create a GitHub Release. Now any AI coding agent can represent your work.
 
-## Publish your paper
+Works with [Claude Code](https://claude.ai/claude-code), [Codex](https://github.com/openai/codex), and [OpenCode](https://github.com/opencode-ai/opencode).
 
-Install the `/publish-paper` skill — it walks you through everything interactively:
+## Quick Start
 
-```bash
-# Claude Code
-claude plugin marketplace add https://github.com/LionSR/PaperProtocol.git
-claude plugin install paper-protocol@paper-protocol
+**Claude Code:**
 
-# Codex
-git clone https://github.com/LionSR/PaperProtocol.git ~/.codex/paper-protocol
-ln -s ~/.codex/paper-protocol/skills/publish-paper ~/.agents/skills/publish-paper
-
-# Other tools — clone and point at skills/
+```
+/plugin marketplace add LionSR/AgenticPublicationProtocol
+```
+```
+/plugin install paper-protocol@paper-protocol
 ```
 
-Then run `/publish-paper` in your coding agent.
+Then type `/publish-paper` and follow the interactive workflow.
+
+## Installation (Other Platforms)
+
+### Codex
+
+Tell Codex:
+
+```
+Fetch and follow instructions from https://raw.githubusercontent.com/LionSR/AgenticPublicationProtocol/refs/heads/main/.codex/INSTALL.md
+```
+
+### Other tools
+
+Clone and point your tool at the `skills/` directory.
 
 ## Use a published paper
 
@@ -32,6 +43,7 @@ git clone https://github.com/author/their-paper.git
 ## What's in this repo
 
 - [PROTOCOL.md](PROTOCOL.md) — the spec
+- [VISION.md](VISION.md) — ideas and future directions
 - [skills/](skills/) — `/publish-paper` and `/load-paper-agent`
 - [template/](template/) — starter `AGENTS.md` and `CLAUDE.md`
 

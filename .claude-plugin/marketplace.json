@@ -1,13 +1,14 @@
 {
   "name": "paper-protocol",
   "owner": {
-    "name": "Paper Protocol"
+    "name": "LionSR"
   },
   "plugins": [
     {
       "name": "paper-protocol",
-      "source": "./",
-      "description": "Publish academic papers as AI agents"
+      "description": "Publish academic papers as AI agents",
+      "version": "0.1.0",
+      "source": "./"
     }
   ]
 }

@@ -16,19 +16,12 @@ A published paper should come with an agent that can explain the work, reproduce
 
 Install the `/publish-paper` plugin — it walks you through everything interactively:
 
-```bash
-# Claude Code
-claude plugin marketplace add https://github.com/LionSR/PaperProtocol.git
-claude plugin install paper-protocol@paper-protocol
-
-# Codex
-git clone https://github.com/LionSR/PaperProtocol.git ~/.codex/paper-protocol
-ln -s ~/.codex/paper-protocol/skills/publish-paper ~/.agents/skills/publish-paper
-
-# Other tools
-git clone https://github.com/LionSR/PaperProtocol.git
-# Point your tool at the skills/ directory
 ```
+/plugin marketplace add LionSR/AgenticPublicationProtocol
+/plugin install paper-protocol@paper-protocol
+```
+
+Then run `/publish-paper`. See [README](README.md) for Codex and OpenCode installation.
 
 Then run `/publish-paper` in your coding agent. It will:
 1. Read your repo and discuss what to include
