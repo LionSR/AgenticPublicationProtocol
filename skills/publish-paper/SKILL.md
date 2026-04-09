@@ -97,7 +97,7 @@ cd <repo-name>
 mkdir <repo-name> && cd <repo-name> && git init
 ```
 
-The researcher can push to GitHub later in step 10.
+The researcher can push to GitHub later in step 11.
 
 ### 4. Copy and organize selected files
 
@@ -208,52 +208,85 @@ Generate `AGENTS.md` at the publication repo root. This is the most important fi
 
 Also create `CLAUDE.md` containing `@AGENTS.md` (Claude Code import syntax).
 
-**Self-check the AGENTS.md before moving on:**
+**Self-check the AGENTS.md before showing it to the researcher:**
 - Verify every file path in the Repository Map exists in the publication repo
 - Run every command in the figure generation table
 - Confirm computational requirements are accurate
-- Read the Paper Summary as if you've never seen this paper — does it convey the key contribution?
 
-Fix any issues found.
+Fix any mechanical issues found.
 
-### 7. Create README
+### 7. Iterate on the AGENTS.md with the researcher
 
-Write a README.md for the publication repo:
+Show the researcher the draft AGENTS.md and discuss it with them. This is not a rubber-stamp review — it's a conversation about what the agent should convey.
+
+**Focus on substance, not formatting:**
+- **Paper Summary**: Does it capture what makes this work distinctive? Push back on generic language — "we propose a novel method" says nothing. What specifically is the insight? What would the authors say at a whiteboard that they wouldn't write in the abstract?
+- **Key Results**: Are these the results the authors are most proud of, or just the ones that are easiest to describe? Ask: "If someone remembers one thing from this paper, what should it be?"
+- **What You Can Do / Extend the work**: What questions do the authors wish people would ask? What variations would be interesting? This is where the agent becomes more than a paper reader — it becomes a collaborator.
+
+**Ask directly:**
+- "What do you want people to take away from this work?"
+- "What's the thing that's hard to get from just reading the paper?"
+- "Is there anything the agent should say that isn't in the paper itself — context, motivation, what you tried that didn't work?"
+
+Revise the AGENTS.md based on their feedback. Go back and forth until the researcher is satisfied that the agent represents their intent, not just their words.
+
+### 8. Create README
+
+Do NOT carry over the working repo's README. Write a fresh README for the publication — it's for readers who want to use the paper agent, not for the original developers.
 
 ```markdown
 # [Paper Title]
 
-## Structure
-- `paper/` — LaTeX source and compiled PDF
-- `code/` — [what the code does]
-- `data/` — [what data is included]
+[Authors, affiliations]
 
-## Reproducing results
+[1-2 sentence summary of the paper]
 
-### Setup
-[how to install dependencies]
+[Link to arXiv / DOI / PDF if available]
 
-### Figures
+## Talk to this paper
+
+This paper is published with an AI agent ([Agentic Publication Protocol](https://github.com/LionSR/AgenticPublicationProtocol)). Clone this repo and open it in an AI coding agent to ask questions, reproduce figures, and explore the work.
+
+**Claude Code:**
+Clone and open in Claude Code — it reads AGENTS.md automatically. Or use the load skill:
+> /load-paper-agent https://github.com/<owner>/<repo>
+
+**Codex / other agents:**
+Clone and open — any agent that reads AGENTS.md or README will pick up the paper context.
+
+## Figures
 
 | Figure in paper | Script | Data | Output |
 |-----------------|--------|------|--------|
 | Fig 1 (description) | `code/scripts/fig1.py` | `data/results.csv` | `paper/figures/fig1.pdf` |
 | Fig 2 (description) | `code/scripts/fig2.py` | `data/sim_output.h5` | `paper/figures/fig2.pdf` |
 
-### Tests
-[how to run the test suite, if one exists]
+## Reproducing results
+
+### Setup
+[how to install dependencies — platform-agnostic]
+
+### Run figures
+[commands]
 
 ### Full experiment
 [how to run from scratch, if applicable]
+
+## Citation
+
+\`\`\`bibtex
+[bibtex entry]
+\`\`\`
 ```
 
-### 8. Extract research context (optional)
+### 9. Extract research context (optional)
 
 Ask the researcher if they want to include research context from their Claude Code / Codex conversation history. This captures the reasoning behind the work so the published agent can answer "why did you do X?" from real reasoning.
 
 If yes, follow the `/extract-context` skill. Run it in the **working repo** (that's where the sessions are), then copy the output into the publication repo's `context/` directory.
 
-### 9. Final review with the researcher
+### 10. Final review with the researcher
 
 Before releasing, the researcher must review and approve:
 
@@ -264,7 +297,7 @@ Before releasing, the researcher must review and approve:
 
 Do NOT proceed until the researcher explicitly confirms.
 
-### 10. Release
+### 11. Release
 
 After the researcher approves:
 ```bash
