@@ -131,6 +131,7 @@ A published version is a GitHub Release (which creates a git tag). The `version`
 
 Not required. Add them if they help:
 
+- **`context/`** — Research context extracted from conversation histories. Can include a distilled `research-notes.md` (key decisions and reasoning) and/or `sessions/` with curated or raw conversation logs. Gives the agent access to the *why* behind the work, not just the *what*.
 - **`skills/`** — Agent capabilities as SKILL.md files (same format as [leanprover/skills](https://github.com/leanprover/skills))
 - **`environment/`** — Dependencies file + platform metadata
 - **`code/`**, **`data/`** — Organized source code and datasets

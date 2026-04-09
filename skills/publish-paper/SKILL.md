@@ -44,14 +44,32 @@ Generate `AGENTS.md` at repo root. Use the template at `template/AGENTS.md` as a
 
 Also create `CLAUDE.md` containing `@AGENTS.md` (Claude Code import syntax).
 
-### 4. Organize (if needed)
+### 4. Extract research context (optional)
+
+Ask the researcher if they want to include research context from their conversation history. This captures the reasoning behind the work — key decisions, methodology choices, debugging insights — so the published agent can answer "why did you do X?" from real reasoning.
+
+Offer three levels:
+
+- **Gist** — Extract and distill a short `context/research-notes.md` summarizing key decisions, what was tried, what worked, what didn't. The researcher reviews and edits before publishing.
+- **Cleaned history** — Export relevant conversation sessions, remove private/irrelevant parts, save to `context/sessions/`. The researcher curates which sessions to include.
+- **Full history** — Raw conversation dumps in `context/sessions/`. Maximum transparency.
+
+The researcher can also decline entirely — context is optional.
+
+If the researcher chooses to include context:
+1. Use the conversation history extraction approach (similar to sci-brain's conversation-dump) to find sessions related to this paper
+2. For **gist**: read the sessions, extract key decisions and reasoning into a concise markdown summary
+3. For **cleaned/full history**: export the sessions, let the researcher review and remove anything private
+4. Add a line to AGENTS.md: `For deeper context on the research process, read the files in context/`
+
+### 5. Organize (if needed)
 
 If the repo is messy, propose reorganizing. Only with researcher approval. Common structure:
 - `paper/` — source + compiled PDF + figures
 - `code/` — scripts, src
 - `data/` — datasets
 
-### 5. Create a GitHub Release
+### 6. Create a GitHub Release
 
 Once the researcher approves:
 ```bash

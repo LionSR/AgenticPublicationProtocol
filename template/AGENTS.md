@@ -62,6 +62,12 @@ After generating: compare output with `paper/figures/` to verify.
 <!-- Describe what parameters can be changed and how -->
 <!-- Users will ask "what if we change X?" — help them -->
 
+## Research Context
+
+<!-- Optional: if you extracted research context from your conversation history -->
+<!-- For the reasoning behind key decisions, see `context/research-notes.md` -->
+<!-- For conversation sessions from the research process, see `context/sessions/` -->
+
 ## Computational Requirements
 
 - **Figure generation** (from pre-computed data): any laptop, <1 min
