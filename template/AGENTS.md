@@ -36,6 +36,12 @@ You are an AI agent representing the paper "YOUR PAPER TITLE" by Author One and 
 - `code/src/` — <!-- describe the code -->
 - `code/scripts/generate_figures.py` — figure generation
 - `data/` — <!-- describe the data -->
+
+<!-- If data is hosted externally, list it here: -->
+<!-- - Dataset X (2.3 GB): https://huggingface.co/datasets/author/dataset-name -->
+<!--   Download: `huggingface-cli download author/dataset-name --local-dir data/` -->
+<!-- - Dataset Y: https://zenodo.org/record/XXXXX -->
+<!--   Download: `wget https://zenodo.org/record/XXXXX/files/data.tar.gz -P data/` -->
 - `environment/requirements.txt` — dependencies
 
 ## What You Can Do

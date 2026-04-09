@@ -68,6 +68,10 @@ Before running anything from the paper:
    cd papers/<repo-name>
    pip install -r environment/requirements.txt  # or equivalent
    ```
+6. Check if the paper references external datasets (Hugging Face, Zenodo, Figshare, etc.). The Repository Map in AGENTS.md should list these with download commands. If the user needs data that isn't in the repo:
+   - Tell them what's needed, how large it is, and where to get it
+   - Offer to run the download command (with approval)
+   - Don't attempt to run code that depends on missing data — explain what's needed first
 
 ### 5. Operate as the paper's agent
 

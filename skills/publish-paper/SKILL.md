@@ -29,6 +29,12 @@ Read the repo thoroughly before asking the researcher anything. Build a mental m
 - Is there data in the repo? How large?
 - Is it raw data, processed data, or both?
 - Are there external data sources referenced?
+- Is large data hosted externally? Check for references to:
+  - Hugging Face (`huggingface.co/datasets/...`)
+  - Zenodo (`zenodo.org/record/...`)
+  - Figshare, Dryad, Materials Project, or other domain repositories
+  - Google Drive, Dropbox, or cloud storage links
+- For any external data, note the URL and how to download it
 
 **Environment:**
 - What platform was this developed on? Check for OS-specific code
@@ -79,6 +85,12 @@ Generate `AGENTS.md` at repo root. Use the template at `template/AGENTS.md` as a
 - Group by function: paper source, figure generation, experiments, data, config
 - Include file paths relative to repo root
 - Note which files are entry points vs. supporting
+- For external data (Hugging Face, Zenodo, Figshare, etc.), document:
+  - What the dataset is and its size
+  - The URL
+  - The exact download command (e.g. `huggingface-cli download ...`, `wget ...`, `zenodo_get ...`)
+  - Where to put it locally (e.g. `data/`)
+  - Whether it's required for basic usage (figures) or only for full reproduction
 
 **Writing "What You Can Do":**
 - **Explain the paper**: which files to read for which sections, how the paper is structured
