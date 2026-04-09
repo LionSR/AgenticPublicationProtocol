@@ -50,17 +50,64 @@ Ask the researcher if they want to include research context from their conversat
 
 Offer three levels:
 
-- **Gist** — Extract and distill a short `context/research-notes.md` summarizing key decisions, what was tried, what worked, what didn't. The researcher reviews and edits before publishing.
-- **Cleaned history** — Export relevant conversation sessions, remove private/irrelevant parts, save to `context/sessions/`. The researcher curates which sessions to include.
-- **Full history** — Raw conversation dumps in `context/sessions/`. Maximum transparency.
+- **Gist** — Distill a `context/research-notes.md` summarizing key decisions, what was tried, what worked, what didn't.
+- **Cleaned history** — Export conversation sessions into structured markdown, cleaned up for readability.
+- **Full history** — Raw conversation dumps, minimally processed.
 
 The researcher can also decline entirely — context is optional.
 
-If the researcher chooses to include context:
-1. Use the conversation history extraction approach (similar to sci-brain's conversation-dump) to find sessions related to this paper
-2. For **gist**: read the sessions, extract key decisions and reasoning into a concise markdown summary
-3. For **cleaned/full history**: export the sessions, let the researcher review and remove anything private
-4. Add a line to AGENTS.md: `For deeper context on the research process, read the files in context/`
+**How to extract and clean up:**
+
+1. Find relevant sessions from Claude Code / Codex conversation history related to this paper
+2. For each session, produce a structured markdown file in `context/sessions/`:
+
+```markdown
+# Session: [descriptive title]
+
+Date: YYYY-MM-DD
+Topic: [what this session was about]
+
+## Key decisions
+- [Decision 1 — what was decided and why]
+- [Decision 2]
+
+## Conversation
+
+**Researcher:** [cleaned-up message — fix typos, remove tangents, keep substance]
+
+**Agent:** [summarized response — keep the key information, trim verbose output]
+
+**Researcher:** [next message]
+
+...
+```
+
+3. Guide the researcher through each session:
+   - Show them the raw conversation
+   - Help them decide: keep, summarize, or skip
+   - Remove private content (API keys, personal info, unrelated tangents)
+   - Clean up messages for readability while preserving the reasoning
+   - Add a "Key decisions" header at the top of each session summarizing what came out of it
+
+4. For **gist** level: after cleaning sessions, further distill everything into a single `context/research-notes.md`:
+
+```markdown
+# Research Notes
+
+## Methodology decisions
+- [Why we chose approach X over Y]
+- [What didn't work and why]
+
+## Key insights during development
+- [Insight 1 — from session Z]
+- [Insight 2]
+
+## Known limitations and future ideas
+- [Limitation the researcher is aware of]
+- [Idea that didn't make it into the paper]
+```
+
+5. Add to AGENTS.md: `For deeper context on the research process, see context/`
 
 ### 5. Organize (if needed)
 
