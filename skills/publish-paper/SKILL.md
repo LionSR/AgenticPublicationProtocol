@@ -13,7 +13,7 @@ Help a researcher add an AI agent to their paper repo following the Agentic Publ
 Read the repo. Find the paper source, code, data, figures.
 
 ### 2. Discuss with the researcher
-Ask: What is this paper about? What are the key results? What code/data should be included? What computational resources are needed?
+Ask: What is this paper about? What are the key results? What code/data should be included? What computational resources are needed? What should NOT be published (private working artifacts, intermediate experiments, personal notes)?
 
 ### 3. Create AGENTS.md
 Generate `AGENTS.md` at the repo root using the template from this protocol. Fill in the researcher's answers. The AGENTS.md is the agent — it defines the paper's spokesperson.

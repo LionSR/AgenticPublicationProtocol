@@ -103,12 +103,23 @@ Not required. Add them if they help:
 - **`environment/`** — Dependencies file + platform metadata
 - **`code/`**, **`data/`** — Organized source code and datasets
 
-## Future Directions
+## Vision
 
-- Multi-agent discussion via Slack channels or orchestrators
-- Research group agents representing a full body of work
-- Paper agents as MCP servers
+**Quick follow-up**: Clone a paper agent and immediately build on the work — no days spent reproducing someone's setup.
+
+**Multi-agent discussion**: Load two paper agents as sub-agents and let them discuss. Or put them in a Slack channel. No new protocol needed — just give them a place to chat.
+
+**Research group agents**: One meta-agent representing a group's full body of work, routing questions to the right paper agent.
+
+**Minimal publications**: No code? No problem. A repo with just `AGENTS.md` and a PDF is valid — the agent explains and discusses.
+
+## Future Work
+
+- Paper agents as MCP servers for runtime tool access
 - Benchmark integration (cf. Terminal Bench Science)
+- GitHub Pages landing page with embedded chat
+- Automated figure verification using vision models
+- Cross-platform environment adaptation (agent diagnoses why code fails on a different OS)
 
 ## License
 
