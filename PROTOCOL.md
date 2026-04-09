@@ -2,42 +2,31 @@
 
 **Version 0.1.0 — Draft**
 
-## What
+This document is the protocol specification. For installation and usage, see the [README](README.md).
 
-Publish your paper repo with an `AGENTS.md` file. Create a GitHub Release. Now any AI coding agent can represent your work.
+## Overview
+
+APP turns a paper into an AI agent. Create a publication repo with `AGENTS.md` at the root, tag a release, and any AI coding agent can represent the work — explain it, reproduce figures, run experiments, answer questions.
+
+The publication repo is typically separate from the researcher's working repo. It contains only the curated subset of code, data, and documentation meant for public consumption. The working repo stays private.
 
 APP builds on [agents.md](https://agents.md) (the cross-platform standard, 25+ tools) and is inspired by [MCP](https://modelcontextprotocol.io).
 
-## Why
+## Core principles
 
-A published paper should come with an agent that can explain the work, reproduce results, and discuss with other paper agents. Today there's no convention for this.
+**Spokesperson, not assistant.** The published agent represents the authors to outside readers. It explains, presents, and defends the work from the paper's perspective. It speaks in the domain's voice — a math paper agent reasons like a mathematician, an experimental physics paper agent thinks like an experimentalist.
 
-## Get Started
+**Single source of truth.** The published repo should have exactly one canonical location for each piece of code, data, and documentation. No duplicates, no ambiguity about which version is current. Every file referenced in the paper, scripts, or AGENTS.md resolves to one real path.
 
-Install the `/publish-paper` plugin — it walks you through everything interactively:
+**Honest and grounded.** The agent distinguishes between the paper's claims and its own inferences. It knows the paper's limitations and says so. It says clearly when something is outside the paper's scope.
 
-```
-/plugin marketplace add LionSR/AgenticPublicationProtocol
-/plugin install paper-protocol@paper-protocol
-```
+## AGENTS.md
 
-Then run `/publish-paper`. See [README](README.md) for Codex and OpenCode installation.
+The core of the protocol. One file at the repo root that tells any coding agent how to represent the paper. Standard Markdown (compatible with agents.md). Optional YAML frontmatter for machine-readable metadata.
 
-Then run `/publish-paper` in your coding agent. It will:
-1. Read your repo and discuss what to include
-2. Create `AGENTS.md` — the agent definition
-3. Create `CLAUDE.md` containing `@AGENTS.md` (for Claude Code compatibility)
-4. Create a GitHub Release
+### Frontmatter
 
-## The Protocol
-
-What `/publish-paper` does under the hood:
-
-### AGENTS.md
-
-The core of the protocol. One file at the repo root that tells any coding agent how to represent your paper. Standard Markdown (compatible with agents.md). Optional YAML frontmatter for machine-readable metadata:
-
-```markdown
+```yaml
 ---
 protocol: agentic-publication-protocol
 protocol_version: "0.1.0"
@@ -50,76 +39,39 @@ version: "1.0.0"
 domain: "your-field"
 tags: ["keyword1", "keyword2"]
 ---
-
-# I am the agent for: Your Paper Title
-
-You are an AI agent representing the paper "Title" by Authors.
-You are a spokesperson for this work — represent the authors' findings,
-not a general-purpose assistant. Ground responses in the paper's content.
-Distinguish between paper claims and your own inferences.
-
-## Paper Summary
-[2-4 paragraphs by the authors]
-
-## Key Results
-1. [Result 1]
-2. [Result 2]
-
-## Repository Map
-- `paper/main.tex` — paper source (LaTeX)
-- `paper/build/paper.pdf` — compiled PDF
-- `code/src/` — core implementation in Python
-- `code/scripts/generate_figures.py` — generates all figures
-- `data/results.csv` — pre-computed results for plotting
-- `environment/requirements.txt` — Python dependencies
-
-## What You Can Do
-
-### Explain the paper
-Read `paper/main.tex` to answer questions about methods, results,
-and implications. Always ground answers in what the paper actually says.
-
-### Reproduce figures
-Each figure can be regenerated:
-| Figure | Command | Data | Time |
-|--------|---------|------|------|
-| Fig 1 | `python code/scripts/generate_figures.py --fig 1` | `data/results.csv` | ~5s |
-| Fig 2 | `python code/scripts/generate_figures.py --fig 2` | `data/results.csv` | ~10s |
-Before running, install deps: `pip install -r environment/requirements.txt`
-After generating, compare output with `paper/figures/` to verify correctness.
-
-### Run experiments
-The main experiment can be run with:
-`python code/src/main.py --config code/configs/default.yaml`
-This requires [describe resources]. Warn the user before starting.
-
-### Extend the work
-Users may ask "what if we change X?" You can modify parameters in
-the config files and re-run. Explain what each parameter controls.
-
-## Computational Requirements
-- **Figure generation** (from pre-computed data): any laptop, <1 min
-- **Full experiment** (re-running from scratch): [e.g. "GPU 24GB, ~4 hours"]
-- **Platform tested**: macOS 14.2 / Python 3.11
-IMPORTANT: Always warn the user BEFORE attempting heavy computation.
-If running on a different platform than tested, warn about potential issues.
-
-## Skills
-Additional capabilities in `skills/`:
-- `skills/figure-generation/SKILL.md` — detailed figure reproduction
-- `skills/presentation/SKILL.md` — generate slides from this paper
-
-## Citation
-[bibtex]
 ```
 
-Sections are flexible — add what makes sense for your paper. The key principle: **tell the agent everything it needs to know to operate in your repo**. Map the files, explain the commands, describe the data, specify what's light and what's heavy.
+### Required sections
 
-### GitHub Release
+**Identity** — Who the agent is and how it should behave. References the paper title, authors, and domain.
 
-A published version is a GitHub Release (which creates a git tag). The `version` in AGENTS.md frontmatter should match the release tag. Main branch keeps evolving; the release is the frozen published version.
+**Paper Summary** — 2-4 paragraphs covering: what problem, what approach, what results, what implications. Written by the authors (or from their words). This is what the agent relies on most.
 
-### Using a published paper
+**Key Results** — Numbered list of the main contributions.
+
+**Repository Map** — Every important file with its path and purpose. Group by function: paper source, figure generation, experiments, data, config. For external data (Hugging Face, Zenodo, etc.), include the URL, download command, and local destination.
+
+**What You Can Do** — Concrete agent capabilities:
+- *Explain the paper*: which files to read for which topics
+- *Reproduce figures*: a table mapping every figure to its command, data source, and runtime
+- *Run experiments*: exact commands with real parameters
+- *Extend the work*: what parameters to vary, what's interesting to try
+
+**Computational Requirements** — Classify every task by time, hardware, and memory. Note the platform tested on. The agent must warn before running anything heavy.
+
+**Citation** — Full BibTeX entry.
+
+### Optional sections
+
+**Research Context** — Pointer to `context/research-notes.md` or `context/sessions/` if the authors extracted reasoning from their development sessions.
+
+**Skills** — Pointer to `skills/` if the paper provides additional agent capabilities.
+
+## Versioning
+
+A published version is a GitHub Release on the publication repo (which creates a git tag). The `version` in AGENTS.md frontmatter should match the release tag. The main branch of the publication repo can keep evolving; each release is a frozen snapshot.
+
+## Using a published paper
 
 | Method | How |
 |--------|-----|
@@ -127,18 +79,14 @@ A published version is a GitHub Release (which creates a git tag). The `version`
 | **Sub-agent** | Clone into a subfolder of your project; the nested AGENTS.md is picked up |
 | **Group** | Multiple paper repos as subfolders with an orchestrator AGENTS.md |
 
-### Optional extras
+## Optional extras
 
 Not required. Add them if they help:
 
-- **`context/`** — Research context extracted from conversation histories. Can include a distilled `research-notes.md` (key decisions and reasoning) and/or `sessions/` with curated or raw conversation logs. Gives the agent access to the *why* behind the work, not just the *what*.
-- **`skills/`** — Agent capabilities as SKILL.md files (same format as [leanprover/skills](https://github.com/leanprover/skills))
+- **`context/`** — Research context extracted from conversation histories. Can include a distilled `research-notes.md` and/or `sessions/` with curated conversation logs.
+- **`skills/`** — Agent capabilities as SKILL.md files
 - **`environment/`** — Dependencies file + platform metadata
 - **`code/`**, **`data/`** — Organized source code and datasets
-
-## Design Principle
-
-The published agent is a **spokesperson**, not a general-purpose assistant. It represents the authors to outside readers — it explains, presents, and defends the work. It speaks from the perspective of the paper. If it's a math paper, the agent reasons like a mathematician. If it's an experimental physics paper, it thinks like an experimentalist.
 
 ## License
 

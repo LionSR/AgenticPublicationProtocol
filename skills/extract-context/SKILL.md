@@ -9,7 +9,7 @@ Extract and curate conversation history from Claude Code or Codex sessions into 
 
 ## When to use
 
-- During `/publish-paper` when the researcher wants to include research context
+- During `/publish-paper` when the researcher wants to include research context — run this in the **working repo** (where the sessions are), then copy output to the publication repo
 - Standalone when a researcher wants to document their reasoning process
 - When preparing supplementary material for a paper
 
