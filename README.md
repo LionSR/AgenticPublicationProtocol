@@ -2,7 +2,7 @@
 
 **Publish papers as AI agents.**
 
-Add `AGENTS.md` to your paper repo. Create a GitHub Release. Now any AI coding agent can represent your work.
+Create a publication repo with `AGENTS.md`. Tag a release. Now any AI coding agent can represent your work.
 
 Works with [Claude Code](https://claude.ai/claude-code), [Codex](https://github.com/openai/codex), and [OpenCode](https://github.com/opencode-ai/opencode).
 
@@ -35,6 +35,12 @@ Clone and point your tool at the `skills/` directory.
 
 ## Use a published paper
 
+**Claude Code** (with plugin installed):
+```
+/load-paper-agent https://github.com/author/their-paper
+```
+
+**Any agent:**
 ```bash
 git clone https://github.com/author/their-paper.git
 # Open in Claude Code, Codex, Cursor, etc. — agent reads AGENTS.md

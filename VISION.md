@@ -22,6 +22,5 @@ When code is included, the agent should understand the computational environment
 
 - Paper agents as MCP servers for runtime tool access
 - Benchmark integration (cf. Terminal Bench Science)
-- GitHub Pages landing page with embedded chat
 - Automated figure verification using vision models
 - Cross-platform environment adaptation
