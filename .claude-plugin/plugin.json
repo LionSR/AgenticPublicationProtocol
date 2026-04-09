@@ -1,0 +1,12 @@
+{
+  "name": "paper-protocol",
+  "description": "Publish academic papers as AI agents following the Paper Publication Protocol",
+  "version": "0.1.0",
+  "author": {
+    "name": "Paper Protocol"
+  },
+  "homepage": "https://github.com/paper-protocol/skills",
+  "repository": "https://github.com/paper-protocol/skills",
+  "license": "MIT",
+  "keywords": ["paper", "publication", "agent", "research", "reproducibility"]
+}

@@ -1,0 +1,14 @@
+{
+  "os_tested": "",
+  "os_compatibility": ["macOS", "Linux"],
+  "language": "python",
+  "language_version": "",
+  "package_manager": "pip",
+  "gpu_required": false,
+  "heavy_computation": {
+    "figure_generation": {
+      "time": "",
+      "requires": "any laptop"
+    }
+  }
+}

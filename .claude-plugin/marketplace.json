@@ -1,0 +1,13 @@
+{
+  "name": "paper-protocol",
+  "owner": {
+    "name": "Paper Protocol"
+  },
+  "plugins": [
+    {
+      "name": "paper-protocol",
+      "source": "./",
+      "description": "Publish academic papers as AI agents"
+    }
+  ]
+}
