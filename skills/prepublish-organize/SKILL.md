@@ -14,8 +14,8 @@ The published repo should have exactly one canonical location for each piece of 
 ## When to use
 
 - Standalone when a researcher wants to clean up a repo for collaborators or archival
-- On a publication repo after `/publish-paper` has copied files into it
 - When inheriting someone else's messy project
+- When organizing a repo in place (as opposed to `/publish-paper`, which creates a separate publication repo)
 
 ## Process
 

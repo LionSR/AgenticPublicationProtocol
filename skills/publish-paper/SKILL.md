@@ -7,6 +7,8 @@ description: Create an AI agent for an academic paper following the Agentic Publ
 
 Create a publication repo for a paper — a clean, public repo with an AGENTS.md that turns it into an AI agent. The researcher's working repo may be private and messy; the publication repo is a curated subset meant for public consumption.
 
+Every step involves the researcher. This is a collaborative process — inform them what you're doing, show them what you find, and get their input before moving on.
+
 ## Process
 
 ### 1. Understand the paper
@@ -50,9 +52,11 @@ For each figure in the paper:
 **What's missing:**
 - Is there anything you can't figure out from reading the repo? Note questions for step 2.
 
+**Tell the researcher** what you found — present your understanding of the repo structure, the paper, and the code. Show them the script→figure mapping. This demonstrates you've done the homework and gives them a chance to correct misunderstandings early.
+
 ### 2. Discuss with the researcher
 
-Present your understanding of the repo first — show them you've done the homework. Then ask about gaps (one or two questions at a time, not all at once):
+Ask about gaps and intent (one or two questions at a time, not all at once):
 
 **About the paper:**
 - What are the key results? (Ask them to state it in their own words — this becomes the Paper Summary)
@@ -68,13 +72,20 @@ Present your understanding of the repo first — show them you've done the homew
 
 **About what to publish:**
 - Which files should go into the publication repo? Which should stay private?
-- Is there anything in the conversation history they want to include as research context?
 - What would a reader most likely want to do? (reproduce figures? extend? understand the math? run with different inputs?)
 - What should the publication repo be called?
 
-### 3. Create the publication repo
+### 3. Extract research context (optional)
 
-Create a new repo for the publication. This is separate from the working repo — it contains only what the researcher chose to share.
+Ask the researcher if they want to include research context from their Claude Code / Codex conversation history. This captures the reasoning behind the work — why they made certain choices, what they tried that didn't work, key insights during development. This context is valuable for writing the AGENTS.md later (steps 7-8), because the agent can answer "why did you do X?" from real reasoning rather than guessing.
+
+If yes, follow the `/extract-context` skill. Run it in the **working repo** (that's where the sessions are). The output will be copied into the publication repo later.
+
+If the researcher declines, that's fine — move on.
+
+### 4. Create the publication repo
+
+Tell the researcher you're creating the publication repo now.
 
 First check if `gh` CLI is available and authenticated:
 ```bash
@@ -99,9 +110,11 @@ mkdir <repo-name> && cd <repo-name> && git init
 
 The researcher can push to GitHub later in step 11.
 
-### 4. Copy and organize selected files
+### 5. Copy and organize selected files
 
-Copy the selected files from the working repo into the publication repo. Create the target directories first, then copy:
+Show the researcher the list of files you're about to copy and the target structure. Confirm before copying.
+
+Create the target directories first, then copy:
 
 ```bash
 # Example — adapt to what's actually being published
@@ -115,7 +128,7 @@ cp ../working-repo/data/results.csv data/
 cp ../working-repo/requirements.txt environment/
 ```
 
-Use the file list from step 2 — copy only what the researcher approved. Then organize into a clean structure:
+Use the file list from step 2 — copy only what the researcher approved. Organize into a clean structure:
 
 ```
 paper/
@@ -151,9 +164,15 @@ Adapt the structure to what's actually being published — don't force directori
 
 **Create a .gitignore** tailored to what's in the repo — cover build artifacts, generated files, sensitive files, and OS files.
 
-### 5. Verify the code works
+If research context was extracted in step 3, copy it into `context/` now.
 
-Actually run things in the publication repo to confirm they work with the new paths:
+Tell the researcher what was copied and how it's organized. Flag anything that needed special handling (large files, updated paths).
+
+### 6. Verify the code works
+
+Tell the researcher you're testing that everything works in the publication repo.
+
+Actually run things to confirm they work with the new paths:
 
 - **Paper compilation**: Run the build command and check it succeeds
 - **Figure generation**: Run each figure script and verify it produces output
@@ -161,9 +180,11 @@ Actually run things in the publication repo to confirm they work with the new pa
 - **Notebooks**: Execute in order and check for errors
 - **Imports**: Verify import paths resolve with the new structure
 
-Fix anything that broke from the copy/reorganization.
+Fix anything that broke from the copy/reorganization. Report results to the researcher — what passed, what needed fixing, what you changed.
 
-### 6. Create AGENTS.md
+### 7. Create AGENTS.md
+
+Tell the researcher you're drafting the AGENTS.md now, drawing on everything from steps 1-3.
 
 Generate `AGENTS.md` at the publication repo root. This is the most important file — it must give an agent everything it needs to operate in this repo.
 
@@ -175,6 +196,7 @@ Generate `AGENTS.md` at the publication repo root. This is the most important fi
 
 **Writing the Paper Summary:**
 - Use the researcher's own words from step 2
+- If research context was extracted in step 3, draw on it — the reasoning and motivation behind decisions
 - 2-4 paragraphs covering: what problem, what approach, what results, what implications
 - This is what the agent will rely on most — make it substantive
 
@@ -208,14 +230,14 @@ Generate `AGENTS.md` at the publication repo root. This is the most important fi
 
 Also create `CLAUDE.md` containing `@AGENTS.md` (Claude Code import syntax).
 
-**Self-check the AGENTS.md before showing it to the researcher:**
+**Self-check before showing to the researcher:**
 - Verify every file path in the Repository Map exists in the publication repo
 - Run every command in the figure generation table
 - Confirm computational requirements are accurate
 
 Fix any mechanical issues found.
 
-### 7. Iterate on the AGENTS.md with the researcher
+### 8. Iterate on the AGENTS.md with the researcher
 
 Show the researcher the draft AGENTS.md and discuss it with them. This is not a rubber-stamp review — it's a conversation about what the agent should convey.
 
@@ -231,9 +253,9 @@ Show the researcher the draft AGENTS.md and discuss it with them. This is not a 
 
 Revise the AGENTS.md based on their feedback. Go back and forth until the researcher is satisfied that the agent represents their intent, not just their words.
 
-### 8. Create README
+### 9. Create README
 
-Do NOT carry over the working repo's README. Write a fresh README for the publication — it's for readers who want to use the paper agent, not for the original developers.
+Show the researcher the README draft. The publication README is for readers who want to use the paper agent — not a copy of the working repo's README.
 
 ```markdown
 # [Paper Title]
@@ -280,26 +302,24 @@ Clone and open — any agent that reads AGENTS.md or README will pick up the pap
 \`\`\`
 ```
 
-### 9. Extract research context (optional)
+Get the researcher's feedback on the README before finalizing.
 
-Ask the researcher if they want to include research context from their Claude Code / Codex conversation history. This captures the reasoning behind the work so the published agent can answer "why did you do X?" from real reasoning.
+### 10. Final review
 
-If yes, follow the `/extract-context` skill. Run it in the **working repo** (that's where the sessions are), then copy the output into the publication repo's `context/` directory.
+Show the researcher the complete publication repo — all files, the AGENTS.md, the README, the context (if extracted). Summarize:
 
-### 10. Final review with the researcher
+- What's included and what was left out
+- What the agent will be able to do
+- What goes public when they release
 
-Before releasing, the researcher must review and approve:
-
-- Show them the complete publication repo contents
-- Show them the AGENTS.md
-- Summarize what will be published and what the agent will be able to do
-- Ask: "Does this accurately represent your paper? Is there anything to change, add, or remove?"
+Ask: "Does this accurately represent your paper? Is there anything to change, add, or remove?"
 
 Do NOT proceed until the researcher explicitly confirms.
 
 ### 11. Release
 
-After the researcher approves:
+Tell the researcher you're ready to create the release. This is the step that makes it public.
+
 ```bash
 cd <publication-repo>
 git add -A
@@ -307,7 +327,7 @@ git commit -m "Initial publication"
 git tag -a v1.0.0 -m "Paper agent v1.0.0"
 ```
 
-Ask for confirmation before pushing — this makes it public.
+Ask for confirmation before pushing.
 
 **If `gh` is available and the repo isn't on GitHub yet:**
 ```bash
@@ -324,6 +344,8 @@ gh release create v1.0.0 --title "v1.0.0" --notes "Paper agent publication"
 **If `gh` is not available**, tell the researcher:
 - Push manually: `git remote add origin <url> && git push -u origin main --tags`
 - Create the release on GitHub's web UI: Releases → Create a new release → tag `v1.0.0`
+
+Tell the researcher the publication is live and share the repo URL.
 
 ### Handling different paper types
 

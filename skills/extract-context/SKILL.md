@@ -19,15 +19,27 @@ Extract and curate conversation history from Claude Code or Codex sessions into 
 
 Ask the researcher which platform they used: Claude Code or Codex.
 
+First, find the extraction script (it's bundled with the plugin):
+```bash
+EXTRACT_SCRIPT=$(find ~/.claude/plugins -name extract_sessions.py 2>/dev/null | head -1)
+```
+
+If not found (e.g. running outside Claude Code), the script can be fetched:
+```bash
+curl -sO https://raw.githubusercontent.com/LionSR/AgenticPublicationProtocol/main/skills/extract-context/scripts/extract_sessions.py
+EXTRACT_SCRIPT=./extract_sessions.py
+```
+
+Then list sessions:
 ```bash
 # Claude Code — sessions for the current project
-python skills/extract-context/scripts/extract_sessions.py list --source claude
+python "$EXTRACT_SCRIPT" list --source claude
 
 # Claude Code — all projects
-python skills/extract-context/scripts/extract_sessions.py list --source claude --project all
+python "$EXTRACT_SCRIPT" list --source claude --project all
 
 # Codex
-python skills/extract-context/scripts/extract_sessions.py list --source codex
+python "$EXTRACT_SCRIPT" list --source codex
 ```
 
 Show the session list to the researcher. Each entry shows a timestamp, session ID, and a preview of the first user message.
@@ -44,7 +56,7 @@ Ask the researcher which sessions relate to this paper/project. They may:
 For each selected session, extract it to JSON:
 
 ```bash
-python skills/extract-context/scripts/extract_sessions.py extract --source claude --session <id>
+python "$EXTRACT_SCRIPT" extract --source claude --session <id>
 ```
 
 This outputs structured JSON with normalized user/assistant turns, system tags stripped.
