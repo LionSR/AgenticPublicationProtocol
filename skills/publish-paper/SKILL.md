@@ -124,7 +124,20 @@ The researcher can also decline entirely — context is optional.
 
 **How to extract and clean up:**
 
-1. Find relevant sessions from Claude Code / Codex conversation history related to this paper
+1. Find relevant sessions using the extraction script:
+
+```bash
+# List all Claude Code sessions for this project
+python skills/publish-paper/scripts/extract_sessions.py list --source claude
+
+# List all Codex sessions
+python skills/publish-paper/scripts/extract_sessions.py list --source codex
+
+# Extract a specific session to JSON
+python skills/publish-paper/scripts/extract_sessions.py extract --source claude --session <id>
+```
+
+Show the session list to the researcher. Let them pick which sessions are related to the paper. Extract each selected session to JSON, then convert to structured markdown:
 2. For each session, produce a structured markdown file in `context/sessions/`:
 
 ```markdown
