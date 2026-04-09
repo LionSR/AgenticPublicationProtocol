@@ -8,7 +8,7 @@
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/paper-protocol/skills.git ~/.codex/paper-protocol
+   git clone https://github.com/LionSR/PaperProtocol.git ~/.codex/paper-protocol
    ```
 
 2. **Create the skills symlinks:**
