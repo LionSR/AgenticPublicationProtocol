@@ -1,22 +1,23 @@
 # Installing for Codex
 
-Just clone and symlink.
+## Option A: Use the skill installer
 
-## Installation
+```
+$skill-installer install --repo LionSR/AgenticPublicationProtocol --path skills/publish-paper skills/load-paper-agent
+```
 
-1. **Clone:**
-   ```bash
-   git clone https://github.com/LionSR/AgenticPublicationProtocol.git ~/.codex/paper-protocol
-   ```
+Restart Codex to pick up new skills.
 
-2. **Symlink skills:**
-   ```bash
-   mkdir -p ~/.agents/skills
-   ln -s ~/.codex/paper-protocol/skills/publish-paper ~/.agents/skills/publish-paper
-   ln -s ~/.codex/paper-protocol/skills/load-paper-agent ~/.agents/skills/load-paper-agent
-   ```
+## Option B: Manual clone + symlink
 
-3. **Restart Codex** to discover the skills.
+```bash
+git clone https://github.com/LionSR/AgenticPublicationProtocol.git ~/.codex/paper-protocol
+mkdir -p ~/.codex/skills
+ln -s ~/.codex/paper-protocol/skills/publish-paper ~/.codex/skills/publish-paper
+ln -s ~/.codex/paper-protocol/skills/load-paper-agent ~/.codex/skills/load-paper-agent
+```
+
+Restart Codex to pick up new skills.
 
 ## Updating
 
@@ -27,6 +28,6 @@ cd ~/.codex/paper-protocol && git pull
 ## Uninstalling
 
 ```bash
-rm ~/.agents/skills/publish-paper ~/.agents/skills/load-paper-agent
+rm -rf ~/.codex/skills/publish-paper ~/.codex/skills/load-paper-agent
 rm -rf ~/.codex/paper-protocol
 ```
