@@ -9,6 +9,8 @@ Create a publication repo for a paper — a clean, public repo with an AGENTS.md
 
 Every step involves the researcher. This is a collaborative process — inform them what you're doing, show them what you find, and get their input before moving on.
 
+When asking the researcher to make choices, use structured question tools if the platform supports them (e.g. `AskUserQuestion` in Claude Code). Present clear options with descriptions rather than open-ended text questions. This makes the process faster and less ambiguous.
+
 ## Process
 
 ### 1. Understand the paper
@@ -71,21 +73,26 @@ Ask about gaps and intent (one or two questions at a time, not all at once):
 - Are there any scripts that take a long time? How long, on what hardware?
 
 **About what to publish:**
-- Which files should go into the publication repo? Which should stay private?
-- What would a reader most likely want to do? (reproduce figures? extend? understand the math? run with different inputs?)
+- Which files should go into the publication repo? Which should stay private? Present the file list with a structured choice for each: include / exclude / ask me later.
+- What would a reader most likely want to do? Offer options: reproduce figures, extend the work, understand the math/theory, run with different inputs.
 - What should the publication repo be called?
 
 ### 3. Extract research context (optional)
 
-Ask the researcher if they want to include research context from their Claude Code / Codex conversation history. This captures the reasoning behind the work — why they made certain choices, what they tried that didn't work, key insights during development. This context is valuable for writing the AGENTS.md later (steps 7-8), because the agent can answer "why did you do X?" from real reasoning rather than guessing.
+Ask the researcher if they want to include research context from their conversation history. Offer a structured choice:
+- **Yes — extract from sessions**: captures reasoning, decisions, dead ends from Claude Code / Codex history
+- **Yes — I'll write notes manually**: the researcher provides context themselves
+- **No — skip this**: no research context in the publication
 
-If yes, follow the `/extract-context` skill. Run it in the **working repo** (that's where the sessions are). The output will be copied into the publication repo later.
+This context is valuable for writing the AGENTS.md later (steps 7-8), because the agent can answer "why did you do X?" from real reasoning rather than guessing.
 
-If the researcher declines, that's fine — move on.
+If extracting from sessions, follow the `/extract-context` skill. Run it in the **working repo** (that's where the sessions are). The output will be copied into the publication repo later.
 
 ### 4. Create the publication repo
 
-Tell the researcher you're creating the publication repo now.
+Ask the researcher how they want to create the publication repo. Offer a structured choice:
+- **Create on GitHub now** (requires `gh` CLI)
+- **Create locally first** (push to GitHub later)
 
 First check if `gh` CLI is available and authenticated:
 ```bash

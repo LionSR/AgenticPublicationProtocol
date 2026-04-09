@@ -63,7 +63,7 @@ This outputs structured JSON with normalized user/assistant turns, system tags s
 
 ### 4. Choose the output level
 
-Offer three levels:
+Use a structured choice prompt to offer three levels:
 
 **Gist** — Distill all selected sessions into a single `context/research-notes.md`:
 

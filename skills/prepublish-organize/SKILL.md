@@ -143,7 +143,7 @@ With researcher approval, execute the reorganization:
 
 **Handle stale files:**
 - Show the researcher the list from step 2
-- Let them decide: delete, archive (move to `_archive/`), or keep
+- For each stale file (or group), offer a structured choice: delete / archive (move to `_archive/`) / keep
 - Don't delete anything without explicit approval
 
 **Handle large files:**
