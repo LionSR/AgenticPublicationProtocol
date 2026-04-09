@@ -118,12 +118,7 @@ If yes, follow the `/extract-context` skill (`skills/extract-context/SKILL.md`).
 
 ### 5. Organize (if needed)
 
-If the repo is messy, propose reorganizing. Only with researcher approval. Common structure:
-- `paper/` — source + compiled PDF + figures
-- `code/` — scripts, src, configs
-- `data/` — datasets
-- `environment/` — requirements.txt, platform info
-- `context/` — research notes and session logs
+If the repo is messy, follow the `/prepublish-organize` skill (`skills/prepublish-organize/SKILL.md`). It handles surveying the repo, proposing a clean structure, moving files, handling notebooks/large files/credentials, and verifying nothing broke.
 
 ### 6. Verify the agent works
 
