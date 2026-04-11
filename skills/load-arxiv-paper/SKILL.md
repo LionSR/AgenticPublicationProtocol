@@ -5,9 +5,7 @@ description: Load a paper directly from arXiv by ID or URL. Fetches the PDF, ext
 
 # Load Paper from arXiv
 
-Load an arXiv paper into your project by its ID or URL. This skill fetches the paper PDF and metadata directly from arXiv, sets up a local directory, and generates a starter AGENTS.md — making the paper ready for consultation even when there's no existing GitHub repo.
-
-This is useful for authors who want to bootstrap their own publication, or for anyone who wants to quickly pull in an arXiv paper for reference.
+Load an arXiv paper into your project by its ID or URL. Fetches the PDF and metadata directly from arXiv, sets up a local directory, and generates a starter AGENTS.md — useful for bootstrapping a publication or pulling in a paper for reference.
 
 ## Triggering
 
@@ -28,15 +26,18 @@ Accept any of these formats and extract the arXiv ID:
 
 Normalize to the bare ID (e.g. `2301.07041`). If a version suffix is given (e.g. `v2`), preserve it.
 
-### 2. Fetch metadata from the arXiv API
+### 2. Fetch metadata and download PDF (in parallel)
 
-Use the arXiv Atom API to retrieve paper metadata:
+Run both requests concurrently — they are independent:
 
 ```bash
-curl -s "http://export.arxiv.org/api/query?id_list=ARXIV_ID" -o /tmp/arxiv_response.xml
+mkdir -p papers/arxiv-ARXIV_ID
+curl -s "https://export.arxiv.org/api/query?id_list=ARXIV_ID" -o /tmp/arxiv_response.xml &
+curl -L "https://arxiv.org/pdf/ARXIV_ID" -o papers/arxiv-ARXIV_ID/paper.pdf &
+wait
 ```
 
-Parse the Atom XML response to extract:
+**From the metadata** (Atom XML), extract:
 - **Title**
 - **Authors** (names and affiliations if available)
 - **Abstract**
@@ -46,16 +47,9 @@ Parse the Atom XML response to extract:
 
 If the API returns no results or an error, inform the user and ask them to verify the ID.
 
-### 3. Download the PDF
+**For the PDF**, verify the download succeeded (file exists and is >0 bytes). If it failed, retry once, then report the error.
 
-```bash
-mkdir -p papers/arxiv-ARXIV_ID
-curl -L "https://arxiv.org/pdf/ARXIV_ID" -o papers/arxiv-ARXIV_ID/paper.pdf
-```
-
-Verify the download succeeded (file exists and is >0 bytes). If it failed, retry once, then report the error.
-
-### 4. Generate a starter AGENTS.md
+### 3. Generate a starter AGENTS.md
 
 Create `papers/arxiv-ARXIV_ID/AGENTS.md` from the fetched metadata:
 
@@ -84,7 +78,7 @@ Fill in the required sections using the metadata:
 - **Computational Requirements**: Unknown — note this
 - **Citation**: Generate a BibTeX entry from the metadata
 
-### 5. Report to the user
+### 4. Report to the user
 
 Present:
 - Paper title and authors
@@ -93,19 +87,23 @@ Present:
 - Where files were saved
 - That this is a PDF-only import — no code, no structured repo. If they want full APP capabilities, they'll need to either find or create a publication repo.
 
-### 6. Find associated resources (ONLY when explicitly asked)
+### 5. Find associated resources (ONLY when explicitly asked)
 
 **Do NOT do this by default.** Only proceed if the user explicitly requests it — e.g. "also find code", "look for reviews", "find everything related to this paper", "find associated resources".
 
-When the user asks, spawn parallel subagents to search for:
+When the user asks, spawn three parallel subagents for 5a, 5b, and 5c:
 
-#### 6a. Code repositories
+#### 5a. Code repositories
 
-Search for associated code using multiple strategies:
-1. **Papers with Code**: Fetch `https://paperswithcode.com/api/v1/papers/?arxiv_id=ARXIV_ID` — this is the most reliable source
-2. **GitHub search**: Search GitHub for the arXiv ID (`gh search repos "ARXIV_ID"` or web search `site:github.com ARXIV_ID`)
-3. **Semantic Scholar**: Fetch `https://api.semanticscholar.org/graph/v1/paper/ArXiv:ARXIV_ID?fields=externalIds` for additional links
-4. **Links in the PDF**: Read the paper PDF and look for GitHub/GitLab URLs
+Use a tiered approach — run the first tier in parallel, fall back only if needed:
+
+**Tier 1 (run in parallel):**
+1. **Papers with Code**: Fetch `https://paperswithcode.com/api/v1/papers/?arxiv_id=ARXIV_ID` — most reliable aggregated source
+2. **Links in the PDF**: Read the paper PDF and look for GitHub/GitLab URLs — catches repos not yet indexed
+
+**Tier 2 (only if Tier 1 finds nothing, run in parallel):**
+3. **GitHub search**: Search GitHub for the arXiv ID (`site:github.com ARXIV_ID`)
+4. **Semantic Scholar**: Fetch `https://api.semanticscholar.org/graph/v1/paper/ArXiv:ARXIV_ID?fields=externalIds`
 
 If code is found:
 - Report the repo URL(s) to the user
@@ -114,7 +112,7 @@ If code is found:
 
 If no code is found, report that clearly.
 
-#### 6b. Author blog posts
+#### 5b. Author blog posts
 
 Search the web for blog posts by the authors about this paper:
 - Search for `"PAPER_TITLE" blog` or `"FIRST_AUTHOR" "PAPER_TITLE" blog`
@@ -123,7 +121,7 @@ Search the web for blog posts by the authors about this paper:
 
 Report any blog posts or threads found with URLs. Don't editorialize — just provide the links and a one-line description of each.
 
-#### 6c. OpenReview rebuttals and reviews
+#### 5c. OpenReview rebuttals and reviews
 
 Search for the paper on OpenReview:
 - Search `https://openreview.net/search?term=PAPER_TITLE` (or use web search: `site:openreview.net "PAPER_TITLE"`)
@@ -136,9 +134,9 @@ Search for the paper on OpenReview:
 
 If not found on OpenReview, report that — not all papers go through OpenReview.
 
-### 7. Present findings
+#### 5d. Present findings
 
-After subagent searches complete, present a consolidated summary:
+After all subagent searches complete, present a consolidated summary:
 
 ```
 ## Associated Resources for "PAPER TITLE"
