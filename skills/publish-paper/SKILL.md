@@ -13,12 +13,29 @@ When asking the researcher to make choices, use structured question tools if the
 
 ## Process
 
+### 0. Check for previous versions
+
+Before starting, ask the researcher: "Is this the first version, or is there a previous publication repo?"
+
+**If a previous version exists:**
+- Clone or locate the previous publication repo
+- Read its `AGENTS.md`, `README.md`, `supplementary/`, and `skills/` thoroughly
+- Most content (paper summary, key results, figure mappings, computational requirements, repo structure, skills) already exists and just needs updating
+- The researcher's interview (step 2) can focus on **what changed** rather than starting from scratch — "What's new or different in this version?"
+- Carry forward anything that hasn't changed rather than re-creating it
+- In step 7, start from the previous AGENTS.md and modify it, rather than drafting from scratch
+- When creating the new version, update the `version` field in AGENTS.md frontmatter and tag a new release (e.g., v2.0.0)
+
+This saves significant time and avoids losing good content that was already reviewed and approved.
+
 ### 1. Understand the paper
 
 Read the working repo thoroughly before asking the researcher anything. Build a mental model:
 
 **Paper source:**
-- Find the main document: look for `*.tex`, `*.md`, `*.pdf` files
+- Find the main document: look for `*.tex`, `*.md`, `*.docx`, `*.pdf`, `*.html`, `*.pptx`, video files
+- The paper can be in any format — LaTeX, DOCX, Markdown, HTML, video, PPTX, PDF
+- If multiple candidates exist, note them all — you'll ask the researcher which is canonical in step 2
 - Read it — understand the title, abstract, key claims, structure
 - Find figures: where are they stored? Are there source files (`.py`, `.ipynb`) that generate them?
 
@@ -45,6 +62,10 @@ Read the working repo thoroughly before asking the researcher anything. Build a 
 - Are there GPU requirements? Cluster job scripts?
 - Are there Docker files or containerization?
 
+**Supplementary materials:**
+- Are there slides, talks, posters, or tutorials in the repo?
+- Are there conversation logs or research notes?
+
 **Build the script→figure mapping:**
 For each figure in the paper:
 1. Find the figure reference in the paper source (`\includegraphics`, figure filenames)
@@ -61,6 +82,7 @@ For each figure in the paper:
 Ask about gaps and intent (one or two questions at a time, not all at once):
 
 **About the paper:**
+- If multiple paper-like documents exist, ask which is the canonical paper (the ground truth). The paper format is flexible — LaTeX, DOCX, Markdown, HTML, video, PPTX are all valid.
 - What are the key results? (Ask them to state it in their own words — this becomes the Paper Summary)
 - What's the main contribution vs. existing work?
 - What domain should the agent reason in? (math? physics? ML? biology?)
@@ -77,16 +99,31 @@ Ask about gaps and intent (one or two questions at a time, not all at once):
 - What would a reader most likely want to do? Offer options: reproduce figures, extend the work, understand the math/theory, run with different inputs.
 - What should the publication repo be called?
 
+**About key information for readers** (2-3 questions max):
+- "What do you wish someone had told you before reading this paper?"
+- "What's not in the paper but matters for understanding or using the work?"
+- The answers become `supplementary/authors-note.md`.
+
+**About supplementary materials:**
+- "Do you have slides, talks, posters, or tutorials for this work?"
+- "Do you have the copyright/permission to share them publicly?"
+- Clarify: these are secondary to the paper — useful context for readers, not ground truth. They'll go in `supplementary/materials/`.
+
+**About skills:**
+- "Are there specific workflows or analyses you'd like readers to be able to run through the agent? For example: a guided analysis pipeline, a visualization tool, a parameter sweep."
+- If yes, help the author define each skill (name, description, step-by-step instructions). You'll create `skills/<name>/SKILL.md` files in step 5.
+- If no, skip — skills are optional.
+
 ### 3. Extract research context (optional)
 
 Ask the researcher if they want to include research context from their conversation history. Offer a structured choice:
-- **Yes — extract from sessions**: captures reasoning, decisions, dead ends from Claude Code / Codex history
+- **Yes — extract from sessions** (recommended): captures reasoning, decisions, dead ends from Claude Code / Codex history. By default all project sessions are included and a thematic summary is produced. The researcher can optionally publish more detailed session transcripts too.
 - **Yes — I'll write notes manually**: the researcher provides context themselves
 - **No — skip this**: no research context in the publication
 
 This context is valuable for writing the AGENTS.md later (steps 7-8), because the agent can answer "why did you do X?" from real reasoning rather than guessing.
 
-If extracting from sessions, follow the `/extract-context` skill. Run it in the **working repo** (that's where the sessions are). The output will be copied into the publication repo later.
+If extracting from sessions, follow the `/extract-context` skill. Run it in the **working repo** (that's where the sessions are). The output will be copied into the publication repo later. The extract-context process includes a mandatory confidentiality screening step — but you should also check for sensitive content during steps 7-8 when incorporating context into the AGENTS.md.
 
 ### 4. Create the publication repo
 
@@ -125,7 +162,7 @@ Create the target directories first, then copy:
 
 ```bash
 # Example — adapt to what's actually being published
-mkdir -p paper/figures paper/build code/src code/scripts data environment
+mkdir -p paper/figures paper/build code/src code/scripts data environment supplementary
 cp ../working-repo/paper/main.tex paper/
 cp ../working-repo/paper/*.bib paper/
 cp ../working-repo/figures/*.pdf paper/figures/
@@ -139,9 +176,10 @@ Use the file list from step 2 — copy only what the researcher approved. Organi
 
 ```
 paper/
-├── main.tex, *.bib
+├── main.tex (or .docx, .md, .html, .pptx)  ← paper source (GROUND TRUTH)
+├── *.bib
 ├── figures/          ← generated figures (final versions)
-└── build/            ← compiled PDF
+└── build/            ← compiled PDF (if applicable)
 
 code/
 ├── src/              ← core implementation
@@ -157,6 +195,17 @@ data/
 environment/
 ├── requirements.txt  ← pinned dependencies
 └── README.md         ← setup instructions
+
+supplementary/
+├── know-how.md       ← tacit knowledge, methodology decisions (from extract-context or manual)
+├── authors-note.md   ← what the authors want readers to know beyond the paper
+├── checklist.md      ← publication checklist (from template)
+├── sessions/         ← (optional) conversation history from the research process
+└── materials/        ← (optional) slides, talks, posters, tutorials
+
+skills/               ← (optional) author-published agent capabilities
+└── skill-name/
+    └── SKILL.md
 ```
 
 Adapt the structure to what's actually being published — don't force directories that have nothing in them. A theory paper might just have `paper/` and a few scripts.
@@ -169,11 +218,27 @@ Adapt the structure to what's actually being published — don't force directori
 - Files >50MB: suggest Git LFS or external hosting (Hugging Face, Zenodo)
 - Generated files that can be reproduced: add to `.gitignore`, document the generation command
 
+**Verify external data links:**
+For every external data URL identified in step 1 (Hugging Face, Zenodo, Figshare, etc.):
+- Test accessibility: `curl -sIL <url>` (follow redirects) or platform-specific commands (`huggingface-cli download --dry-run`, etc.)
+- Show results to the researcher: "Link X returned 200 OK" or "Link Y returned 404 — is this still the right URL?"
+- Ask the researcher to confirm each link works (some may require authentication the agent doesn't have)
+- Record verified/flagged status in `supplementary/checklist.md`
+
 **Create a .gitignore** tailored to what's in the repo — cover build artifacts, generated files, sensitive files, and OS files.
 
-If research context was extracted in step 3, copy it into `context/` now.
+**Copy supplementary materials:**
+- If research context was extracted in step 3, copy it into `supplementary/` now
+- Generate `supplementary/authors-note.md` from the step 2 interview answers
+- Copy any supplementary materials (slides, talks, posters) the researcher approved into `supplementary/materials/`
+- Copy `template/publication-checklist.md` to `supplementary/checklist.md` and adapt it by removing sections that don't apply to this publication
 
-Tell the researcher what was copied and how it's organized. Flag anything that needed special handling (large files, updated paths).
+**Create skills:**
+- If the researcher defined skills in step 2, create `skills/<name>/SKILL.md` for each one with name and description in frontmatter and step-by-step instructions in the body
+
+Tell the researcher what was copied and how it's organized. Flag anything that needed special handling (large files, updated paths, broken data links).
+
+**Review checkpoint:** Launch a review agent following `/review-publication --stage structure` to check file paths, sensitive files, and data links. Fix any errors (search for `REVIEW: error` in files — markers may be `<!-- REVIEW:` in Markdown or `# REVIEW:` in code). Show warnings to the researcher.
 
 ### 6. Verify the code works
 
@@ -181,7 +246,7 @@ Tell the researcher you're testing that everything works in the publication repo
 
 Actually run things to confirm they work with the new paths:
 
-- **Paper compilation**: Run the build command and check it succeeds
+- **Paper compilation**: Run the build command and check it succeeds (if applicable — not all paper formats compile)
 - **Figure generation**: Run each figure script and verify it produces output
 - **Tests**: If the repo has tests, run them
 - **Notebooks**: Execute in order and check for errors
@@ -200,6 +265,11 @@ Generate `AGENTS.md` at the publication repo root. This is the most important fi
 - It should adopt the domain's reasoning style (mathematician for math, experimentalist for physics, etc.)
 - It must distinguish between the paper's claims and its own inferences
 - It should know the paper's limitations and say so honestly
+- **The paper is the ground truth** — state this explicitly. Supplementary materials provide context but are secondary. If anything conflicts with the paper, the paper takes precedence.
+
+**Writing the frontmatter:**
+- Include all standard fields (protocol, title, authors, arxiv_id, version, domain, tags)
+- Set `paper_format` to the correct format (latex, docx, markdown, html, video, pptx, pdf)
 
 **Writing the Paper Summary:**
 - Use the researcher's own words from step 2
@@ -209,6 +279,7 @@ Generate `AGENTS.md` at the publication repo root. This is the most important fi
 
 **Writing the Repository Map:**
 - Don't just list files — explain what each one does and how they connect
+- Mark the paper source as `(GROUND TRUTH)`
 - Group by function: paper source, figure generation, experiments, data, config
 - Include file paths relative to the publication repo root
 - Note which files are entry points vs. supporting
@@ -225,6 +296,17 @@ Generate `AGENTS.md` at the publication repo root. This is the most important fi
 - **Run experiments**: exact commands with real parameters, not placeholders
 - **Extend the work**: what can a reader change? Which parameters are interesting to vary?
 - For each capability, include the actual commands, not just descriptions
+
+**Writing the Supplementary Materials section:**
+- Point to `supplementary/know-how.md` for methodology insights and tacit knowledge
+- Point to `supplementary/authors-note.md` for the authors' message to readers
+- If sessions were published, point to `supplementary/sessions/`
+- If materials (slides, talks, etc.) were included, point to `supplementary/materials/` and note these are secondary to the paper
+- Keep this section brief — it's pointers, not content
+
+**Writing the Skills section:**
+- If the author published skills, list each one with its name, location, and a one-line description
+- If no skills, omit this section
 
 **Writing Computational Requirements:**
 - Classify every task: figure generation, individual experiments, full reproduction
@@ -243,6 +325,8 @@ Also create `CLAUDE.md` containing `@AGENTS.md` (Claude Code import syntax).
 - Confirm computational requirements are accurate
 
 Fix any mechanical issues found.
+
+**Review checkpoint:** Launch a review agent following `/review-publication --stage agents-md` to check factuality against the paper, path validity, privacy, and substance. Fix any errors. Show warnings to the researcher before the iteration step — they can address both the review findings and their own feedback together.
 
 ### 8. Iterate on the AGENTS.md with the researcher
 
@@ -311,13 +395,19 @@ Clone and open — any agent that reads AGENTS.md or README will pick up the pap
 
 Get the researcher's feedback on the README before finalizing.
 
+**Review checkpoint:** Launch a review agent following `/review-publication --stage readme` to check consistency between README and AGENTS.md, links, and privacy. Fix any errors. Show warnings to the researcher.
+
 ### 10. Final review
 
-Show the researcher the complete publication repo — all files, the AGENTS.md, the README, the context (if extracted). Summarize:
+Show the researcher the complete publication repo — all files, the AGENTS.md, the README, the supplementary materials (if any), the skills (if any). Summarize:
 
 - What's included and what was left out
 - What the agent will be able to do
 - What goes public when they release
+
+**Review checkpoint:** Launch a review agent following `/review-publication --stage full` for a comprehensive sweep — factuality, privacy, paths, consistency, and substance across all files. Fix any errors. Show warnings and notes to the researcher.
+
+**Walk through the checklist** (`supplementary/checklist.md`) as a quality gate. Go through each item with the researcher and mark them off. Flag any unchecked items that need attention before release.
 
 Ask: "Does this accurately represent your paper? Is there anything to change, add, or remove?"
 
@@ -356,6 +446,8 @@ Tell the researcher the publication is live and share the repo URL.
 
 ### Handling different paper types
 
+The paper can be in any format — LaTeX, DOCX, Markdown, HTML, video, PPTX, PDF. Adapt the process accordingly.
+
 **Theory-only paper (no code):**
 - The publication repo may just be `paper/` and AGENTS.md
 - Focus on: explaining the theorems, the proof strategy, the assumptions
@@ -375,3 +467,8 @@ Tell the researcher the publication is live and share the repo URL.
 - Map notebooks to figures/results: "notebook X produces figure Y"
 - Note that notebooks may need to be run in order
 - Consider extracting key cells into standalone scripts for easier reproduction
+
+**Video / slideware paper:**
+- The video or PPTX is the ground truth document
+- The agent should be able to discuss its contents and reference specific sections/timestamps
+- Supplementary materials may include a text summary or transcript

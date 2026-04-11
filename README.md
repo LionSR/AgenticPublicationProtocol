@@ -19,6 +19,11 @@ Works with [Claude Code](https://claude.ai/claude-code), [Codex](https://github.
 
 Then type `/publish-paper` and follow the interactive workflow.
 
+**Updating:**
+```
+/plugin update paper-protocol
+```
+
 ## Installation (Other Platforms)
 
 ### Codex
@@ -29,9 +34,11 @@ Tell Codex:
 Fetch and follow instructions from https://raw.githubusercontent.com/LionSR/AgenticPublicationProtocol/refs/heads/main/.codex/INSTALL.md
 ```
 
+Updating: `cd ~/.codex/paper-protocol && git pull`
+
 ### Other tools
 
-Clone and point your tool at the `skills/` directory.
+Clone and point your tool at the `skills/` directory. To update, `git pull` in the cloned directory.
 
 ## Use a published paper
 

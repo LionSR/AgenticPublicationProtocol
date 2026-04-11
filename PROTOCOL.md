@@ -16,6 +16,8 @@ APP builds on [agents.md](https://agents.md) (the cross-platform standard, 25+ t
 
 **Spokesperson, not assistant.** The published agent represents the authors to outside readers. It explains, presents, and defends the work from the paper's perspective. It speaks in the domain's voice — a math paper agent reasons like a mathematician, an experimental physics paper agent thinks like an experimentalist.
 
+**Paper is the ground truth.** The paper document — in whatever format the authors designate (LaTeX, DOCX, Markdown, HTML, video, PPTX) — is the authoritative source for the work's claims and results. All other materials (talks, slides, supplementary notes, conversation history, skills) are secondary. When any supplementary material conflicts with the paper, the paper takes precedence. The agent must understand and respect this hierarchy.
+
 **Single source of truth.** The published repo should have exactly one canonical location for each piece of code, data, and documentation. No duplicates, no ambiguity about which version is current. Every file referenced in the paper, scripts, or AGENTS.md resolves to one real path.
 
 **Honest and grounded.** The agent distinguishes between the paper's claims and its own inferences. It knows the paper's limitations and says so. It says clearly when something is outside the paper's scope.
@@ -35,6 +37,7 @@ authors:
   - name: "Author Name"
     affiliation: "Institution"
 arxiv_id: "XXXX.XXXXX"
+paper_format: "latex"  # or "docx", "markdown", "html", "video", "pptx", "pdf"
 version: "1.0.0"
 domain: "your-field"
 tags: ["keyword1", "keyword2"]
@@ -43,9 +46,9 @@ tags: ["keyword1", "keyword2"]
 
 ### Required sections
 
-**Identity** — Who the agent is and how it should behave. References the paper title, authors, and domain.
+**Identity** — Who the agent is and how it should behave. References the paper title, authors, and domain. Must establish that the paper is the ground truth for all claims.
 
-**Paper Summary** — 2-4 paragraphs covering: what problem, what approach, what results, what implications. Written by the authors (or from their words). This is what the agent relies on most.
+**Paper Summary** — 2-4 paragraphs covering: what problem, what approach, what results, what implications. Written by the authors (or from their words). The paper can be in any format (LaTeX, DOCX, Markdown, HTML, video, PPTX); the agent should read and reference the designated main document. This is what the agent relies on most.
 
 **Key Results** — Numbered list of the main contributions.
 
@@ -63,13 +66,19 @@ tags: ["keyword1", "keyword2"]
 
 ### Optional sections
 
-**Research Context** — Pointer to `context/research-notes.md` or `context/sessions/` if the authors extracted reasoning from their development sessions.
+**Supplementary Materials** — Pointer to `supplementary/` if the authors included additional materials beyond the paper:
+- `supplementary/know-how.md` — practical knowledge, methodology decisions, tacit insights extracted from the research process
+- `supplementary/authors-note.md` — what the authors want readers to know beyond the paper
+- `supplementary/sessions/` — (optional) curated conversation history from development sessions
+- `supplementary/materials/` — (optional) slides, talks, posters, tutorials. These are secondary to the paper — useful context, not ground truth.
 
-**Skills** — Pointer to `skills/` if the paper provides additional agent capabilities.
+**Skills** — Pointer to `skills/` if the paper provides additional agent capabilities. Authors can publish custom skills as SKILL.md files in `skills/`. Each skill is a self-contained capability the agent can perform — e.g., a specialized analysis workflow, a visualization pipeline, or a guided exploration of the results. Skills follow the standard SKILL.md format (name and description in frontmatter, instructions in body). Skills are tools, not claims — they do not override the paper's findings.
 
 ## Versioning
 
 A published version is a GitHub Release on the publication repo (which creates a git tag). The `version` in AGENTS.md frontmatter should match the release tag. The main branch of the publication repo can keep evolving; each release is a frozen snapshot.
+
+When publishing a new version, the previous version's AGENTS.md, supplementary materials, and skills should be used as a starting point. Most content carries forward — only update what has actually changed.
 
 ## Using a published paper
 
@@ -83,8 +92,8 @@ A published version is a GitHub Release on the publication repo (which creates a
 
 Not required. Add them if they help:
 
-- **`context/`** — Research context extracted from conversation histories. Can include a distilled `research-notes.md` and/or `sessions/` with curated conversation logs.
-- **`skills/`** — Agent capabilities as SKILL.md files
+- **`supplementary/`** — Supplementary materials: know-how notes, authors' note to readers, conversation history, slides/talks/posters, and publication checklist
+- **`skills/`** — Author-published agent capabilities as SKILL.md files (e.g., guided analysis workflows, visualization tools, parameter sweeps)
 - **`environment/`** — Dependencies file + platform metadata
 - **`code/`**, **`data/`** — Organized source code and datasets
 

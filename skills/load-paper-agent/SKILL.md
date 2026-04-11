@@ -44,11 +44,12 @@ Read `papers/<repo-name>/AGENTS.md`. Check:
 
 **For APP-compliant papers**, read the AGENTS.md and report to the user:
 - Paper title and authors
+- Paper format (from `paper_format` in frontmatter)
 - Paper summary (from the agent's own summary section)
 - What the agent can do (explain, reproduce figures, run experiments, extend)
 - Computational requirements (what's light, what's heavy)
-- Available research context (if `context/` exists)
-- Available skills (if `skills/` exists)
+- Available supplementary materials (if `supplementary/` exists) — know-how, author notes, sessions, additional materials
+- Available skills (if `skills/` exists) — list each skill with its name and description from the SKILL.md frontmatter
 
 **For non-APP repos**, explore the repo and report:
 - What the repo contains (paper, code, data, notebooks)
@@ -75,27 +76,58 @@ Before running anything from the paper:
 
 ### 5. Operate as the paper's agent
 
-When the user asks questions about this paper:
+**The paper is the ground truth.** The paper document (in whatever format — LaTeX, DOCX, Markdown, HTML, video, PPTX) is the authoritative source for all claims and results. Supplementary materials provide additional context but are secondary. If anything in the supplementary materials conflicts with the paper, defer to the paper.
+
+When the user asks questions about this paper, route to the right source:
+
+**Routing guide — which file for which question:**
+
+| User asks about... | Primary source | Also check |
+|---------------------|---------------|------------|
+| What the paper claims, methods, results | Paper source (ground truth) | AGENTS.md Paper Summary |
+| Why a specific choice was made | `supplementary/know-how.md` | Paper source for what the choice was |
+| What to know before reading | `supplementary/authors-note.md` | AGENTS.md Paper Summary |
+| How to reproduce a figure | AGENTS.md figure table | Run the command |
+| How to run an analysis or workflow | `skills/` (check for matching skill) | AGENTS.md "What You Can Do" |
+| What parameters to change | AGENTS.md "Extend the work" | Code configs |
+| Computational requirements | AGENTS.md Computational Requirements | |
 
 **Explaining:**
-- Read the paper source (LaTeX, Markdown, PDF) to answer
+- Read the paper source to answer — it is the ground truth
 - Ground every answer in what the paper actually says
 - Distinguish between paper claims and your inference
-- If research context exists in `context/`, use it to explain the reasoning behind decisions
+- If supplementary materials exist in `supplementary/`, use them to explain the reasoning behind decisions — but note that these provide context, not authoritative claims
+- If `supplementary/know-how.md` exists, use it to answer "why did you do X?" questions — this is where tacit knowledge lives
+- If `supplementary/authors-note.md` exists, use it for the authors' perspective on what matters beyond the paper
 
 **Reproducing:**
 - Follow the figure generation commands from AGENTS.md exactly
 - After generating, compare output with the existing figures
 - Report whether reproduction succeeded or if there are differences
+- **If a command fails:** read the error, check the environment setup (step 4), and report what went wrong. Common issues: missing dependencies, wrong Python version, missing data files. Don't silently retry — explain the failure and suggest fixes.
+- **If external data is needed:** check AGENTS.md Repository Map for download commands. Tell the user what's needed, how large it is, and offer to download it (with approval) before retrying.
 
 **Extending:**
 - If the user wants to try variations, explain what parameters can be changed
 - Modify config files or script arguments as needed
 - Warn about computational cost before running
+- After running a variation, compare results with the paper's reported results and note differences
+
+**Using skills:**
+- If the paper includes skills in `skills/`, read the SKILL.md files to discover what capabilities the authors provided
+- **Proactively suggest skills** when the user's request matches a skill name or description — e.g., "This paper includes a guided analysis skill that can walk you through this. Would you like to use it?"
+- When using a skill, read the SKILL.md and follow its instructions step by step
+- Report what the skill produced and whether it succeeded
+- If a skill's output appears to contradict the paper, flag the discrepancy to the user
+- If a skill fails partway through, report where it failed and what the expected behavior was
 
 **Attribution:**
 - Always attribute information: "According to [Paper Title]..."
 - Be clear about the paper's scope — don't extrapolate beyond what it claims
+
+**Feedback loop:**
+- After answering a substantive question, ask: "Did that answer your question, or should I look deeper into the paper or code?"
+- If the user's question can't be fully answered from the available materials, say so explicitly and suggest what might help (e.g., "The paper doesn't discuss this; you might want to contact the authors")
 
 ### 6. Multiple papers
 
