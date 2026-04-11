@@ -13,129 +13,96 @@ Extract and curate conversation history from Claude Code or Codex sessions into 
 - Standalone when a researcher wants to document their reasoning process
 - When preparing supplementary material for a paper
 
+## Parallelism
+
+When there are many sessions, parallelize the work. Launch subagents to extract and summarize batches of sessions concurrently rather than processing them one by one. For example, with 12 sessions, launch 3-4 subagents each handling a batch, then merge their summaries into the final `know-how.md`. This applies to both extraction (step 2) and summarization (step 3).
+
 ## Process
 
-### 1. List available sessions
+### 1. Gather all sessions
 
 Ask the researcher which platform they used: Claude Code or Codex.
 
-First, find the extraction script (it's bundled with the plugin):
+Find the extraction script (bundled with the plugin):
 ```bash
 EXTRACT_SCRIPT=$(find ~/.claude/plugins -name extract_sessions.py 2>/dev/null | head -1)
 ```
 
-If not found (e.g. running outside Claude Code), the script can be fetched:
+If not found (e.g. running outside Claude Code):
 ```bash
 curl -sO https://raw.githubusercontent.com/LionSR/AgenticPublicationProtocol/main/skills/extract-context/scripts/extract_sessions.py
 EXTRACT_SCRIPT=./extract_sessions.py
 ```
 
-Then list sessions:
+List all sessions for the project:
 ```bash
-# Claude Code — sessions for the current project
-python "$EXTRACT_SCRIPT" list --source claude
-
-# Claude Code — all projects
-python "$EXTRACT_SCRIPT" list --source claude --project all
-
-# Codex
-python "$EXTRACT_SCRIPT" list --source codex
+python "$EXTRACT_SCRIPT" list --source claude        # current project
+python "$EXTRACT_SCRIPT" list --source claude --project all  # all projects (if needed)
+python "$EXTRACT_SCRIPT" list --source codex          # Codex
 ```
 
-Show the session list to the researcher. Each entry shows a timestamp, session ID, and a preview of the first user message.
+Show the session list to the researcher. **By default, include all sessions for the project.** Only narrow the selection if the researcher asks to exclude specific ones or there are clearly unrelated sessions.
 
-### 2. Select relevant sessions
+### 2. Extract sessions
 
-Ask the researcher which sessions relate to this paper/project. They may:
-- Pick specific sessions by number
-- Select all sessions from a time range
-- Select sessions matching a keyword (you can grep session previews)
-
-### 3. Extract selected sessions
-
-For each selected session, extract it to JSON:
+Extract all included sessions to JSON (parallelize across batches if many):
 
 ```bash
 python "$EXTRACT_SCRIPT" extract --source claude --session <id>
 ```
 
-This outputs structured JSON with normalized user/assistant turns, system tags stripped.
+Outputs structured JSON with normalized user/assistant turns, system tags stripped.
 
-### 4. Choose the output level
+### 3. Produce the summary (default output)
 
-Use a structured choice prompt to offer three levels:
+By default, distill all sessions into a single `supplementary/know-how.md` — a thematic summary of the reasoning behind the work. Read through every extracted session, pull out key decisions, methodology choices, dead ends, and insights. Organize by theme, not by session. See `session-formats.md` for the know-how template.
 
-**Gist** — Distill all selected sessions into a single `context/research-notes.md`:
+### 4. Ask about publishing more detail
 
-```markdown
-# Research Notes
+After showing the summary, ask the researcher if they also want to publish more detailed session records:
 
-## Methodology decisions
-- [Why we chose approach X over Y — from session Z]
-- [What didn't work and why]
+- **Summary only** (default) — publish just `supplementary/know-how.md`. Fastest option; captures the key reasoning. Best for most papers.
+- **Summary + cleaned sessions** — also publish curated session transcripts in `supplementary/sessions/`. Choose this when the research process itself is part of the contribution (e.g., novel methodology development).
+- **Summary + full history** — also publish lightly processed transcripts. Choose this when full transparency is the goal (e.g., reproducibility-focused publications).
 
-## Key insights during development
-- [Insight 1]
-- [Insight 2]
+For cleaned and full session formatting, see `session-formats.md`.
 
-## Known limitations and future ideas
-- [Limitation the researcher is aware of]
-- [Idea that didn't make it into the paper]
-```
+### 5. Confidentiality and privacy screening
 
-Read through each extracted session. Pull out key decisions, methodology choices, dead ends, and insights. Organize by theme, not by session. The researcher reviews and edits before publishing.
+**Mandatory before anything is published.** Scan all output files for content that should not be made public.
 
-**Cleaned history** — Convert each session into structured markdown in `context/sessions/`:
+**Quick checklist — flag these patterns:**
+- Credentials: API keys (`sk-...`, `ghp_...`), tokens, passwords, connection strings
+- Personal info: email addresses, phone numbers, names of non-authors
+- Private infrastructure: internal URLs, file paths like `/Users/name/...`, private repo references
+- Access-controlled data: dataset identifiers, license keys
+- Tone: profanity, negative comments about people/institutions, off-topic tangents
 
-```markdown
-# Session: [descriptive title]
+For each flagged item, present the researcher with the exact text and suggest: **redact**, **keep**, or **rephrase**.
 
-Date: YYYY-MM-DD
-Topic: [what this session was about]
+See `confidentiality-checklist.md` for the extended reference with full pattern details and procedure.
 
-## Key decisions
-- [Decision 1 — what was decided and why]
-- [Decision 2]
+Report every flagged item to the researcher. Do not silently remove content. Err on the side of over-flagging. After the researcher resolves all flags, do a final pass to confirm nothing was missed.
 
-## Conversation
+### 6. Researcher review
 
-**Researcher:** [cleaned-up message — fix typos, remove tangents, keep substance]
+Show the final output to the researcher before it's committed. They may want to remove content, rephrase for clarity, add context that wasn't in the conversation, or delete entire sessions. Nothing goes into `supplementary/` without researcher approval.
 
-**Agent:** [summarized response — keep the key information, trim verbose output]
+### 7. Wire into AGENTS.md and supplementary doc
 
-**Researcher:** [next message]
+The research context appears in two places:
 
-...
-```
-
-Guide the researcher through each session:
-- Show them the raw conversation
-- Help them decide: keep, summarize, or skip each exchange
-- Remove private content (API keys, personal info, unrelated tangents)
-- Clean up messages for readability while preserving the reasoning
-- Summarize long agent responses to their key points
-- Add a "Key decisions" header at the top summarizing what came out of it
-
-**Full history** — Export sessions with minimal processing. Still convert from JSON to readable markdown, but don't heavily edit. Just strip system tags and format readably.
-
-### 5. Researcher review
-
-Always show the final output to the researcher before it's committed. They may want to:
-- Remove additional private content
-- Rephrase things for clarity
-- Add context that wasn't in the conversation
-- Delete entire sessions they changed their mind about
-
-Nothing goes into `context/` without researcher approval.
-
-### 6. Wire into AGENTS.md
-
-If being used as part of `/publish-paper`, add to the paper's AGENTS.md:
+**In AGENTS.md** — a brief pointer:
 
 ```markdown
-## Research Context
-For the reasoning behind key decisions, see `context/research-notes.md`
-For conversation sessions from the research process, see `context/sessions/`
+## Supplementary Materials
+Practical knowledge and methodology insights are documented in [`supplementary/know-how.md`](supplementary/know-how.md).
 ```
 
-If used standalone, tell the researcher where the files were saved and suggest they reference them from their AGENTS.md or README.
+If session transcripts were also published, add a link to `supplementary/sessions/`.
+
+**In `supplementary/know-how.md`** — the full thematic summary from step 3. This is what the agent reads when asked "why did you do X?"
+
+The separation is intentional: AGENTS.md stays concise and navigable; the detailed reasoning lives in its own document.
+
+If used standalone (not as part of `/publish-paper`), tell the researcher where the files were saved and suggest they add the AGENTS.md reference themselves.

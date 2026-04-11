@@ -34,7 +34,7 @@ All moves, renames, and deletions stay on this branch. The researcher reviews, t
 Read the repo thoroughly. Build a complete picture:
 
 **Find everything:**
-- Paper source files (`.tex`, `.bib`, `.md`, `.docx`)
+- Paper source files (`.tex`, `.bib`, `.md`, `.docx`, `.html`, `.pptx`, video files)
 - Code files — what languages, what frameworks
 - Notebooks (`.ipynb`, `.Rmd`) — these are often the messiest part
 - Data files — CSVs, HDF5, JSON, images, simulation output
@@ -43,6 +43,7 @@ Read the repo thoroughly. Build a complete picture:
 - Build artifacts — compiled PDFs, cached outputs, `__pycache__`, `.aux` files
 - Environment files — `requirements.txt`, `environment.yml`, `Pipfile`, lock files
 - Stale files — old versions, backup copies (`*_old`, `*_v2`, `Copy of *`)
+- Supplementary materials — slides, talks, posters, tutorials (may go in `supplementary/materials/` during publication)
 - Hidden files — `.env`, credentials, API keys (flag these immediately)
 
 **Build the script→figure mapping:**
