@@ -39,7 +39,7 @@ The paper is the ground truth. Everything else is secondary.
 - Don't run heavy commands — just check they parse and reference real files
 
 **External links:**
-- Test with `curl -sI <url>` — flag non-2xx responses
+- Test with `curl -sIL <url>` — flag non-2xx responses
 - Note: some links may require authentication; flag as "needs manual verification" rather than "broken"
 - Hugging Face, Zenodo, Figshare URLs should resolve
 

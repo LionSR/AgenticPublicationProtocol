@@ -55,7 +55,7 @@ Only run at stages: `agents-md`, `full`.
 - Verify every file path in AGENTS.md Repository Map exists in the repo
 - Verify every file path in README exists
 - Check that commands in the figure generation table are syntactically valid
-- Test external data links with `curl -sI <url>` (flag non-2xx responses)
+- Test external data links with `curl -sIL <url>` (flag non-2xx responses)
 - Check that `supplementary/` references point to real files
 
 Run at all stages.

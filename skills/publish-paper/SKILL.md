@@ -220,7 +220,7 @@ Adapt the structure to what's actually being published — don't force directori
 
 **Verify external data links:**
 For every external data URL identified in step 1 (Hugging Face, Zenodo, Figshare, etc.):
-- Test accessibility: `curl -sI <url>` or platform-specific commands (`huggingface-cli download --dry-run`, etc.)
+- Test accessibility: `curl -sIL <url>` (follow redirects) or platform-specific commands (`huggingface-cli download --dry-run`, etc.)
 - Show results to the researcher: "Link X returned 200 OK" or "Link Y returned 404 — is this still the right URL?"
 - Ask the researcher to confirm each link works (some may require authentication the agent doesn't have)
 - Record verified/flagged status in `supplementary/checklist.md`
@@ -238,7 +238,7 @@ For every external data URL identified in step 1 (Hugging Face, Zenodo, Figshare
 
 Tell the researcher what was copied and how it's organized. Flag anything that needed special handling (large files, updated paths, broken data links).
 
-**Review checkpoint:** Launch a review agent following `/review-publication --stage structure` to check file paths, sensitive files, and data links. Fix any errors (search for `<!-- REVIEW: error` in files). Show warnings to the researcher.
+**Review checkpoint:** Launch a review agent following `/review-publication --stage structure` to check file paths, sensitive files, and data links. Fix any errors (search for `REVIEW: error` in files — markers may be `<!-- REVIEW:` in Markdown or `# REVIEW:` in code). Show warnings to the researcher.
 
 ### 6. Verify the code works
 
