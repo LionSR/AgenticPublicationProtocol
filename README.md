@@ -47,6 +47,11 @@ Clone and point your tool at the `skills/` directory. To update, `git pull` in t
 /load-paper-agent https://github.com/author/their-paper
 ```
 
+**Load directly from arXiv:**
+```
+/load-arxiv-paper 2301.07041
+```
+
 **Any agent:**
 ```bash
 git clone https://github.com/author/their-paper.git
@@ -59,6 +64,7 @@ git clone https://github.com/author/their-paper.git
 |-------|-------------|
 | `/publish-paper` | Create a publication repo with AGENTS.md from your working repo |
 | `/load-paper-agent` | Load a published paper agent into your project as a sub-agent |
+| `/load-arxiv-paper` | Load a paper directly from arXiv — fetch PDF, metadata, and optionally find code, blog posts, and reviews |
 | `/extract-context` | Extract research context (decisions, reasoning) from conversation history |
 | `/create-paper-page` | Generate a GitHub Pages landing page for your paper |
 
@@ -66,7 +72,7 @@ git clone https://github.com/author/their-paper.git
 
 - [PROTOCOL.md](PROTOCOL.md) — the AGENTS.md format spec (for tool builders and curious readers)
 - [VISION.md](VISION.md) — ideas and future directions
-- [skills/](skills/) — all four skills above
+- [skills/](skills/) — all five skills above
 - [template/](template/) — starter `AGENTS.md` and `CLAUDE.md`
 
 ## License

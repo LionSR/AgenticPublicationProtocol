@@ -29,7 +29,7 @@ If the user specifies a version:
 git clone --branch v1.0.0 <url> papers/<repo-name>
 ```
 
-If the user gives an arXiv ID instead of a GitHub URL, search for the corresponding repo (check the paper's PDF for a GitHub link, or search GitHub for the arXiv ID).
+If the user gives an arXiv ID instead of a GitHub URL, prefer using the `/load-arxiv-paper` skill — it fetches the PDF and metadata directly from arXiv and can optionally search for code repos, blog posts, and OpenReview reviews. If that skill is not available, fall back to searching for the corresponding repo (check the paper's PDF for a GitHub link, or search GitHub for the arXiv ID).
 
 If the clone fails (private repo, wrong URL), inform the user and ask for the correct URL or access.
 
