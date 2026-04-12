@@ -15,16 +15,21 @@ When asking the researcher to make choices, use structured question tools if the
 
 ### 0. Check for previous versions
 
-Before starting, ask the researcher: "Is this the first version, or is there a previous publication repo?"
+First, check the **working repo** for a `.publications.md` file — this is automatically created in step 12 after each release and tracks all publication repos created from this working repo.
 
-**If a previous version exists:**
-- Clone or locate the previous publication repo
+**If `.publications.md` exists:**
+- Read it to find the previous publication repo URL, version, and date
+- Clone or locate that publication repo
 - Read its `AGENTS.md`, `README.md`, `supplementary/`, and `skills/` thoroughly
-- Most content (paper summary, key results, figure mappings, computational requirements, repo structure, skills) already exists and just needs updating
-- The researcher's interview (step 2) can focus on **what changed** rather than starting from scratch — "What's new or different in this version?"
+- Most content already exists and just needs updating
+- The researcher's interview (step 2) can focus on **what changed** — "What's new or different in this version?"
 - Carry forward anything that hasn't changed rather than re-creating it
 - In step 7, start from the previous AGENTS.md and modify it, rather than drafting from scratch
 - When creating the new version, update the `version` field in AGENTS.md frontmatter and tag a new release (e.g., v2.0.0)
+
+**If `.publications.md` does not exist**, ask the researcher: "Is this the first version, or is there a previous publication repo?"
+
+If a previous version exists, get the repo URL and follow the same process as above.
 
 This saves significant time and avoids losing good content that was already reviewed and approved.
 
@@ -443,6 +448,35 @@ gh release create v1.0.0 --title "v1.0.0" --notes "Paper agent publication"
 - Create the release on GitHub's web UI: Releases → Create a new release → tag `v1.0.0`
 
 Tell the researcher the publication is live and share the repo URL.
+
+### 12. Record the release in the working repo
+
+After the publication is live, switch back to the **working repo** and record the release in `.publications.md`. This ensures that future sessions know a publication repo exists — no need to ask the researcher or guess.
+
+**If `.publications.md` doesn't exist yet**, create it:
+```markdown
+# Publications
+
+Repos created from this working repo via the Agentic Publication Protocol.
+
+| Repo | Version | Date | Notes |
+|------|---------|------|-------|
+| [<repo-name>](<repo-url>) | v1.0.0 | YYYY-MM-DD | Initial publication |
+```
+
+**If `.publications.md` already exists**, append a new row to the table:
+```markdown
+| [<repo-name>](<repo-url>) | v2.0.0 | YYYY-MM-DD | Updated results, new figures |
+```
+
+Commit `.publications.md` in the working repo:
+```bash
+cd <working-repo>
+git add .publications.md
+git commit -m "Record publication: <repo-name> v1.0.0"
+```
+
+This file is the link between the working repo and its publication repos. Step 0 reads it to detect previous versions automatically.
 
 ### Handling different paper types
 
