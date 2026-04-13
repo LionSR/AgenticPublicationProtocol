@@ -1,6 +1,6 @@
-# Review Criteria
+# Validation Criteria
 
-Detailed criteria for each review agent in review-publication.
+Detailed criteria for each validation agent in validate-publication.
 
 ## Factuality
 
@@ -25,17 +25,39 @@ The paper is the ground truth. Everything else is secondary.
 - Stating implications the paper explicitly discusses
 - The know-how describing methodology choices not mentioned in the paper (that's its purpose)
 
-## Path & command validity
+## Path, structure & command validity
+
+**Folder structure conformance:**
+
+The publication repo should follow the directory layout defined in [PROTOCOL.md](../../PROTOCOL.md#publication-repo-structure). Not every directory is required — check based on what the paper actually contains:
+
+| Directory | Required? |
+|-----------|-----------|
+| `paper/` | Yes |
+| `code/` | If the paper has code |
+| `data/` | If the paper has data |
+| `environment/` | If the paper has code |
+| `supplementary/` | Recommended |
+| `skills/` | If author defined skills |
+
+**What to flag:**
+- Files at root that belong in a subdirectory (e.g., `main.tex`, `*.py`, `requirements.txt`, `*.csv` at root)
+- Root should only contain: `AGENTS.md`, `CLAUDE.md`, `README.md`, `LICENSE`, `.gitignore`
+- Paper source outside `paper/` (e.g., in `src/` or root)
+- Code files outside `code/` (e.g., scripts loose at root or in `paper/`)
+- Dependencies at root instead of `environment/` (e.g., `requirements.txt`, `environment.yml`, `pyproject.toml` at root)
+- Supplementary materials outside `supplementary/` (e.g., `know-how.md` at root)
+- Severity: `warning` for misplaced files (the repo works, but the structure is inconsistent)
 
 **File paths:**
-- Every path in AGENTS.md Repository Map must resolve to a real file or directory
+- Every path in AGENTS.md Repository Structure must resolve to a real file or directory
 - Every path in README must resolve
 - Every path in `supplementary/` references must resolve
 - Relative paths should be relative to the repo root
 
 **Commands:**
 - Figure generation commands should be syntactically valid (parseable by the shell)
-- Install commands should reference real package files (e.g., `requirements.txt` exists)
+- Install commands should reference real package files (e.g., `environment/requirements.txt` exists)
 - Don't run heavy commands — just check they parse and reference real files
 
 **External links:**

@@ -52,7 +52,7 @@ tags: ["keyword1", "keyword2"]
 
 **Key Results** — Numbered list of the main contributions.
 
-**Repository Map** — Every important file with its path and purpose. Group by function: paper source, figure generation, experiments, data, config. For external data (Hugging Face, Zenodo, etc.), include the URL, download command, and local destination.
+**Repository Structure** — Every important file with its path and purpose. Group by function: paper source, figure generation, experiments, data, config. For external data (Hugging Face, Zenodo, etc.), include the URL, download command, and local destination.
 
 **What You Can Do** — Concrete agent capabilities:
 - *Explain the paper*: which files to read for which topics
@@ -88,14 +88,25 @@ When publishing a new version, the previous version's AGENTS.md, supplementary m
 | **Sub-agent** | Clone into a subfolder of your project; the nested AGENTS.md is picked up |
 | **Group** | Multiple paper repos as subfolders with an orchestrator AGENTS.md |
 
-## Optional extras
+## Publication repo structure
 
-Not required. Add them if they help:
+Publication repos should follow a consistent directory layout. Not every directory is required — a theory paper may only need `paper/` — but files should be in the right place.
 
-- **`supplementary/`** — Supplementary materials: know-how notes, authors' note to readers, conversation history, slides/talks/posters, and publication checklist
-- **`skills/`** — Author-published agent capabilities as SKILL.md files (e.g., guided analysis workflows, visualization tools, parameter sweeps)
-- **`environment/`** — Dependencies file + platform metadata
-- **`code/`**, **`data/`** — Organized source code and datasets
+```
+paper/              ← paper source (GROUND TRUTH), figures, bibliography, compiled PDF
+code/               ← src/, scripts/, configs/, notebooks/
+data/               ← raw/, processed/, README
+environment/        ← requirements.txt (or equivalent), setup instructions
+supplementary/      ← know-how.md, authors-note.md, checklist.md, sessions/, materials/
+skills/             ← <name>/SKILL.md per author-published skill
+AGENTS.md           ← paper agent instructions
+CLAUDE.md           ← @AGENTS.md (Claude Code import)
+README.md           ← public README for readers
+LICENSE
+.gitignore
+```
+
+Root should only contain the files listed above and the top-level directories. Code, data, paper source, and dependencies each have their own directory — don't put them loose at root.
 
 ## License
 

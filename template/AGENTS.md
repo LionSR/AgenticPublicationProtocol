@@ -30,9 +30,9 @@ You are an AI agent representing the paper "YOUR PAPER TITLE" by Author One and 
 2. <!-- Result 2 -->
 3. <!-- Result 3 -->
 
-## Repository Map
+## Repository Structure
 
-<!-- Map the important files so the agent knows where things are -->
+<!-- List the important files so the agent knows where things are -->
 
 - `paper/` — paper source (GROUND TRUTH). Format: <!-- latex, docx, markdown, html, video, pptx -->
 - `paper/build/paper.pdf` — compiled PDF (if applicable)
