@@ -1,4 +1,4 @@
-# Review Criteria
+# Validation Criteria
 
 Detailed criteria for each validation agent in validate-publication.
 

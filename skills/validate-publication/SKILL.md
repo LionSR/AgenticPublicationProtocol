@@ -69,7 +69,7 @@ Scan ALL files in the repo — not just supplementary materials, but also the pa
 - Names of people not listed as authors
 - Access-controlled dataset identifiers
 
-See `review-criteria.md` for the full pattern list and `../extract-context/confidentiality-checklist.md` for the extended reference.
+See `validation-criteria.md` for the full pattern list and `../extract-context/confidentiality-checklist.md` for the extended reference.
 
 Run at all stages.
 
@@ -115,7 +115,7 @@ For every validated issue, write a comment directly in the file:
 <!-- REVIEW: note — Consider adding the runtime for Figure 3 to the computational requirements. -->
 ```
 
-Place the comment immediately above or next to the problematic content. The researcher resolves each by fixing the issue and removing the `<!-- REVIEW: -->` marker.
+The `REVIEW:` prefix is a short, scannable marker — it doesn't refer to the skill name. Place the comment immediately above or next to the problematic content. The researcher resolves each by fixing the issue and removing the `<!-- REVIEW: -->` marker.
 
 For code files, use the appropriate comment syntax:
 ```python

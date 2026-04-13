@@ -6,4 +6,4 @@ This file is maintained automatically by the `publish-paper` skill (step 12) aft
 
 | Repo | Version | Date | Notes |
 |------|---------|------|-------|
-| <!-- [repo-name](https://github.com/owner/repo) --> | <!-- v1.0.0 --> | <!-- YYYY-MM-DD --> | <!-- Initial publication --> |
+| [repo-name](https://github.com/owner/repo) | v1.0.0 | YYYY-MM-DD | Initial publication |
