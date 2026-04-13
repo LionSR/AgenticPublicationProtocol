@@ -7,7 +7,9 @@ description: Create an AI agent for an academic paper following the Agentic Publ
 
 Create a publication repo for a paper — a clean, public repo with an AGENTS.md that turns it into an AI agent. The researcher's working repo may be private and messy; the publication repo is a curated subset meant for public consumption.
 
-Every step involves the researcher. This is a collaborative process — inform them what you're doing, show them what you find, and get their input before moving on.
+Publishing a paper is a significant responsibility. This process should be deliberate, not rushed. It is fine — and expected — for this to span multiple sessions.
+
+**Pace principle:** Never treat a partial answer as a complete one. If you asked three questions and the researcher answered one, follow up on the unanswered ones before moving on — they may have missed them, not declined them. When showing the researcher something for feedback (a draft, a file list, a checklist), wait for them to engage with it substantively. A one-word acknowledgement ("ok", "sure", "fine") after presenting five things to review is not confirmation — ask which specific items they've looked at. The researcher's attention is finite; work with that, not against it.
 
 **Author's voice principle:** The supplementary materials (`authors-note.md`, `know-how.md`), the AGENTS.md paper summary, and any content that speaks for the researcher must reflect what *they* want to convey — not what the agent thinks is important. Before drafting any of these, ask the researcher what they want the document to say and who the intended audience is. Draft from their intent, then iterate. Never generate these documents first and ask for approval after — that inverts the authorship.
 
@@ -87,6 +89,8 @@ For each figure in the paper:
 ### 2. Discuss with the researcher
 
 Ask **1-3 questions per round**, wait for answers, then move to the next round. Do not dump all questions at once — researchers have limited attention and will miss things in a wall of text. Lead with what you can't figure out from reading the repo yourself; skip questions you already know the answer to.
+
+**Within each round:** If the researcher answers some questions but not others, follow up on the unanswered ones specifically. Do not move to the next round until the current one is resolved — either answered or explicitly deferred by the researcher.
 
 **Round 1 — The paper** (start here, it's the foundation):
 - If multiple paper-like documents exist: "Which of these is the canonical paper?" (show the candidates you found)
@@ -336,14 +340,15 @@ Fix any mechanical issues found.
 
 Show the researcher the draft AGENTS.md and discuss it with them. This is not a rubber-stamp review — it's a conversation about what the agent should convey.
 
-**Focus on substance, not formatting:**
-- **Paper Summary**: Does it capture what makes this work distinctive? Push back on generic language — "we propose a novel method" says nothing. What specifically is the insight? What would the authors say at a whiteboard that they wouldn't write in the abstract?
-- **Key Results**: Are these the results the authors are most proud of, or just the ones that are easiest to describe? Ask: "If someone remembers one thing from this paper, what should it be?"
-- **What You Can Do / Extend the work**: What questions do the authors wish people would ask? What variations would be interesting? This is where the agent becomes more than a paper reader — it becomes a collaborator.
+Walk through the AGENTS.md **one section at a time** rather than asking the researcher to review the entire document at once. For each section, ask a focused question:
 
-**Ask directly:**
-- "What do you want people to take away from this work?"
-- "What's the thing that's hard to get from just reading the paper?"
+- **Paper Summary**: "Does this capture what makes your work distinctive? What would you change?"
+- **Key Results**: "Are these the results you're most proud of, or just the easiest to describe? If someone remembers one thing from this paper, what should it be?"
+- **What You Can Do / Extend the work**: "What questions do you wish people would ask about this work? What variations would be interesting?"
+
+If the researcher says "looks good" without engaging with specifics, gently probe one concrete aspect — e.g., "I want to make sure the summary captures your intent. The first paragraph says [X] — does that match how you'd describe it?"
+
+After walking through sections, ask:
 - "Is there anything the agent should say that isn't in the paper itself — context, motivation, what you tried that didn't work?"
 
 Revise the AGENTS.md based on their feedback. Go back and forth until the researcher is satisfied that the agent represents their intent, not just their words.
@@ -403,19 +408,21 @@ Get the researcher's feedback on the README before finalizing.
 
 ### 10. Final review
 
-Show the researcher the complete publication repo — all files, the AGENTS.md, the README, the supplementary materials (if any), the skills (if any). Summarize:
+**Validation checkpoint:** Launch a validation agent following `/validate-publication --stage full` for a comprehensive sweep — factuality, privacy, paths, consistency, and substance across all files. Fix any errors before showing results to the researcher.
 
-- What's included and what was left out
-- What the agent will be able to do
-- What goes public when they release
+Present the final state to the researcher **one piece at a time**, not as a single wall of information:
 
-**Validation checkpoint:** Launch a validation agent following `/validate-publication --stage full` for a comprehensive sweep — factuality, privacy, paths, consistency, and substance across all files. Fix any errors. Show warnings and notes to the researcher.
+1. **File inventory**: Show what's included and what was excluded. Ask: "Is this the right set of files? Anything missing or anything that shouldn't be here?"
+2. **AGENTS.md**: Show the final version. Ask: "Does this still accurately represent your paper after all the changes we made?"
+3. **README**: Show the final version. Ask: "Is this what you want readers to see first?"
+4. **Supplementary materials**: List what's in `supplementary/`. Ask: "Are you comfortable with all of this being public?"
+5. **Validation results**: Show any remaining warnings or notes from the validation sweep. Walk through each one — don't just list them.
 
-**Walk through the checklist** (`supplementary/checklist.md`) as a quality gate. Go through each item with the researcher and mark them off. Flag any unchecked items that need attention before release.
+Wait for the researcher to engage with each item. If they say "all good" without engaging, ask about one specific thing — e.g., "I want to double-check: the supplementary materials include [X]. Are you sure that should be public?"
 
-Ask: "Does this accurately represent your paper? Is there anything to change, add, or remove?"
+**Walk through the checklist** (`supplementary/checklist.md`) as a final quality gate. Go through each item with the researcher and mark them off. Flag any unchecked items.
 
-Do NOT proceed until the researcher explicitly confirms.
+Do NOT proceed until the researcher has explicitly confirmed they've reviewed the files, the AGENTS.md, and the supplementary materials.
 
 ### 11. Release
 
@@ -462,7 +469,7 @@ PUBLICATION SUMMARY — please review before I publish:
 
 Do NOT proceed until you have unambiguous confirmation.
 
-After confirmation:
+After confirmation, commit and tag locally — this does not push anything yet:
 
 ```bash
 cd <publication-repo>
@@ -471,20 +478,36 @@ git commit -m "Initial publication"
 git tag -a v1.0.0 -m "Paper agent v1.0.0"
 ```
 
+Tell the researcher: "Everything is committed and tagged locally. Nothing has been pushed yet."
+
+**Separate confirmation before each remote action.** Each push or remote operation requires its own explicit confirmation — do not chain them.
+
 **If `gh` is available and the repo isn't on GitHub yet:**
+
+Ask: "Ready to create the public GitHub repo and push? This makes everything visible."
 ```bash
 gh repo create <repo-name> --public --source . --push
+```
+
+Then ask: "Repo is live. Shall I also create a GitHub release tagged v1.0.0?"
+```bash
 gh release create v1.0.0 --title "v1.0.0" --notes "Paper agent publication"
 ```
 
 **If the repo is already on GitHub:**
+
+Ask: "Ready to push to GitHub? This makes everything visible."
 ```bash
 git push origin main --tags
+```
+
+Then ask: "Push complete. Shall I also create a GitHub release tagged v1.0.0?"
+```bash
 gh release create v1.0.0 --title "v1.0.0" --notes "Paper agent publication"
 ```
 
-**If `gh` is not available**, tell the researcher:
-- Push manually: `git remote add origin <url> && git push -u origin main --tags`
+**If `gh` is not available**, tell the researcher what to run manually:
+- Push: `git remote add origin <url> && git push -u origin main --tags`
 - Create the release on GitHub's web UI: Releases → Create a new release → tag `v1.0.0`
 
 Tell the researcher the publication is live and share the repo URL.
