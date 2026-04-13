@@ -59,7 +59,6 @@ git clone https://github.com/author/their-paper.git
 |-------|-------------|
 | `/publish-paper` | Create a publication repo with AGENTS.md from your working repo |
 | `/load-paper-agent` | Load a published paper agent into your project as a sub-agent |
-| `/prepublish-organize` | Clean up a messy research repo before publishing |
 | `/extract-context` | Extract research context (decisions, reasoning) from conversation history |
 | `/create-paper-page` | Generate a GitHub Pages landing page for your paper |
 
@@ -67,7 +66,7 @@ git clone https://github.com/author/their-paper.git
 
 - [PROTOCOL.md](PROTOCOL.md) — the AGENTS.md format spec (for tool builders and curious readers)
 - [VISION.md](VISION.md) — ideas and future directions
-- [skills/](skills/) — all five skills above
+- [skills/](skills/) — all four skills above
 - [template/](template/) — starter `AGENTS.md` and `CLAUDE.md`
 
 ## License
