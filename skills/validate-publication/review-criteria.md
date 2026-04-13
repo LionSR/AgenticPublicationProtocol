@@ -1,6 +1,6 @@
 # Review Criteria
 
-Detailed criteria for each review agent in review-publication.
+Detailed criteria for each validation agent in validate-publication.
 
 ## Factuality
 

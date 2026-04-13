@@ -4,10 +4,10 @@
 
 Not every section applies to every paper. Use this guide to skip irrelevant sections:
 
-- **Theory paper** (no code): Paper, Supplementary Materials, AGENTS.md, Review, Final
+- **Theory paper** (no code): Paper, Supplementary Materials, AGENTS.md, Validation, Final
 - **Computational paper**: All sections
-- **Experimental paper** (wet lab + analysis scripts): Paper, Data, Supplementary Materials, AGENTS.md, Review, Final
-- **Notebook paper**: Paper, Code (focus on notebooks), Data, Supplementary Materials, AGENTS.md, Review, Final
+- **Experimental paper** (wet lab + analysis scripts): Paper, Data, Supplementary Materials, AGENTS.md, Validation, Final
+- **Notebook paper**: Paper, Code (focus on notebooks), Data, Supplementary Materials, AGENTS.md, Validation, Final
 
 ---
 
@@ -60,11 +60,11 @@ Not every section applies to every paper. Use this guide to skip irrelevant sect
 - [ ] Supplementary Materials section points to correct files
 - [ ] Skills section lists all published skills
 
-## Review
-- [ ] Structure review passed (after file organization)
-- [ ] AGENTS.md review passed (after drafting)
-- [ ] README review passed (after drafting)
-- [ ] Full review passed (before release)
+## Validation
+- [ ] Structure validation passed (after file organization)
+- [ ] AGENTS.md validation passed (after drafting)
+- [ ] README validation passed (after drafting)
+- [ ] Full validation passed (before release)
 
 ## Final
 - [ ] README is complete and accurate

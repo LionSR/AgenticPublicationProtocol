@@ -1,23 +1,23 @@
 ---
-name: review-publication
-description: Review a publication repo for factuality, privacy, consistency, and completeness. Use after major steps in /publish-paper or standalone to audit an existing publication. Launches parallel specialized agents to check different aspects and leaves inline comments in files.
+name: validate-publication
+description: Validate a publication repo for factuality, privacy, consistency, and completeness. Use after major steps in /publish-paper or standalone to audit an existing publication. Launches parallel specialized agents to check different aspects and leaves inline comments in files.
 ---
 
-# Review Publication
+# Validate Publication
 
-Automated quality review for publication repos. Launches parallel agents to independently check factuality, privacy, file integrity, and substance, then leaves inline comments directly in the files for the researcher to resolve.
+Automated quality checks for publication repos. Launches parallel agents to independently check factuality, privacy, file integrity, and substance, then leaves inline comments directly in the files for the researcher to resolve.
 
 Modeled on the code-review pattern: parallel specialized agents, high-signal filtering, independent validation of flagged issues.
 
 ## When to use
 
-- During `/publish-paper` at review checkpoints (after steps 5, 7, 9, and 10)
+- During `/publish-paper` at validation checkpoints (after steps 5, 7, 9, and 10)
 - Standalone to audit an existing publication repo
 - Before tagging a new release of an existing publication
 
 ## Stages
 
-Invoke with `--stage <name>` to review specific artifacts. Omit for a full review.
+Invoke with `--stage <name>` to validate specific artifacts. Omit for a full validation.
 
 | Stage | When | What's checked |
 |-------|------|----------------|
@@ -30,7 +30,7 @@ Invoke with `--stage <name>` to review specific artifacts. Omit for a full revie
 
 ### 1. Gather context
 
-Read the publication repo to understand what's being reviewed:
+Read the publication repo to understand what's being validated:
 - `AGENTS.md` — the agent's instructions (if it exists yet)
 - The paper source — whatever format is designated as ground truth
 - `README.md`
@@ -38,7 +38,7 @@ Read the publication repo to understand what's being reviewed:
 - `skills/` — any author-published skills
 - `supplementary/checklist.md` — the publication checklist (if it exists)
 
-### 2. Launch parallel review agents
+### 2. Launch parallel validation agents
 
 Launch these agents in parallel. Each returns a list of issues with severity, location, and suggested fix.
 
@@ -127,7 +127,7 @@ For code files, use the appropriate comment syntax:
 Output a summary:
 
 ```
-## Publication review (stage: agents-md)
+## Publication validation (stage: agents-md)
 
 ### Errors (2)
 1. AGENTS.md:23 — Paper summary claims "95% accuracy"; paper reports 93.7%
@@ -151,7 +151,7 @@ If no issues found: "No issues found. Checked factuality, privacy, paths, and co
 When used outside `/publish-paper` (e.g., auditing an existing publication repo):
 
 ```
-/review-publication
+/validate-publication
 ```
 
-This runs `--stage full` by default. The agent reads the entire repo, runs all four review agents, and reports findings with inline comments.
+This runs `--stage full` by default. The agent reads the entire repo, runs all four validation agents, and reports findings with inline comments.

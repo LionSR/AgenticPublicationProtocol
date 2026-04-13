@@ -243,7 +243,7 @@ For every external data URL identified in step 1 (Hugging Face, Zenodo, Figshare
 
 Tell the researcher what was copied and how it's organized. Flag anything that needed special handling (large files, updated paths, broken data links).
 
-**Review checkpoint:** Launch a review agent following `/review-publication --stage structure` to check file paths, sensitive files, and data links. Fix any errors (search for `REVIEW: error` in files — markers may be `<!-- REVIEW:` in Markdown or `# REVIEW:` in code). Show warnings to the researcher.
+**Validation checkpoint:** Launch a validation agent following `/validate-publication --stage structure` to check file paths, sensitive files, and data links. Fix any errors (search for `REVIEW: error` in files — markers may be `<!-- REVIEW:` in Markdown or `# REVIEW:` in code). Show warnings to the researcher.
 
 ### 6. Verify the code works
 
@@ -331,7 +331,7 @@ Also create `CLAUDE.md` containing `@AGENTS.md` (Claude Code import syntax).
 
 Fix any mechanical issues found.
 
-**Review checkpoint:** Launch a review agent following `/review-publication --stage agents-md` to check factuality against the paper, path validity, privacy, and substance. Fix any errors. Show warnings to the researcher before the iteration step — they can address both the review findings and their own feedback together.
+**Validation checkpoint:** Launch a validation agent following `/validate-publication --stage agents-md` to check factuality against the paper, path validity, privacy, and substance. Fix any errors. Show warnings to the researcher before the iteration step — they can address both the validation findings and their own feedback together.
 
 ### 8. Iterate on the AGENTS.md with the researcher
 
@@ -400,7 +400,7 @@ Clone and open — any agent that reads AGENTS.md or README will pick up the pap
 
 Get the researcher's feedback on the README before finalizing.
 
-**Review checkpoint:** Launch a review agent following `/review-publication --stage readme` to check consistency between README and AGENTS.md, links, and privacy. Fix any errors. Show warnings to the researcher.
+**Validation checkpoint:** Launch a validation agent following `/validate-publication --stage readme` to check consistency between README and AGENTS.md, links, and privacy. Fix any errors. Show warnings to the researcher.
 
 ### 10. Final review
 
@@ -410,7 +410,7 @@ Show the researcher the complete publication repo — all files, the AGENTS.md, 
 - What the agent will be able to do
 - What goes public when they release
 
-**Review checkpoint:** Launch a review agent following `/review-publication --stage full` for a comprehensive sweep — factuality, privacy, paths, consistency, and substance across all files. Fix any errors. Show warnings and notes to the researcher.
+**Validation checkpoint:** Launch a validation agent following `/validate-publication --stage full` for a comprehensive sweep — factuality, privacy, paths, consistency, and substance across all files. Fix any errors. Show warnings and notes to the researcher.
 
 **Walk through the checklist** (`supplementary/checklist.md`) as a quality gate. Go through each item with the researcher and mark them off. Flag any unchecked items that need attention before release.
 
