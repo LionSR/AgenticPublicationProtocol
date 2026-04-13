@@ -49,7 +49,7 @@ Clone and point your tool at the `skills/` directory. To update, `git pull` in t
 
 **Load directly from arXiv:**
 ```
-/load-arxiv-paper 2301.07041
+/load-paper-agent 2301.07041
 ```
 
 **Any agent:**
@@ -63,8 +63,8 @@ git clone https://github.com/author/their-paper.git
 | Skill | Description |
 |-------|-------------|
 | `/publish-paper` | Create a publication repo with AGENTS.md from your working repo |
-| `/load-paper-agent` | Load a published paper agent into your project as a sub-agent |
-| `/load-arxiv-paper` | Load a paper directly from arXiv — fetch PDF, metadata, and optionally find code, blog posts, and reviews |
+| `/load-paper-agent` | Load a paper into your project — from GitHub URL or arXiv ID |
+| `/find-paper-resources` | Find code repos, author blog posts, and OpenReview reviews for a paper |
 | `/extract-context` | Extract research context (decisions, reasoning) from conversation history |
 | `/create-paper-page` | Generate a GitHub Pages landing page for your paper |
 

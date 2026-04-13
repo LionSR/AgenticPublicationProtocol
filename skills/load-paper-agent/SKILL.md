@@ -1,6 +1,6 @@
 ---
 name: load-paper-agent
-description: Load a published paper agent into your current project as a sub-agent. Use when a user wants to consult, build on, or discuss a paper that follows the Agentic Publication Protocol. Also works with non-APP repos that have code and a README.
+description: Load a published paper agent into your current project as a sub-agent. Use when a user wants to consult, build on, or discuss a paper that follows the Agentic Publication Protocol. Accepts GitHub URLs, arXiv IDs, or arXiv URLs. Also works with non-APP repos that have code and a README.
 ---
 
 # Load Paper Agent
@@ -13,11 +13,16 @@ User says something like:
 - "Load paper agent from https://github.com/user/paper-repo"
 - "I want to consult the paper at <url>"
 - "Add this paper as a sub-agent: <url>"
-- "Load <arxiv-id> as a paper agent"
+- "Load 2301.07041 as a paper agent"
+- "Load this paper from arXiv: https://arxiv.org/abs/2301.07041"
 
 ## Steps
 
-### 1. Clone the paper
+### 1. Identify the source and fetch the paper
+
+Determine whether the user provided a **GitHub URL** or an **arXiv reference**, then follow the appropriate path.
+
+#### GitHub URL
 
 ```bash
 mkdir -p papers/
@@ -29,9 +34,38 @@ If the user specifies a version:
 git clone --branch v1.0.0 <url> papers/<repo-name>
 ```
 
-If the user gives an arXiv ID instead of a GitHub URL, prefer using the `/load-arxiv-paper` skill — it fetches the PDF and metadata directly from arXiv and can optionally search for code repos, blog posts, and OpenReview reviews. If that skill is not available, fall back to searching for the corresponding repo (check the paper's PDF for a GitHub link, or search GitHub for the arXiv ID).
-
 If the clone fails (private repo, wrong URL), inform the user and ask for the correct URL or access.
+
+#### arXiv ID or URL
+
+Accept any of these formats and extract the arXiv ID:
+- Bare ID: `2301.07041` or `2301.07041v2`
+- Abstract URL: `https://arxiv.org/abs/2301.07041`
+- PDF URL: `https://arxiv.org/pdf/2301.07041`
+
+Normalize to the bare ID (e.g. `2301.07041`). If a version suffix is given (e.g. `v2`), preserve it.
+
+Fetch metadata and download the PDF in parallel:
+
+```bash
+mkdir -p papers/arxiv-ARXIV_ID
+curl -s "https://export.arxiv.org/api/query?id_list=ARXIV_ID" -o /tmp/arxiv_response.xml &
+curl -L "https://arxiv.org/pdf/ARXIV_ID" -o papers/arxiv-ARXIV_ID/paper.pdf &
+wait
+```
+
+**From the metadata** (Atom XML), extract: title, authors (names and affiliations if available), abstract, categories (e.g. cs.CL, stat.ML), published/updated dates, links (PDF, DOI).
+
+If the API returns no results or an error, inform the user and ask them to verify the ID.
+
+Verify the PDF download succeeded (file exists and is >0 bytes). If it failed, retry once, then report the error.
+
+Generate a starter `papers/arxiv-ARXIV_ID/AGENTS.md` following the structure defined in [PROTOCOL.md](../../PROTOCOL.md#agentsmd), populated with the fetched metadata. Since this is an import (not an author publication), fill in what the metadata provides and mark the rest as placeholders:
+- **Paper Summary**: Use the arXiv abstract (note it's not an author-written agent summary)
+- **Key Results**: Leave as placeholder
+- **Repository Structure**: List `paper.pdf` as the ground truth document
+- **Citation**: Generate a BibTeX entry from the metadata
+- Other required sections: populate with sensible defaults per the protocol
 
 ### 2. Check for APP compliance
 
@@ -50,6 +84,14 @@ Read `papers/<repo-name>/AGENTS.md`. Check:
 - Computational requirements (what's light, what's heavy)
 - Available supplementary materials (if `supplementary/` exists) — know-how, author notes, sessions, additional materials
 - Available skills (if `skills/` exists) — list each skill with its name and description from the SKILL.md frontmatter
+
+**For arXiv imports** (PDF-only, no code repo), report:
+- Paper title and authors
+- Abstract (first 3-4 sentences)
+- arXiv categories
+- Where files were saved
+- That this is a PDF-only import — no code, no structured repo. If they want full APP capabilities, they'll need to either find or create a publication repo.
+- Suggest `/find-paper-resources` if they want to search for associated code, blog posts, or reviews.
 
 **For non-APP repos**, explore the repo and report:
 - What the repo contains (paper, code, data, notebooks)
