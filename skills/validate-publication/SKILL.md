@@ -21,7 +21,7 @@ Invoke with `--stage <name>` to validate specific artifacts. Omit for a full val
 
 | Stage | When | What's checked |
 |-------|------|----------------|
-| `structure` | After step 5 (copy/organize) | File paths, sensitive files, data links, .gitignore |
+| `structure` | After step 5 (copy/organize) | Folder structure, file paths, sensitive files, data links, .gitignore |
 | `agents-md` | After step 7 (AGENTS.md created) | Factuality, paths, ground truth, substance, commands |
 | `readme` | After step 9 (README created) | Consistency with AGENTS.md, links, figure table |
 | `full` | Step 10 or standalone | All of the above + confidentiality sweep + checklist |
@@ -51,12 +51,21 @@ Compare every claim in AGENTS.md (paper summary, key results, "What You Can Do")
 
 Only run at stages: `agents-md`, `full`.
 
-**Agent 2: Path & command validator**
+**Agent 2: Path & structure validator**
 - Verify every file path in AGENTS.md Repository Map exists in the repo
 - Verify every file path in README exists
 - Check that commands in the figure generation table are syntactically valid
 - Test external data links with `curl -sIL <url>` (flag non-2xx responses)
 - Check that `supplementary/` references point to real files
+- **Check folder structure conformance** — the publication repo should follow the convention from `/publish-paper` step 5:
+  - Paper source in `paper/`, not loose at root or in `src/`
+  - Code in `code/` (with `src/`, `scripts/`, `configs/`, `notebooks/` as relevant)
+  - Data in `data/`
+  - Dependencies/setup in `environment/`
+  - Supplementary materials in `supplementary/`
+  - Skills in `skills/<name>/SKILL.md`
+  - Root should only contain `AGENTS.md`, `CLAUDE.md`, `README.md`, `LICENSE`, `.gitignore`, and the top-level directories — flag other root-level files
+  - Flag files that look misplaced (e.g., `.py` scripts at root, `requirements.txt` at root instead of `environment/`, paper PDF at root instead of `paper/build/`)
 
 Run at all stages.
 
