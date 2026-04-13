@@ -51,32 +51,14 @@ If the API returns no results or an error, inform the user and ask them to verif
 
 ### 3. Generate a starter AGENTS.md
 
-Create `papers/arxiv-ARXIV_ID/AGENTS.md` from the fetched metadata:
+Create `papers/arxiv-ARXIV_ID/AGENTS.md` following the structure defined in [PROTOCOL.md](../../PROTOCOL.md#agentsmd), populated with the fetched metadata. Use the YAML frontmatter fields from the protocol (`protocol`, `protocol_version`, `title`, `authors`, `arxiv_id`, `paper_format`, `version`, `domain`, `tags`).
 
-```yaml
----
-protocol: agentic-publication-protocol
-protocol_version: "0.1.0"
-title: "PAPER TITLE"
-authors:
-  - name: "Author Name"
-    affiliation: "Institution"  # if available from API
-arxiv_id: "ARXIV_ID"
-paper_format: "pdf"
-version: "1.0.0"
-domain: "PRIMARY_CATEGORY"
-tags: ["category1", "category2"]
----
-```
-
-Fill in the required sections using the metadata:
-- **Identity**: Standard spokesperson framing, referencing the paper title and authors
-- **Paper Summary**: Use the abstract as the initial summary (note that this is the arXiv abstract, not an author-written agent summary)
-- **Key Results**: Leave as placeholder — the abstract doesn't usually enumerate individual contributions clearly enough
-- **Repository Structure**: List `paper.pdf` as the ground truth document, plus any other files added
-- **What You Can Do**: Explain the paper (from the PDF), note that code reproduction requires additional setup
-- **Computational Requirements**: Unknown — note this
+Since this is an import (not an author publication), fill in what the metadata provides and mark the rest as placeholders:
+- **Paper Summary**: Use the arXiv abstract (note it's not an author-written agent summary)
+- **Key Results**: Leave as placeholder — the abstract doesn't enumerate contributions clearly enough
+- **Repository Structure**: List `paper.pdf` as the ground truth document
 - **Citation**: Generate a BibTeX entry from the metadata
+- Other required sections: populate with sensible defaults per the protocol
 
 ### 4. Report to the user
 
@@ -99,7 +81,7 @@ Use a tiered approach — run the first tier in parallel, fall back only if need
 
 **Tier 1 (run in parallel):**
 1. **Papers with Code**: Fetch `https://paperswithcode.com/api/v1/papers/?arxiv_id=ARXIV_ID` — most reliable aggregated source
-2. **Links in the PDF**: Read the paper PDF and look for GitHub/GitLab URLs — catches repos not yet indexed
+2. **Links in the PDF**: Read the already-downloaded `papers/arxiv-ARXIV_ID/paper.pdf` and look for GitHub/GitLab URLs — catches repos not yet indexed
 
 **Tier 2 (only if Tier 1 finds nothing, run in parallel):**
 3. **GitHub search**: Search GitHub for the arXiv ID (`site:github.com ARXIV_ID`)
