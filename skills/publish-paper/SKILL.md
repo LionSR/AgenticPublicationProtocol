@@ -1,11 +1,48 @@
 ---
 name: publish-paper
-description: Create an AI agent for an academic paper following the Agentic Publication Protocol. Use when a researcher wants to publish their paper repo with an AGENTS.md so any coding agent can represent the work — explain it, reproduce figures, run experiments, answer questions about the methodology.
+description: Orchestrate the publication of an academic paper as an AI agent following the Agentic Publication Protocol. This is the main skill — it calls /extract-context and /validate-publication as sub-skills at the appropriate stages.
 ---
 
 # Publish Paper as Agent
 
-Create a publication repo for a paper — a clean, public repo with an AGENTS.md that turns it into an AI agent. The researcher's working repo may be private and messy; the publication repo is a curated subset meant for public consumption.
+This is the **orchestrator skill**. It guides the full publication process and calls sub-skills:
+- `/extract-context` — to extract research context from conversation history (phase 2)
+- `/validate-publication` — to run automated quality checks (phases 3, 4, and 5)
+
+## Roadmap
+
+At the very start, show the researcher this roadmap so they know what's ahead:
+
+```
+PUBLICATION ROADMAP
+
+  Phase 1 — Understand        [ ]  Read the repo, check for previous versions
+  Phase 2 — Discuss           [ ]  Interview (5 short rounds), extract context
+  Phase 3 — Build             [ ]  Create repo, organize files, verify code
+  Phase 4 — Draft             [ ]  AGENTS.md, iterate with you, README
+  Phase 5 — Final review      [ ]  Walk through everything, validation sweep
+  Phase 6 — Release           [ ]  Publish (with your explicit confirmation)
+
+  This is a deliberate process — it can span multiple sessions.
+  I'll update this checklist as we go.
+```
+
+## Progress tracking
+
+After completing each phase, **re-display the roadmap** with updated status so the researcher always knows where they are. Mark completed phases with `[x]` and show the current phase:
+
+```
+  Phase 1 — Understand        [x]  Done
+  Phase 2 — Discuss           [x]  Done
+  Phase 3 — Build             [>]  In progress — organizing files
+  Phase 4 — Draft             [ ]  Next
+  Phase 5 — Final review      [ ]  
+  Phase 6 — Release           [ ]  
+```
+
+If resuming a previous session, reconstruct the progress state from what already exists (e.g., if AGENTS.md and README already exist, phases 1-4 are done).
+
+## Guiding principles
 
 Publishing a paper is a significant responsibility. This process should be deliberate, not rushed. It is fine — and expected — for this to span multiple sessions.
 
@@ -15,20 +52,22 @@ Publishing a paper is a significant responsibility. This process should be delib
 
 When asking the researcher to make choices, use structured question tools if the platform supports them (e.g. `AskUserQuestion` in Claude Code). Present clear options with descriptions rather than open-ended text questions. This makes the process faster and less ambiguous.
 
-## Process
+---
 
-### 0. Check for previous versions
+## Phase 1 — Understand
 
-First, check the **working repo** for a `.publications.md` file — this is automatically created in step 12 after each release and tracks all publication repos created from this working repo.
+### 1.1 Check for previous versions
+
+First, check the **working repo** for a `.publications.md` file — this is automatically created in phase 6 after each release and tracks all publication repos created from this working repo.
 
 **If `.publications.md` exists:**
 - Read it to find the previous publication repo URL, version, and date
 - Clone or locate that publication repo
 - Read its `AGENTS.md`, `README.md`, `supplementary/`, and `skills/` thoroughly
 - Most content already exists and just needs updating
-- The researcher's interview (step 2) can focus on **what changed** — "What's new or different in this version?"
+- The researcher's interview (phase 2) can focus on **what changed** — "What's new or different in this version?"
 - Carry forward anything that hasn't changed rather than re-creating it
-- In step 7, start from the previous AGENTS.md and modify it, rather than drafting from scratch
+- In phase 4, start from the previous AGENTS.md and modify it, rather than drafting from scratch
 - When creating the new version, update the `version` field in AGENTS.md frontmatter and tag a new release (e.g., v2.0.0)
 
 **If `.publications.md` does not exist**, ask the researcher: "Is this the first version, or is there a previous publication repo?"
@@ -37,14 +76,14 @@ If a previous version exists, get the repo URL and follow the same process as ab
 
 This saves significant time and avoids losing good content that was already reviewed and approved.
 
-### 1. Understand the paper
+### 1.2 Understand the paper
 
 Read the working repo thoroughly before asking the researcher anything. Build a mental model:
 
 **Paper source:**
 - Find the main document: look for `*.tex`, `*.md`, `*.docx`, `*.pdf`, `*.html`, `*.pptx`, video files
 - The paper can be in any format — LaTeX, DOCX, Markdown, HTML, video, PPTX, PDF
-- If multiple candidates exist, note them all — you'll ask the researcher which is canonical in step 2
+- If multiple candidates exist, note them all — you'll ask the researcher which is canonical in phase 2
 - Read it — understand the title, abstract, key claims, structure
 - Find figures: where are they stored? Are there source files (`.py`, `.ipynb`) that generate them?
 
@@ -82,11 +121,13 @@ For each figure in the paper:
 3. Identify what data the script reads
 
 **What's missing:**
-- Is there anything you can't figure out from reading the repo? Note questions for step 2.
+- Is there anything you can't figure out from reading the repo? Note questions for phase 2.
 
 **Tell the researcher** what you found — present your understanding of the repo structure, the paper, and the code. Show them the script→figure mapping. This demonstrates you've done the homework and gives them a chance to correct misunderstandings early.
 
-### 2. Discuss with the researcher
+## Phase 2 — Discuss
+
+### 2.1 Interview the researcher
 
 Ask **1-3 questions per round**, wait for answers, then move to the next round. Do not dump all questions at once — researchers have limited attention and will miss things in a wall of text. Lead with what you can't figure out from reading the repo yourself; skip questions you already know the answer to.
 
@@ -96,7 +137,7 @@ Ask **1-3 questions per round**, wait for answers, then move to the next round. 
 - If multiple paper-like documents exist: "Which of these is the canonical paper?" (show the candidates you found)
 - "In your own words, what are the key results and the main contribution?"
 
-**Round 2 — The code** (only what you couldn't determine from step 1):
+**Round 2 — The code** (only what you couldn't determine from phase 1):
 - Show the script→figure mapping you built and ask the researcher to confirm or correct it
 - "What's the main experiment and how do you run it?"
 - If anything looked fragile or slow, ask about that specifically
@@ -121,18 +162,20 @@ Ask **1-3 questions per round**, wait for answers, then move to the next round. 
 
 These four are required to proceed. Everything else can be filled in later or inferred.
 
-### 3. Extract research context (optional)
+### 2.2 Extract research context (optional) — `/extract-context`
 
 Ask the researcher if they want to include research context from their conversation history. Offer a structured choice:
 - **Yes — extract from sessions** (recommended): captures reasoning, decisions, dead ends from Claude Code / Codex history. By default all project sessions are included and a thematic summary is produced. The researcher can optionally publish more detailed session transcripts too.
 - **Yes — I'll write notes manually**: the researcher provides context themselves
 - **No — skip this**: no research context in the publication
 
-This context is valuable for writing the AGENTS.md later (steps 7-8), because the agent can answer "why did you do X?" from real reasoning rather than guessing.
+This context is valuable for writing the AGENTS.md in phase 4, because the agent can answer "why did you do X?" from real reasoning rather than guessing.
 
-If extracting from sessions, follow the `/extract-context` skill. Run it in the **working repo** (that's where the sessions are). The output will be copied into the publication repo later. The extract-context process includes a mandatory confidentiality screening step — but you should also check for sensitive content during steps 7-8 when incorporating context into the AGENTS.md.
+If extracting from sessions, run the `/extract-context` sub-skill in the **working repo** (that's where the sessions are). The output will be copied into the publication repo later. The extract-context process includes a mandatory confidentiality screening step — but you should also check for sensitive content in phase 4 when incorporating context into the AGENTS.md.
 
-### 4. Create the publication repo
+## Phase 3 — Build
+
+### 3.1 Create the publication repo
 
 Ask the researcher how they want to create the publication repo. Offer a structured choice:
 - **Create on GitHub now** (requires `gh` CLI)
@@ -159,9 +202,9 @@ cd <repo-name>
 mkdir <repo-name> && cd <repo-name> && git init
 ```
 
-The researcher can push to GitHub later in step 11.
+The researcher can push to GitHub later in phase 6.
 
-### 5. Copy and organize selected files
+### 3.2 Copy and organize selected files
 
 Show the researcher the list of files you're about to copy and the target structure. Confirm before copying.
 
@@ -179,7 +222,7 @@ cp ../working-repo/data/results.csv data/
 cp ../working-repo/requirements.txt environment/
 ```
 
-Use the file list from step 2 — copy only what the researcher approved. Organize into the directory structure defined in [PROTOCOL.md](../../PROTOCOL.md#publication-repo-structure). Not every directory is required — adapt to what's actually being published. A theory paper might just have `paper/` and a few scripts.
+Use the file list from phase 2 — copy only what the researcher approved. Organize into the directory structure defined in [PROTOCOL.md](../../PROTOCOL.md#publication-repo-structure). Not every directory is required — adapt to what's actually being published. A theory paper might just have `paper/` and a few scripts.
 
 **Single source of truth:** Each file lives in exactly one place. No duplicates, no ambiguity about which version is current.
 
@@ -190,7 +233,7 @@ Use the file list from step 2 — copy only what the researcher approved. Organi
 - Generated files that can be reproduced: add to `.gitignore`, document the generation command
 
 **Verify external data links:**
-For every external data URL identified in step 1 (Hugging Face, Zenodo, Figshare, etc.):
+For every external data URL identified in phase 1 (Hugging Face, Zenodo, Figshare, etc.):
 - Test accessibility: `curl -sIL <url>` (follow redirects) or platform-specific commands (`huggingface-cli download --dry-run`, etc.)
 - Show results to the researcher: "Link X returned 200 OK" or "Link Y returned 404 — is this still the right URL?"
 - Ask the researcher to confirm each link works (some may require authentication the agent doesn't have)
@@ -199,19 +242,19 @@ For every external data URL identified in step 1 (Hugging Face, Zenodo, Figshare
 **Create a .gitignore** tailored to what's in the repo — cover build artifacts, generated files, sensitive files, and OS files.
 
 **Copy supplementary materials:**
-- If research context was extracted in step 3, copy it into `supplementary/` now
-- For `supplementary/authors-note.md`: ask the researcher what message they want to leave for readers — what should someone know that isn't in the paper? Draft from their answer and the step 2 interview, then show them the draft for revision. This is their voice, not the agent's.
+- If research context was extracted in phase 2, copy it into `supplementary/` now
+- For `supplementary/authors-note.md`: ask the researcher what message they want to leave for readers — what should someone know that isn't in the paper? Draft from their answer and the phase 2 interview, then show them the draft for revision. This is their voice, not the agent's.
 - Copy any supplementary materials (slides, talks, posters) the researcher approved into `supplementary/materials/`
 - Copy `template/publication-checklist.md` to `supplementary/checklist.md` and adapt it by removing sections that don't apply to this publication
 
 **Create skills:**
-- If the researcher defined skills in step 2, create `skills/<name>/SKILL.md` for each one with name and description in frontmatter and step-by-step instructions in the body
+- If the researcher defined skills in phase 2, create `skills/<name>/SKILL.md` for each one with name and description in frontmatter and step-by-step instructions in the body
 
 Tell the researcher what was copied and how it's organized. Flag anything that needed special handling (large files, updated paths, broken data links).
 
-**Validation checkpoint:** Launch a validation agent following `/validate-publication --stage structure` to check file paths, sensitive files, and data links. Fix any errors (search for `REVIEW: error` in files — markers may be `<!-- REVIEW:` in Markdown or `# REVIEW:` in code). Show warnings to the researcher.
+**Sub-skill: `/validate-publication --stage structure`** — checks file paths, folder structure, sensitive files, and data links. Fix any errors (search for `REVIEW: error` in files — markers may be `<!-- REVIEW:` in Markdown or `# REVIEW:` in code). Show warnings to the researcher.
 
-### 6. Verify the code works
+### 3.3 Verify the code works
 
 Tell the researcher you're testing that everything works in the publication repo.
 
@@ -225,9 +268,11 @@ Actually run things to confirm they work with the new paths:
 
 Fix anything that broke from the copy/reorganization. Report results to the researcher — what passed, what needed fixing, what you changed.
 
-### 7. Create AGENTS.md
+## Phase 4 — Draft
 
-Tell the researcher you're drafting the AGENTS.md now, drawing on everything from steps 1-3.
+### 4.1 Create AGENTS.md
+
+Tell the researcher you're drafting the AGENTS.md now, drawing on everything from phases 1-2.
 
 Generate `AGENTS.md` at the publication repo root. This is the most important file — it must give an agent everything it needs to operate in this repo.
 
@@ -244,8 +289,8 @@ Generate `AGENTS.md` at the publication repo root. This is the most important fi
 
 **Writing the Paper Summary:**
 - Before drafting, ask the researcher: "What's the core message you want someone to take away from this paper?" Their answer sets the direction — don't draft from your own reading first.
-- Use the researcher's own words from step 2 and this answer as the foundation
-- If research context was extracted in step 3, draw on it — the reasoning and motivation behind decisions
+- Use the researcher's own words from phase 2 and this answer as the foundation
+- If research context was extracted in phase 2, draw on it — the reasoning and motivation behind decisions
 - 2-4 paragraphs covering: what problem, what approach, what results, what implications
 - This is what the agent will rely on most — make it substantive
 
@@ -298,9 +343,9 @@ Also create `CLAUDE.md` containing `@AGENTS.md` (Claude Code import syntax).
 
 Fix any mechanical issues found.
 
-**Validation checkpoint:** Launch a validation agent following `/validate-publication --stage agents-md` to check factuality against the paper, path validity, privacy, and substance. Fix any errors. Show warnings to the researcher before the iteration step — they can address both the validation findings and their own feedback together.
+**Sub-skill: `/validate-publication --stage agents-md`** — checks factuality against the paper, path validity, privacy, and substance. Fix any errors. Show warnings to the researcher before the iteration step — they can address both the validation findings and their own feedback together.
 
-### 8. Iterate on the AGENTS.md with the researcher
+### 4.2 Iterate on the AGENTS.md with the researcher
 
 Show the researcher the draft AGENTS.md and discuss it with them. This is not a rubber-stamp review — it's a conversation about what the agent should convey.
 
@@ -317,7 +362,7 @@ After walking through sections, ask:
 
 Revise the AGENTS.md based on their feedback. Go back and forth until the researcher is satisfied that the agent represents their intent, not just their words.
 
-### 9. Create README
+### 4.3 Create README
 
 Show the researcher the README draft. The publication README is for readers who want to use the paper agent — not a copy of the working repo's README.
 
@@ -368,11 +413,11 @@ Clone and open — any agent that reads AGENTS.md or README will pick up the pap
 
 Get the researcher's feedback on the README before finalizing.
 
-**Validation checkpoint:** Launch a validation agent following `/validate-publication --stage readme` to check consistency between README and AGENTS.md, links, and privacy. Fix any errors. Show warnings to the researcher.
+**Sub-skill: `/validate-publication --stage readme`** — checks consistency between README and AGENTS.md, links, and privacy. Fix any errors. Show warnings to the researcher.
 
-### 10. Final review
+## Phase 5 — Final review
 
-**Validation checkpoint:** Launch a validation agent following `/validate-publication --stage full` for a comprehensive sweep — factuality, privacy, paths, consistency, and substance across all files. Fix any errors before showing results to the researcher.
+**Sub-skill: `/validate-publication --stage full`** — comprehensive sweep: factuality, privacy, paths, consistency, and substance across all files. Fix any errors before showing results to the researcher.
 
 Present the final state to the researcher **one piece at a time**, not as a single wall of information:
 
@@ -388,7 +433,9 @@ Wait for the researcher to engage with each item. If they say "all good" without
 
 Do NOT proceed until the researcher has explicitly confirmed they've reviewed the files, the AGENTS.md, and the supplementary materials.
 
-### 11. Release
+## Phase 6 — Release
+
+### 6.1 Confirm and publish
 
 **Before doing anything in this step**, present the researcher with a concrete summary of exactly what is about to happen. This is the point of no return — once pushed, the repo is public. The confirmation must be specific, not a generic "should I proceed?"
 
@@ -476,7 +523,7 @@ gh release create v1.0.0 --title "v1.0.0" --notes "Paper agent publication"
 
 Tell the researcher the publication is live and share the repo URL.
 
-### 12. Record the release in the working repo
+### 6.2 Record the release in the working repo
 
 After the publication is live, switch back to the **working repo** and record the release in `.publications.md`. This ensures that future sessions know a publication repo exists — no need to ask the researcher or guess.
 
@@ -505,7 +552,9 @@ git commit -m "Record publication: <repo-name> v1.0.0"
 
 This file is the link between the working repo and its publication repos. Step 0 reads it to detect previous versions automatically.
 
-### Handling different paper types
+---
+
+## Handling different paper types
 
 The paper can be in any format — LaTeX, DOCX, Markdown, HTML, video, PPTX, PDF. Adapt the process accordingly.
 

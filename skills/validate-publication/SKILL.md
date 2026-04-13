@@ -11,7 +11,7 @@ Modeled on the code-review pattern: parallel specialized agents, high-signal fil
 
 ## When to use
 
-- During `/publish-paper` at validation checkpoints (after steps 5, 7, 9, and 10)
+- Called by `/publish-paper` as a sub-skill at validation checkpoints
 - Standalone to audit an existing publication repo
 - Before tagging a new release of an existing publication
 
@@ -21,10 +21,10 @@ Invoke with `--stage <name>` to validate specific artifacts. Omit for a full val
 
 | Stage | When | What's checked |
 |-------|------|----------------|
-| `structure` | After step 5 (copy/organize) | Folder structure, file paths, sensitive files, data links, .gitignore |
-| `agents-md` | After step 7 (AGENTS.md created) | Factuality, paths, ground truth, substance, commands |
-| `readme` | After step 9 (README created) | Consistency with AGENTS.md, links, figure table |
-| `full` | Step 10 or standalone | All of the above + confidentiality sweep + checklist |
+| `structure` | After organizing files (phase 3) | Folder structure, file paths, sensitive files, data links, .gitignore |
+| `agents-md` | After creating AGENTS.md (phase 4) | Factuality, paths, ground truth, substance, commands |
+| `readme` | After creating README (phase 4) | Consistency with AGENTS.md, links, figure table |
+| `full` | Final review (phase 5) or standalone | All of the above + confidentiality sweep + checklist |
 
 ## Process
 
