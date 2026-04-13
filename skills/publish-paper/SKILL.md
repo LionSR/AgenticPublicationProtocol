@@ -420,7 +420,50 @@ Do NOT proceed until the researcher explicitly confirms.
 
 ### 11. Release
 
-Tell the researcher you're ready to create the release. This is the step that makes it public.
+**Before doing anything in this step**, present the researcher with a concrete summary of exactly what is about to happen. This is the point of no return — once pushed, the repo is public. The confirmation must be specific, not a generic "should I proceed?"
+
+Present this to the researcher (fill in the actual values):
+
+```
+PUBLICATION SUMMARY — please review before I publish:
+
+  Repo name:    <repo-name>
+  Visibility:   PUBLIC — anyone on the internet can see this
+  Version:      v1.0.0
+  Tag:          v1.0.0
+
+  Files included (<N> files):
+    paper/          — <paper source format>, figures, bibliography
+    code/           — <brief description>
+    data/           — <brief description>
+    environment/    — <dependencies file>
+    supplementary/  — <list which files: know-how, authors-note, sessions, etc.>
+    skills/         — <list skill names, or "none">
+    AGENTS.md       — paper agent instructions
+    README.md       — public README
+
+  Files NOT included (stayed in working repo):
+    <list key excluded files/directories, or "nothing excluded">
+
+  External data links:
+    <list any URLs that will be referenced, or "none">
+
+  Checklist status:
+    <N>/<M> items checked — <list any unchecked items>
+
+  What happens next:
+    1. Commit all files to the publication repo
+    2. Tag as v1.0.0
+    3. Push to GitHub as a PUBLIC repository
+    4. Create a GitHub release (v1.0.0)
+    5. Record this release in your working repo (.publications.md)
+```
+
+**Wait for the researcher to explicitly confirm.** A clear "yes", "go ahead", "publish it", or equivalent. Do NOT proceed on ambiguous responses like "looks good" or "ok" — ask: "Just to be clear — shall I push this as a public repo now?"
+
+Do NOT proceed until you have unambiguous confirmation.
+
+After confirmation:
 
 ```bash
 cd <publication-repo>
@@ -428,8 +471,6 @@ git add -A
 git commit -m "Initial publication"
 git tag -a v1.0.0 -m "Paper agent v1.0.0"
 ```
-
-Ask for confirmation before pushing.
 
 **If `gh` is available and the repo isn't on GitHub yet:**
 ```bash
