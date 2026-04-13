@@ -9,6 +9,8 @@ Create a publication repo for a paper — a clean, public repo with an AGENTS.md
 
 Every step involves the researcher. This is a collaborative process — inform them what you're doing, show them what you find, and get their input before moving on.
 
+**Author's voice principle:** The supplementary materials (`authors-note.md`, `know-how.md`), the AGENTS.md paper summary, and any content that speaks for the researcher must reflect what *they* want to convey — not what the agent thinks is important. Before drafting any of these, ask the researcher what they want the document to say and who the intended audience is. Draft from their intent, then iterate. Never generate these documents first and ask for approval after — that inverts the authorship.
+
 When asking the researcher to make choices, use structured question tools if the platform supports them (e.g. `AskUserQuestion` in Claude Code). Present clear options with descriptions rather than open-ended text questions. This makes the process faster and less ambiguous.
 
 ## Process
@@ -234,7 +236,7 @@ For every external data URL identified in step 1 (Hugging Face, Zenodo, Figshare
 
 **Copy supplementary materials:**
 - If research context was extracted in step 3, copy it into `supplementary/` now
-- Generate `supplementary/authors-note.md` from the step 2 interview answers
+- For `supplementary/authors-note.md`: ask the researcher what message they want to leave for readers — what should someone know that isn't in the paper? Draft from their answer and the step 2 interview, then show them the draft for revision. This is their voice, not the agent's.
 - Copy any supplementary materials (slides, talks, posters) the researcher approved into `supplementary/materials/`
 - Copy `template/publication-checklist.md` to `supplementary/checklist.md` and adapt it by removing sections that don't apply to this publication
 
@@ -277,7 +279,8 @@ Generate `AGENTS.md` at the publication repo root. This is the most important fi
 - Set `paper_format` to the correct format (latex, docx, markdown, html, video, pptx, pdf)
 
 **Writing the Paper Summary:**
-- Use the researcher's own words from step 2
+- Before drafting, ask the researcher: "What's the core message you want someone to take away from this paper?" Their answer sets the direction — don't draft from your own reading first.
+- Use the researcher's own words from step 2 and this answer as the foundation
 - If research context was extracted in step 3, draw on it — the reasoning and motivation behind decisions
 - 2-4 paragraphs covering: what problem, what approach, what results, what implications
 - This is what the agent will rely on most — make it substantive

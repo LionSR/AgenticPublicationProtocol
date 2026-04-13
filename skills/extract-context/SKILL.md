@@ -55,7 +55,11 @@ Outputs structured JSON with normalized user/assistant turns, system tags stripp
 
 ### 3. Produce the summary (default output)
 
-By default, distill all sessions into a single `supplementary/know-how.md` — a thematic summary of the reasoning behind the work. Read through every extracted session, pull out key decisions, methodology choices, dead ends, and insights. Organize by theme, not by session. See `session-formats.md` for the know-how template.
+Before drafting, ask the researcher: "What kind of behind-the-scenes knowledge do you want readers to have? What decisions, dead ends, or insights matter most?" Their answer guides what to emphasize — the know-how should reflect what the author considers important, not just everything the agent can find in the sessions.
+
+Then distill all sessions into a single `supplementary/know-how.md` — a thematic summary of the reasoning behind the work. Read through every extracted session, pull out key decisions, methodology choices, dead ends, and insights that align with the researcher's stated intent. Organize by theme, not by session. See `session-formats.md` for the know-how template.
+
+Show the draft to the researcher before finalizing — this document speaks for them.
 
 ### 4. Ask about publishing more detail
 
