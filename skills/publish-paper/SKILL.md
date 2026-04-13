@@ -86,40 +86,36 @@ For each figure in the paper:
 
 ### 2. Discuss with the researcher
 
-Ask about gaps and intent (one or two questions at a time, not all at once):
+Ask **1-3 questions per round**, wait for answers, then move to the next round. Do not dump all questions at once — researchers have limited attention and will miss things in a wall of text. Lead with what you can't figure out from reading the repo yourself; skip questions you already know the answer to.
 
-**About the paper:**
-- If multiple paper-like documents exist, ask which is the canonical paper (the ground truth). The paper format is flexible — LaTeX, DOCX, Markdown, HTML, video, PPTX are all valid.
-- What are the key results? (Ask them to state it in their own words — this becomes the Paper Summary)
-- What's the main contribution vs. existing work?
-- What domain should the agent reason in? (math? physics? ML? biology?)
+**Round 1 — The paper** (start here, it's the foundation):
+- If multiple paper-like documents exist: "Which of these is the canonical paper?" (show the candidates you found)
+- "In your own words, what are the key results and the main contribution?"
 
-**About the code:**
-- Confirm the script→figure mapping. Fill gaps — which scripts generate which figures?
-- What's the main experiment and how do you run it?
-- What parameters can a reader change to explore variations?
-- What parts of the code are fragile / require specific setup?
-- Are there any scripts that take a long time? How long, on what hardware?
+**Round 2 — The code** (only what you couldn't determine from step 1):
+- Show the script→figure mapping you built and ask the researcher to confirm or correct it
+- "What's the main experiment and how do you run it?"
+- If anything looked fragile or slow, ask about that specifically
 
-**About what to publish:**
-- Which files should go into the publication repo? Which should stay private? Present the file list with a structured choice for each: include / exclude / ask me later.
-- What would a reader most likely want to do? Offer options: reproduce figures, extend the work, understand the math/theory, run with different inputs.
-- What should the publication repo be called?
+**Round 3 — What to publish:**
+- Present the file list with a structured choice for each: include / exclude / ask me later
+- "What should the publication repo be called?"
 
-**About key information for readers** (2-3 questions max):
+**Round 4 — The reader's perspective:**
 - "What do you wish someone had told you before reading this paper?"
-- "What's not in the paper but matters for understanding or using the work?"
-- The answers become `supplementary/authors-note.md`.
+- "What would a reader most likely want to do?" Offer options: reproduce figures, extend the work, understand the math/theory, run with different inputs
 
-**About supplementary materials:**
-- "Do you have slides, talks, posters, or tutorials for this work?"
-- "Do you have the copyright/permission to share them publicly?"
-- Clarify: these are secondary to the paper — useful context for readers, not ground truth. They'll go in `supplementary/materials/`.
+**Round 5 — Supplementary materials and skills** (optional — skip if researcher is low on time):
+- "Do you have slides, talks, posters, or tutorials? Do you have permission to share them?"
+- "Are there specific workflows you'd like readers to be able to run through the agent?"
 
-**About skills:**
-- "Are there specific workflows or analyses you'd like readers to be able to run through the agent? For example: a guided analysis pipeline, a visualization tool, a parameter sweep."
-- If yes, help the author define each skill (name, description, step-by-step instructions). You'll create `skills/<name>/SKILL.md` files in step 5.
-- If no, skip — skills are optional.
+**After all rounds — check for gaps.** Review what was answered. If any of these crucial items are still missing, ask again explicitly:
+- Which document is the ground truth paper
+- What the key results are
+- Which files to include / exclude
+- The repo name
+
+These four are required to proceed. Everything else can be filled in later or inferred.
 
 ### 3. Extract research context (optional)
 
