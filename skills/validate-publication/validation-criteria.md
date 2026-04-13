@@ -29,16 +29,16 @@ The paper is the ground truth. Everything else is secondary.
 
 **Folder structure conformance:**
 
-The publication repo should follow the directory layout defined in [PROTOCOL.md](../../PROTOCOL.md#publication-repo-structure). Not every directory is required (a theory paper may only have `paper/`), but files should be in the right place.
+The publication repo should follow the directory layout defined in [PROTOCOL.md](../../PROTOCOL.md#publication-repo-structure). Not every directory is required — check based on what the paper actually contains:
 
-| Directory | Contains | Required? |
-|-----------|----------|-----------|
-| `paper/` | Paper source (ground truth), `.bib`, `figures/`, `build/` | Yes |
-| `code/` | `src/`, `scripts/`, `configs/`, `notebooks/` | If the paper has code |
-| `data/` | `raw/`, `processed/`, `README.md` | If the paper has data |
-| `environment/` | `requirements.txt` (or equivalent), setup `README.md` | If the paper has code |
-| `supplementary/` | `know-how.md`, `authors-note.md`, `checklist.md`, `sessions/`, `materials/` | Recommended |
-| `skills/` | `<name>/SKILL.md` per skill | If author defined skills |
+| Directory | Required? |
+|-----------|-----------|
+| `paper/` | Yes |
+| `code/` | If the paper has code |
+| `data/` | If the paper has data |
+| `environment/` | If the paper has code |
+| `supplementary/` | Recommended |
+| `skills/` | If author defined skills |
 
 **What to flag:**
 - Files at root that belong in a subdirectory (e.g., `main.tex`, `*.py`, `requirements.txt`, `*.csv` at root)

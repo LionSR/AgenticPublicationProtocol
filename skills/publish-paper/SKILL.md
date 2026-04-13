@@ -29,18 +29,7 @@ PUBLICATION ROADMAP
 
 ## Progress tracking
 
-After completing each phase, **re-display the roadmap** with updated status so the researcher always knows where they are. Mark completed phases with `[x]` and show the current phase:
-
-```
-  Phase 1 — Understand        [x]  Done
-  Phase 2 — Discuss           [x]  Done
-  Phase 3 — Build             [>]  In progress — organizing files
-  Phase 4 — Draft             [ ]  Next
-  Phase 5 — Final review      [ ]  
-  Phase 6 — Release           [ ]  
-```
-
-If resuming a previous session, reconstruct the progress state from what already exists (e.g., if AGENTS.md and README already exist, phases 1-4 are done).
+Display the full roadmap at the **start of the process** and when **resuming a previous session** (reconstruct progress from what already exists — e.g., if AGENTS.md and README are present, phases 1-4 are done). For normal phase-to-phase transitions, a brief status line is enough: "Phase 3 complete. Moving to Phase 4 — Draft."
 
 ## Guiding principles
 
@@ -78,7 +67,7 @@ This saves significant time and avoids losing good content that was already revi
 
 ### 1.2 Understand the paper
 
-Read the working repo thoroughly before asking the researcher anything. Build a mental model:
+Read the working repo thoroughly before asking the researcher anything. Build a mental model. (For format-specific guidance — theory papers, notebooks, video — see "Handling different paper types" at the end of this document.)
 
 **Paper source:**
 - Find the main document: look for `*.tex`, `*.md`, `*.docx`, `*.pdf`, `*.html`, `*.pptx`, video files
@@ -272,9 +261,7 @@ Fix anything that broke from the copy/reorganization. Report results to the rese
 
 ### 4.1 Create AGENTS.md
 
-Tell the researcher you're drafting the AGENTS.md now, drawing on everything from phases 1-2.
-
-Generate `AGENTS.md` at the publication repo root. This is the most important file — it must give an agent everything it needs to operate in this repo.
+Tell the researcher you're drafting the AGENTS.md now, drawing on everything from phases 1-2. The required and optional sections are defined in [PROTOCOL.md](../../PROTOCOL.md#agentsmd) — create each section as follows:
 
 **Writing the identity section:**
 - The agent is a spokesperson for THIS work, not a generic assistant
@@ -413,19 +400,16 @@ Clone and open — any agent that reads AGENTS.md or README will pick up the pap
 
 Get the researcher's feedback on the README before finalizing.
 
-**Sub-skill: `/validate-publication --stage readme`** — checks consistency between README and AGENTS.md, links, and privacy. Fix any errors. Show warnings to the researcher.
-
 ## Phase 5 — Final review
 
-**Sub-skill: `/validate-publication --stage full`** — comprehensive sweep: factuality, privacy, paths, consistency, and substance across all files. Fix any errors before showing results to the researcher.
+**Sub-skill: `/validate-publication --stage full`** — comprehensive sweep: factuality, privacy, paths, consistency, substance, and README-AGENTS.md cross-checks across all files. Fix any errors before showing results to the researcher.
 
 Present the final state to the researcher **one piece at a time**, not as a single wall of information:
 
 1. **File inventory**: Show what's included and what was excluded. Ask: "Is this the right set of files? Anything missing or anything that shouldn't be here?"
-2. **AGENTS.md**: Show the final version. Ask: "Does this still accurately represent your paper after all the changes we made?"
-3. **README**: Show the final version. Ask: "Is this what you want readers to see first?"
-4. **Supplementary materials**: List what's in `supplementary/`. Ask: "Are you comfortable with all of this being public?"
-5. **Validation results**: Show any remaining warnings or notes from the validation sweep. Walk through each one — don't just list them.
+2. **AGENTS.md and README**: Briefly confirm these still read correctly after all the revisions — this is a staleness check, not a full re-review (that was phase 4).
+3. **Supplementary materials**: List what's in `supplementary/`. Ask: "Are you comfortable with all of this being public?"
+4. **Validation results**: Show any remaining warnings or notes from the validation sweep. Walk through each one — don't just list them.
 
 Wait for the researcher to engage with each item. If they say "all good" without engaging, ask about one specific thing — e.g., "I want to double-check: the supplementary materials include [X]. Are you sure that should be public?"
 
@@ -550,7 +534,7 @@ git add .publications.md
 git commit -m "Record publication: <repo-name> v1.0.0"
 ```
 
-This file is the link between the working repo and its publication repos. Step 0 reads it to detect previous versions automatically.
+This file is the link between the working repo and its publication repos. Phase 1 reads it to detect previous versions automatically.
 
 ---
 

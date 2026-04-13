@@ -23,8 +23,7 @@ Invoke with `--stage <name>` to validate specific artifacts. Omit for a full val
 |-------|------|----------------|
 | `structure` | After organizing files (phase 3) | Folder structure, file paths, sensitive files, data links, .gitignore |
 | `agents-md` | After creating AGENTS.md (phase 4) | Factuality, paths, ground truth, substance, commands |
-| `readme` | After creating README (phase 4) | Consistency with AGENTS.md, links, figure table |
-| `full` | Final review (phase 5) or standalone | All of the above + confidentiality sweep + checklist |
+| `full` | Final review (phase 5) or standalone | All of the above + README consistency, confidentiality sweep + checklist |
 
 ## Process
 
@@ -84,7 +83,7 @@ Cross-check information across files:
 - Paper summary is substantive — flag generic phrases like "novel method", "we propose", "state-of-the-art" without specifics
 - Key results are concrete — flag vague results like "improved performance"
 
-Only run at stages: `agents-md`, `readme`, `full`.
+Only run at stages: `agents-md`, `full`.
 
 ### 3. Collect and classify issues
 
