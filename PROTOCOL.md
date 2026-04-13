@@ -52,7 +52,7 @@ tags: ["keyword1", "keyword2"]
 
 **Key Results** — Numbered list of the main contributions.
 
-**Repository Map** — Every important file with its path and purpose. Group by function: paper source, figure generation, experiments, data, config. For external data (Hugging Face, Zenodo, etc.), include the URL, download command, and local destination.
+**Repository Structure** — Every important file with its path and purpose. Group by function: paper source, figure generation, experiments, data, config. For external data (Hugging Face, Zenodo, etc.), include the URL, download command, and local destination.
 
 **What You Can Do** — Concrete agent capabilities:
 - *Explain the paper*: which files to read for which topics

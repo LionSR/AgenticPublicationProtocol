@@ -29,7 +29,7 @@ The paper is the ground truth. Everything else is secondary.
 
 **Folder structure conformance:**
 
-The publication repo should follow the convention from `/publish-paper` step 5. Not every directory is required (a theory paper may only have `paper/`), but files should be in the right place.
+The publication repo should follow the directory layout defined in [PROTOCOL.md](../../PROTOCOL.md#publication-repo-structure). Not every directory is required (a theory paper may only have `paper/`), but files should be in the right place.
 
 | Directory | Contains | Required? |
 |-----------|----------|-----------|
@@ -50,7 +50,7 @@ The publication repo should follow the convention from `/publish-paper` step 5. 
 - Severity: `warning` for misplaced files (the repo works, but the structure is inconsistent)
 
 **File paths:**
-- Every path in AGENTS.md Repository Map must resolve to a real file or directory
+- Every path in AGENTS.md Repository Structure must resolve to a real file or directory
 - Every path in README must resolve
 - Every path in `supplementary/` references must resolve
 - Relative paths should be relative to the repo root

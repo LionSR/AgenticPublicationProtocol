@@ -52,20 +52,12 @@ Compare every claim in AGENTS.md (paper summary, key results, "What You Can Do")
 Only run at stages: `agents-md`, `full`.
 
 **Agent 2: Path & structure validator**
-- Verify every file path in AGENTS.md Repository Map exists in the repo
+- Verify every file path in AGENTS.md Repository Structure exists in the repo
 - Verify every file path in README exists
 - Check that commands in the figure generation table are syntactically valid
 - Test external data links with `curl -sIL <url>` (flag non-2xx responses)
 - Check that `supplementary/` references point to real files
-- **Check folder structure conformance** — the publication repo should follow the convention from `/publish-paper` step 5:
-  - Paper source in `paper/`, not loose at root or in `src/`
-  - Code in `code/` (with `src/`, `scripts/`, `configs/`, `notebooks/` as relevant)
-  - Data in `data/`
-  - Dependencies/setup in `environment/`
-  - Supplementary materials in `supplementary/`
-  - Skills in `skills/<name>/SKILL.md`
-  - Root should only contain `AGENTS.md`, `CLAUDE.md`, `README.md`, `LICENSE`, `.gitignore`, and the top-level directories — flag other root-level files
-  - Flag files that look misplaced (e.g., `.py` scripts at root, `requirements.txt` at root instead of `environment/`, paper PDF at root instead of `paper/build/`)
+- **Check folder structure conformance** against the layout defined in [PROTOCOL.md](../../PROTOCOL.md#publication-repo-structure). See `validation-criteria.md` for the detailed checklist of what to flag.
 
 Run at all stages.
 

@@ -179,43 +179,7 @@ cp ../working-repo/data/results.csv data/
 cp ../working-repo/requirements.txt environment/
 ```
 
-Use the file list from step 2 — copy only what the researcher approved. Organize into a clean structure:
-
-```
-paper/
-├── main.tex (or .docx, .md, .html, .pptx)  ← paper source (GROUND TRUTH)
-├── *.bib
-├── figures/          ← generated figures (final versions)
-└── build/            ← compiled PDF (if applicable)
-
-code/
-├── src/              ← core implementation
-├── scripts/          ← utility scripts, figure generation
-├── configs/          ← experiment configurations
-└── notebooks/        ← cleaned Jupyter notebooks (if any)
-
-data/
-├── raw/              ← original data (or download instructions)
-├── processed/        ← intermediate results
-└── README.md         ← what the data is, where it came from
-
-environment/
-├── requirements.txt  ← pinned dependencies
-└── README.md         ← setup instructions
-
-supplementary/
-├── know-how.md       ← tacit knowledge, methodology decisions (from extract-context or manual)
-├── authors-note.md   ← what the authors want readers to know beyond the paper
-├── checklist.md      ← publication checklist (from template)
-├── sessions/         ← (optional) conversation history from the research process
-└── materials/        ← (optional) slides, talks, posters, tutorials
-
-skills/               ← (optional) author-published agent capabilities
-└── skill-name/
-    └── SKILL.md
-```
-
-Adapt the structure to what's actually being published — don't force directories that have nothing in them. A theory paper might just have `paper/` and a few scripts.
+Use the file list from step 2 — copy only what the researcher approved. Organize into the directory structure defined in [PROTOCOL.md](../../PROTOCOL.md#publication-repo-structure). Not every directory is required — adapt to what's actually being published. A theory paper might just have `paper/` and a few scripts.
 
 **Single source of truth:** Each file lives in exactly one place. No duplicates, no ambiguity about which version is current.
 
@@ -285,7 +249,7 @@ Generate `AGENTS.md` at the publication repo root. This is the most important fi
 - 2-4 paragraphs covering: what problem, what approach, what results, what implications
 - This is what the agent will rely on most — make it substantive
 
-**Writing the Repository Map:**
+**Writing the Repository Structure:**
 - Don't just list files — explain what each one does and how they connect
 - Mark the paper source as `(GROUND TRUTH)`
 - Group by function: paper source, figure generation, experiments, data, config
@@ -328,7 +292,7 @@ Generate `AGENTS.md` at the publication repo root. This is the most important fi
 Also create `CLAUDE.md` containing `@AGENTS.md` (Claude Code import syntax).
 
 **Self-check before showing to the researcher:**
-- Verify every file path in the Repository Map exists in the publication repo
+- Verify every file path in the Repository Structure exists in the publication repo
 - Run every command in the figure generation table
 - Confirm computational requirements are accurate
 
@@ -551,7 +515,7 @@ The paper can be in any format — LaTeX, DOCX, Markdown, HTML, video, PPTX, PDF
 - The agent's value is being able to discuss the ideas and connect them to related work
 
 **Computational paper:**
-- Full Repository Map, figure table, experiment commands
+- Full Repository Structure, figure table, experiment commands
 - Extra care on environment specification — computational papers are the hardest to reproduce
 - Document cluster/GPU requirements clearly
 

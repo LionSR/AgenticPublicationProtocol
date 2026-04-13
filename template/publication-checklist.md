@@ -51,7 +51,7 @@ Not every section applies to every paper. Use this guide to skip irrelevant sect
 - [ ] Skills do not make claims that contradict the paper
 
 ## AGENTS.md
-- [ ] All file paths in Repository Map exist in the repo
+- [ ] All file paths in Repository Structure exist in the repo
 - [ ] All commands in figure generation table have been tested
 - [ ] Paper Summary captures what makes the work distinctive
 - [ ] Ground truth hierarchy is clear (paper is authoritative)
