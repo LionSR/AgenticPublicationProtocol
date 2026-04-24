@@ -29,25 +29,17 @@ The paper is the ground truth. Everything else is secondary.
 
 **Folder structure conformance:**
 
-The publication repo should follow the directory layout defined in [PROTOCOL.md](../../PROTOCOL.md#repository-layout). Not every directory is required — check based on what the paper actually contains:
-
-| Directory | Required? |
-|-----------|-----------|
-| `paper/` | Yes |
-| `code/` | If the paper has code |
-| `data/` | If the paper has data |
-| `environment/` | If the paper has code |
-| `supplementary/` | Recommended |
-| `skills/` | If author defined skills |
+The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../PROTOCOL.md#repository-layout). This file does not restate it — validators resolve "what is required" against PROTOCOL.md, and flag deviations as follows.
 
 **What to flag:**
-- Files at root that belong in a subdirectory (e.g., `main.tex`, `*.py`, `requirements.txt`, `*.csv` at root)
-- Root should only contain: `AGENTS.md`, `CLAUDE.md`, `README.md`, `LICENSE`, `.gitignore`
-- Paper source outside `paper/` (e.g., in `src/` or root)
-- Code files outside `code/` (e.g., scripts loose at root or in `paper/`)
-- Dependencies at root instead of `environment/` (e.g., `requirements.txt`, `environment.yml`, `pyproject.toml` at root)
-- Supplementary materials outside `supplementary/` (e.g., `know-how.md` at root)
-- Severity: `warning` for misplaced files (the repo works, but the structure is inconsistent)
+- Paper, code, data, or dependency files loose at root (e.g., `main.tex`, `*.py`, `requirements.txt`, `*.csv`) when a dedicated top-level directory exists.
+- Paper source outside `paper/` (e.g., in `src/` or at root).
+- Code files outside `code/` (e.g., scripts at root or in `paper/`).
+- Dependency files outside `environment/` (`requirements.txt`, `environment.yml`, `pyproject.toml`).
+- Supplementary materials outside `supplementary/` (e.g., `know-how.md` at root).
+- Missing `AGENTS.md`, `README.md`, or `LICENSE` at root — these are required by the protocol.
+- Missing `supplementary/checklist.md` — the protocol requires this for every publication, even when no other supplementary material ships.
+- Severity: `warning` for misplaced files (the repo works but the structure is inconsistent); `error` for missing required files.
 
 **File paths:**
 - Every path in AGENTS.md Repository Structure must resolve to a real file or directory

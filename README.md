@@ -73,7 +73,6 @@ Claude Code users can also run `/load-paper-agent <repo-url>` to clone a publish
 |-------|--------------|
 | `/validate-publication` | Check a publication against `PROTOCOL.md` — paths, privacy, factuality, consistency. |
 | `/extract-context` | Pull research context (decisions, reasoning, dead ends) from local Claude Code / Codex conversation history. |
-| `/prepublish-organize` | Clean up a messy working repo before publishing. |
 
 **Standalone**
 

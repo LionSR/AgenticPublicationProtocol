@@ -21,6 +21,7 @@ APP defines what a publication looks like. It does not define how authors produc
 ├── CLAUDE.md          optional; one line: @AGENTS.md
 ├── README.md          human-facing README for readers
 ├── LICENSE
+├── .gitignore         standard repo metadata; .gitattributes and .github/ are also allowed
 ├── paper/             paper source (ground truth), figures, compiled PDF
 ├── code/              source and scripts
 ├── data/              shipped datasets; external datasets are documented in AGENTS.md
@@ -29,7 +30,7 @@ APP defines what a publication looks like. It does not define how authors produc
 └── skills/            optional: author-published SKILL.md capabilities
 ```
 
-Root contains only these entries. Code, data, paper source, and dependencies each live in their own top-level directory — nothing loose at root. Not every directory is required: a theory-only paper may only carry `paper/` and `AGENTS.md`.
+At the root, publication artifacts live only in the entries above. No paper, code, data, or dependency files loose at root. Standard repository metadata (`.gitignore`, `.gitattributes`, `.github/`) is allowed. Not every directory is required: a theory-only paper may carry only `paper/` and `AGENTS.md`.
 
 A publication with code, data, and paper-specific skills gives the agent more to work with than a `paper/`-only repo. When feasible, include the scripts that generate the figures, the data those scripts use, and any method-specific skill worth sharing.
 
@@ -37,7 +38,7 @@ For a concrete starter, see [`template/`](template/) — example `AGENTS.md`, `C
 
 ### `paper/`
 
-The paper itself plus everything needed to read it: the main document, any compiled output, figure files, bibliography. Exactly one document is the canonical paper; its path and format are recorded in the AGENTS.md frontmatter. Everything in `paper/` is ground truth.
+The paper itself plus everything needed to read it: the main document, any compiled output, figure files, bibliography. Exactly one document is the canonical paper; its format is declared in the AGENTS.md frontmatter (`paper_format`) and its path is listed in the Repository Structure section of AGENTS.md. Everything in `paper/` is ground truth.
 
 ### `code/`
 
@@ -118,13 +119,15 @@ tags: ["keyword1", "keyword2"]
 
 ## Versioning
 
-A publication is the pair `(repo URL, tag)`. Tags are immutable; the main branch is not. Tags use `vMAJOR.MINOR.PATCH` ([semver](https://semver.org) recommended, not mandated). Every tag corresponds to a GitHub Release, and the `version` field in AGENTS.md matches the tag without the leading `v`. External references — citations, arXiv ancillary links, personal pages — always point to a specific tag.
+A publication is the pair `(repo URL, tag)`. Tags are immutable; the main branch is not. The recommended tag format is `vMAJOR.MINOR.PATCH` ([semver](https://semver.org)); other immutable tag names are allowed. Every tag corresponds to a GitHub Release. When the tag uses the recommended `vMAJOR.MINOR.PATCH` form, the `version` field in AGENTS.md matches the tag without the leading `v` (tag `v1.0.0` → `version: "1.0.0"`); otherwise, `version` matches the tag exactly. External references — citations, arXiv ancillary links, personal pages — always point to a specific tag.
 
 When publishing a new version, start from the previous version's AGENTS.md, supplementary materials, and skills, then update only what changed.
 
 ## Publication checklist
 
-Every publication includes `supplementary/checklist.md`, in which the authors explicitly confirm at least the following. Items that do not apply can be marked N/A.
+Every publication includes a completed checklist at `supplementary/checklist.md`. `supplementary/` itself stays optional: a publication that ships no other supplementary material still includes `supplementary/checklist.md` as its only entry.
+
+The checklist records that the authors explicitly confirmed at least the following. Items that do not apply can be marked N/A.
 
 - The paper in `paper/` is the canonical, up-to-date source.
 - Every path referenced in AGENTS.md resolves in the repo.
@@ -133,7 +136,7 @@ Every publication includes `supplementary/checklist.md`, in which the authors ex
 - The license in `LICENSE` is what the authors intend.
 - The git tag and the AGENTS.md `version` field match.
 
-A reference template is distributed at `template/publication-checklist.md`.
+The reference template at [`template/publication-checklist.md`](template/publication-checklist.md) expands these into per-topic subchecks.
 
 ## Using a published paper
 
