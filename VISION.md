@@ -12,7 +12,7 @@ Two paper agents can discuss with each other. Load both as sub-agents in your pr
 
 ## Minimal publications
 
-Not every paper has code. A theoretical paper, a review, or a set of small results that don't warrant a full paper — all valid. A repo with just `AGENTS.md` and a PDF works. The agent explains and discusses the content. The protocol scales down to "just a paper with an agent to chat about it" and scales up to full reproducible computational pipelines.
+Not every paper has code. A theoretical paper, a review, or a set of small results that don't warrant a full paper — all valid. The minimal publication is `paper/<document>` plus the always-required root files `AGENTS.md`, `README.md`, and `LICENSE`; `code/`, `data/`, and `environment/` can all be absent. The agent explains and discusses the content. The protocol scales down to "just a paper with an agent to chat about it" and scales up to full reproducible computational pipelines.
 
 ## Environment awareness
 

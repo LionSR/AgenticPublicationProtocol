@@ -21,7 +21,7 @@ Wait for the researcher to engage with each item. If they say "all good" without
 
 ### 5.3 Walk the checklist
 
-Walk through `supplementary/checklist.md` with the researcher as the final quality gate. Go through each item and mark them off. Flag any unchecked items — the researcher decides whether to resolve or mark N/A before proceeding.
+Walk through [`publication-checklist.md`](publication-checklist.md) (the skill-internal tracker in this skill's directory) with the researcher as the final quality gate. Go through each item and mark them off. Flag any unchecked items — the researcher decides whether to resolve or mark N/A before proceeding. This file is not part of the publication; it stays with the skill.
 
 Do NOT proceed until the researcher has explicitly confirmed they reviewed the files, the `AGENTS.md`, and the supplementary materials.
 
@@ -46,7 +46,7 @@ PUBLICATION SUMMARY — please review before I publish:
     code/           — <brief description>
     data/           — <brief description>
     environment/    — <dependencies file>
-    supplementary/  — <list which files: know-how, authors-note, sessions, checklist>
+    supplementary/  — <list which files: know-how, authors-note, sessions, materials>
     skills/         — <list skill names, or "none">
     AGENTS.md       — paper agent instructions
     README.md       — public README
@@ -57,7 +57,7 @@ PUBLICATION SUMMARY — please review before I publish:
   External data links:
     <list any URLs that will be referenced, or "none">
 
-  Checklist status:
+  Checklist status (skill-internal):
     <N>/<M> items checked — <list any unchecked items>
 
   What happens next:
@@ -83,6 +83,20 @@ git tag -a v1.0.0 -m "Paper agent v1.0.0"
 
 Tell the researcher: "Everything is committed and tagged locally. Nothing has been pushed yet."
 
+### 6.1a Draft GitHub Release notes
+
+The Release notes are where edit/version history lives — this is the substitute for any "changelog in the repo" approach, and the only place readers see what changed between versions. Draft them before creating the GitHub release, not after.
+
+For a **first release** (`v1.0.0`): notes summarize the publication itself — paper title, authors, a one-line statement of what the agent can do, and links (arXiv/DOI/PDF) if available.
+
+For a **subsequent release**: base the notes on what actually changed.
+
+- Read `.publications.md` in the working repo to find the previous tag.
+- If the previous publication repo exists, diff against it (`git log <prev-tag>..HEAD --oneline`, inspect changed files).
+- Ask the researcher, in their own words: "What changed in this version that a reader should know about?" Cover: results that were added/revised, figures that were redrawn, code that was refactored in ways readers will notice, data updates.
+
+Draft the notes and show them to the researcher for revision. Do not auto-generate boilerplate like "Bug fixes and improvements." When you create the GitHub release in the next step, pass the drafted notes via `--notes` (or `--notes-file`); do not fall back to a stock string.
+
 **Separate confirmation before each remote action.** Each push or remote operation requires its own confirmation — do not chain them.
 
 **If `gh` is available and the repo isn't on GitHub yet:**
@@ -94,7 +108,7 @@ gh repo create <repo-name> --public --source . --push
 
 Then ask: "Repo is live. Shall I also create a GitHub release tagged v1.0.0?"
 ```bash
-gh release create v1.0.0 --title "v1.0.0" --notes "Paper agent publication"
+gh release create v1.0.0 --title "v1.0.0" --notes-file /tmp/release-notes-v1.0.0.md
 ```
 
 **If the repo is already on GitHub:**
@@ -106,7 +120,7 @@ git push origin main --tags
 
 Then ask: "Push complete. Shall I also create a GitHub release tagged v1.0.0?"
 ```bash
-gh release create v1.0.0 --title "v1.0.0" --notes "Paper agent publication"
+gh release create v1.0.0 --title "v1.0.0" --notes-file /tmp/release-notes-v1.0.0.md
 ```
 
 **If `gh` is not available**, tell the researcher what to run manually:
