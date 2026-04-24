@@ -9,6 +9,10 @@ This is the **orchestrator skill**. It guides the full publication process and c
 - `/extract-context` — to extract research context from conversation history (phase 2)
 - `/validate-publication` — to run automated quality checks (phases 3, 4, and 5)
 
+**What this skill produces.** An APP-compliant publication repo — the format defined in [PROTOCOL.md](../../PROTOCOL.md). The protocol is the spec; this skill is one path for producing it. Defer to PROTOCOL.md for the schema of `AGENTS.md`, the publication repo structure, and the versioning rules. This skill focuses on the *process* of publishing, not on re-specifying the format.
+
+**Scope.** APP is for publishing a paper that is already written. This skill does not help write the paper, run experiments, or produce results — those must already exist in the author's working repo before this skill is useful.
+
 ## Roadmap
 
 At the very start, show the researcher this roadmap so they know what's ahead:
@@ -211,7 +215,7 @@ cp ../working-repo/data/results.csv data/
 cp ../working-repo/requirements.txt environment/
 ```
 
-Use the file list from phase 2 — copy only what the researcher approved. Organize into the directory structure defined in [PROTOCOL.md](../../PROTOCOL.md#publication-repo-structure). Not every directory is required — adapt to what's actually being published. A theory paper might just have `paper/` and a few scripts.
+Use the file list from phase 2 — copy only what the researcher approved. Organize into the directory structure defined in [PROTOCOL.md](../../PROTOCOL.md#repository-layout). Not every directory is required — adapt to what's actually being published. A theory paper might just have `paper/` and a few scripts.
 
 **Single source of truth:** Each file lives in exactly one place. No duplicates, no ambiguity about which version is current.
 
@@ -261,65 +265,23 @@ Fix anything that broke from the copy/reorganization. Report results to the rese
 
 ### 4.1 Create AGENTS.md
 
-Tell the researcher you're drafting the AGENTS.md now, drawing on everything from phases 1-2. The required and optional sections are defined in [PROTOCOL.md](../../PROTOCOL.md#agentsmd) — create each section as follows:
+Tell the researcher you're drafting the AGENTS.md now, drawing on everything from phases 1-2.
 
-**Writing the identity section:**
-- The agent is a spokesperson for THIS work, not a generic assistant
-- It should adopt the domain's reasoning style (mathematician for math, experimentalist for physics, etc.)
-- It must distinguish between the paper's claims and its own inferences
-- It should know the paper's limitations and say so honestly
-- **The paper is the ground truth** — state this explicitly. Supplementary materials provide context but are secondary. If anything conflicts with the paper, the paper takes precedence.
+The schema — every required frontmatter field, every required and optional body section — is defined in [PROTOCOL.md § AGENTS.md](../../PROTOCOL.md#agentsmd). Read it before drafting. Do not paraphrase or re-derive the schema here. The guidance below is about *how to fill the schema well*, not *what the schema is*.
 
-**Writing the frontmatter:**
-- Include all standard fields (protocol, title, authors, arxiv_id, version, domain, tags)
-- Set `paper_format` to the correct format (latex, docx, markdown, html, video, pptx, pdf)
+You can use [`template/AGENTS.md`](../../template/AGENTS.md) as a starting skeleton.
 
-**Writing the Paper Summary:**
-- Before drafting, ask the researcher: "What's the core message you want someone to take away from this paper?" Their answer sets the direction — don't draft from your own reading first.
-- Use the researcher's own words from phase 2 and this answer as the foundation
-- If research context was extracted in phase 2, draw on it — the reasoning and motivation behind decisions
-- 2-4 paragraphs covering: what problem, what approach, what results, what implications
-- This is what the agent will rely on most — make it substantive
+**Drafting guidance — things easy to get wrong:**
 
-**Writing the Repository Structure:**
-- Don't just list files — explain what each one does and how they connect
-- Mark the paper source as `(GROUND TRUTH)`
-- Group by function: paper source, figure generation, experiments, data, config
-- Include file paths relative to the publication repo root
-- Note which files are entry points vs. supporting
-- For external data (Hugging Face, Zenodo, Figshare, etc.), document:
-  - What the dataset is and its size
-  - The URL
-  - The exact download command (e.g. `huggingface-cli download ...`, `wget ...`, `zenodo_get ...`)
-  - Where to put it locally (e.g. `data/`)
-  - Whether it's required for basic usage (figures) or only for full reproduction
+- **Paper Summary.** Before drafting, ask the researcher: "What's the core message you want someone to take away from this paper?" Their answer sets the direction — do not draft from your own reading first. Use the researcher's own words from phase 2 and any extracted context as the foundation. This section is what the agent will rely on most; make it substantive, not generic.
 
-**Writing "What You Can Do":**
-- **Explain the paper**: which files to read for which sections
-- **Reproduce figures**: a table mapping EVERY figure to its command, data source, and runtime. Include the exact install command for dependencies.
-- **Run experiments**: exact commands with real parameters, not placeholders
-- **Extend the work**: what can a reader change? Which parameters are interesting to vary?
-- For each capability, include the actual commands, not just descriptions
+- **Repository Structure.** Don't just list files — explain what each does and how they connect. Mark the canonical paper file as `(GROUND TRUTH)`. Group by function: paper source, figure generation, experiments, data, config. Use paths relative to the repo root. For external data (Hugging Face, Zenodo, Figshare, etc.), include: what the dataset is, its size, URL, the exact download command, the local destination, and whether it is required for basic figures or only for full reproduction.
 
-**Writing the Supplementary Materials section:**
-- Point to `supplementary/know-how.md` for methodology insights and tacit knowledge
-- Point to `supplementary/authors-note.md` for the authors' message to readers
-- If sessions were published, point to `supplementary/sessions/`
-- If materials (slides, talks, etc.) were included, point to `supplementary/materials/` and note these are secondary to the paper
-- Keep this section brief — it's pointers, not content
+- **What You Can Do.** Use real, copy-pasteable commands — not placeholders. The figure-reproduction table must cover every figure in the paper. For "Run experiments" and "Extend the work," the goal is that a reader can answer "what if I change X?" by running something concrete.
 
-**Writing the Skills section:**
-- If the author published skills, list each one with its name, location, and a one-line description
-- If no skills, omit this section
+- **Computational Requirements.** Classify every task (figure generation, individual experiments, full reproduction) by time, hardware, and memory. Note the platform the code was tested on (OS, language version). The agent MUST warn before running anything heavy.
 
-**Writing Computational Requirements:**
-- Classify every task: figure generation, individual experiments, full reproduction
-- For each: estimated time, required hardware, required memory
-- Note the platform the code was tested on (OS, language version)
-- The agent MUST warn before running anything heavy
-
-**Writing the Citation:**
-- Full BibTeX entry
+- **Identity.** Keep the spokesperson framing — the agent represents *these authors' work*, not a generic assistant. The domain voice matters: a math paper's agent reasons like a mathematician; an experimental paper's agent thinks like an experimentalist.
 
 Also create `CLAUDE.md` containing `@AGENTS.md` (Claude Code import syntax).
 

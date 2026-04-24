@@ -29,7 +29,7 @@ The paper is the ground truth. Everything else is secondary.
 
 **Folder structure conformance:**
 
-The publication repo should follow the directory layout defined in [PROTOCOL.md](../../PROTOCOL.md#publication-repo-structure). Not every directory is required — check based on what the paper actually contains:
+The publication repo should follow the directory layout defined in [PROTOCOL.md](../../PROTOCOL.md#repository-layout). Not every directory is required — check based on what the paper actually contains:
 
 | Directory | Required? |
 |-----------|-----------|
