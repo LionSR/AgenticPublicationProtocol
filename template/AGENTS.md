@@ -59,10 +59,10 @@ Read the paper source to answer questions about methods, results, and implicatio
 The authoritative figure reproduction map is `code/figure-reproduction/README.md`.
 
 <!-- Fill in a concise summary table. Keep it consistent with code/figure-reproduction/README.md. -->
-| Figure | Paper artifact | Script | Status | Time |
-|--------|----------------|--------|--------|------|
-| Fig 1 | `paper/figures/fig1.png` | `python code/figure-reproduction/fig01_example.py` | reproduced | ~5s |
-| Fig 2 | `paper/figures/fig2.png` | `python code/figure-reproduction/fig02_example.py` | reproduced | ~10s |
+| Figure | Paper artifact | Script | Data | Status | Time |
+|--------|----------------|--------|------|--------|------|
+| Fig 1 | `paper/figures/fig1.png` | `python code/figure-reproduction/fig01_example.py` | `data/results.csv` | reproduced | ~5s |
+| Fig 2 | `paper/figures/fig2.png` | `python code/figure-reproduction/fig02_example.py` | `data/results.csv` | reproduced | ~10s |
 
 Before running: `pip install -r environment/requirements.txt`
 Generated outputs should be written to `reproduction/figures/` unless `code/figure-reproduction/README.md` says otherwise. After generating: compare output with `paper/figures/` to verify.

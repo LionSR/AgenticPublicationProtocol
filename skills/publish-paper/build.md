@@ -37,6 +37,7 @@ cp data/results.csv publication-staging/data/
 cp requirements.txt publication-staging/environment/
 ```
 
+Do not create an empty `LICENSE` placeholder at this point — wait until step 3.2a writes the real text.
 If the publication uses any dataset, local or external, `publication-staging/data/README.md` must also exist — authored below with the researcher.
 
 Use the file list from phase 2 — copy only what the researcher approved. Organize into the directory layout defined in [PROTOCOL.md § Repository layout](../../PROTOCOL.md#repository-layout). Not every directory is required — adapt to what is actually being published. See [`paper-types.md`](paper-types.md) for format-specific minimums.
@@ -84,21 +85,31 @@ Tell the researcher what was copied and how it is organized. Flag anything that 
 
 The spec requires a `LICENSE` file at the repo root with no extension. Ask the researcher which license they want using a structured choice: `MIT`, `Apache-2.0`, `CC-BY-4.0`, `BSD-3-Clause`, or `Other`.
 
-Fetch the canonical text rather than paraphrasing. Try GitHub's licenses API first, falling back to choosealicense.com raw for licenses the API does not carry, notably CC licenses:
+Fetch the canonical text rather than paraphrasing. Fetch into a temporary file first, show it to the researcher, and only move it into place as `LICENSE` after explicit confirmation. Try GitHub's licenses API first; fall back to choosealicense.com raw for licenses the API does not carry, notably CC licenses:
 
 ```bash
-curl -sS https://api.github.com/licenses/<spdx> > LICENSE.tmp
-jq -r '.body' LICENSE.tmp > publication-staging/LICENSE
+# Primary: GitHub licenses API
+curl -fsSL https://api.github.com/licenses/<spdx> | jq -r '.body' > LICENSE.tmp
 
-curl -sS https://raw.githubusercontent.com/github/choosealicense.com/gh-pages/_licenses/<spdx>.txt \
-  | awk 'f;/^---$/{c++;if(c==2)f=1}' > publication-staging/LICENSE
+# Fallback (CC-BY-4.0, CC-BY-SA-4.0, etc.): strip the YAML frontmatter after the second "---"
+curl -fsSL https://raw.githubusercontent.com/github/choosealicense.com/gh-pages/_licenses/<spdx>.txt \
+  | awk 'f;/^---$/{c++;if(c==2)f=1}' > LICENSE.tmp
+
+# Sanity-check the fetch succeeded before showing the researcher
+[ -s LICENSE.tmp ] || { echo "LICENSE fetch failed"; exit 1; }
 ```
 
 SPDX identifiers for the menu: `mit`, `apache-2.0`, `cc-by-4.0`, `bsd-3-clause`.
 
-Fill placeholders: MIT and BSD-3-Clause have `[year]` and `[fullname]` — substitute the current year and the authors' names from phase 2. Apache-2.0's canonical text has no placeholders; mention that the researcher may add a `NOTICE` file separately if they want attribution callouts. For `Other`, ask the researcher to paste the full license text; write it verbatim.
+Fill placeholders: MIT and BSD-3-Clause have `[year]` and `[fullname]` — substitute the current year and the authors' names from phase 2. Apache-2.0's canonical text has no placeholders; mention that the researcher may add a `NOTICE` file separately if they want attribution callouts. For `Other`, ask the researcher to paste the full license text; write it to `LICENSE.tmp` verbatim.
 
-Show the populated `LICENSE` to the researcher and write it only after explicit confirmation. If paper, code, and data are not all under the same license, the single `LICENSE` file must explicitly call this out.
+Show the populated `LICENSE.tmp` to the researcher. Only after explicit confirmation:
+
+```bash
+mv LICENSE.tmp publication-staging/LICENSE
+```
+
+**Multi-component licensing.** Ask whether paper, code, and data are all under the same license. If not, for example paper under CC-BY-4.0 and code under MIT, the single `LICENSE` file must explicitly call this out per the spec. The skill does not auto-assemble multi-section LICENSE files — prompt the researcher to author the full text themselves and write it verbatim.
 
 ## 3.4 Create direct figure/table reproduction scripts
 
@@ -166,7 +177,7 @@ Tell the researcher you're testing that everything runs with the new staging-roo
 Run commands from inside `publication-staging/` unless a tool truly requires a parent-repo command.
 
 - **Paper compilation.** Run the build command and check it succeeds (if the format compiles).
-- **Figure generation.** Run each script in `code/figure-reproduction/` whose status is intended to be `reproduced`; verify it produces the documented output and update the README status.
+- **Figure generation.** Run each script in `code/figure-reproduction/` whose status is intended to be `reproduced`; verify it produces the documented output and update the README status. Confirm the script-to-figure mapping still holds after the copy and reorganization — no new duplicates, no missing scripts.
 - **Tests.** If the staging tree has tests, run them.
 - **Notebooks.** Execute in order and check for errors.
 - **Imports.** Verify import paths resolve with the staged structure.

@@ -217,6 +217,24 @@ tree: ${TREE_SHA}"
 
 Tell the researcher: "Everything is committed and tagged locally in the public publication repo, and APP_PUBLICATION.json has been generated. Nothing has been pushed yet."
 
+Draft GitHub release notes before creating the release. Release notes are where edit/version history lives, and the only place readers see what changed between versions.
+
+For a **first release** (`v1.0.0`), summarize the publication itself: paper title, authors, a one-line statement of what the agent can do, and links (arXiv/DOI/PDF) if available.
+
+For a **subsequent release**, base the notes on what actually changed:
+
+- Read `.publications.md` in the working repo to find the previous tag.
+- If the previous publication repo exists, diff against it (`git log <prev-tag>..HEAD --oneline`, inspect changed files).
+- Ask the researcher, in their own words: "What changed in this version that a reader should know about?" Cover results that were added or revised, figures that were redrawn, code that changed in reader-visible ways, and data updates.
+
+Draft the notes and show them to the researcher for revision. Do not auto-generate boilerplate like "Bug fixes and improvements." After approval, write them to a file path that includes the actual tag so the later `gh release create` command can read them:
+
+```bash
+cat > /tmp/release-notes-v1.0.0.md <<'NOTES'
+<the drafted notes>
+NOTES
+```
+
 #### 6A.2 Remote publication
 
 Separate confirmation before each remote action. Do not chain remote operations.
@@ -233,9 +251,7 @@ Then ask: "Repo is live. Shall I also create a GitHub release tagged v1.0.0 and 
 ```bash
 gh release create v1.0.0 \
   --title "v1.0.0" \
-  --notes "APP paper-agent publication
-
-app_publication_id: ${APP_ID}" \
+  --notes-file /tmp/release-notes-v1.0.0.md \
   APP_PUBLICATION.json
 ```
 
@@ -250,9 +266,7 @@ Then ask: "Push complete. Shall I also create a GitHub release tagged v1.0.0 and
 ```bash
 gh release create v1.0.0 \
   --title "v1.0.0" \
-  --notes "APP paper-agent publication
-
-app_publication_id: ${APP_ID}" \
+  --notes-file /tmp/release-notes-v1.0.0.md \
   APP_PUBLICATION.json
 ```
 

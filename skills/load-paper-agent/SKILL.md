@@ -201,7 +201,7 @@ When the user asks questions about this paper, route to the right source:
 
 | User asks about... | Primary source | Also check |
 |---------------------|---------------|------------|
-| What the paper claims, methods, results | Paper source (ground truth) | `code/` for implementation details; `data/` for provenance; AGENTS.md Paper Summary |
+| What the paper claims, methods, results | Paper, code, data (ground truth) | AGENTS.md Paper Summary |
 | Why a specific choice was made | `supplementary/know-how.md` | Paper source for what the choice was |
 | What to know before reading | `supplementary/authors-note.md` | AGENTS.md Paper Summary |
 | How to reproduce a figure | `code/figure-reproduction/README.md` if present | AGENTS.md figure summary, README/docs, scripts, notebooks, paper source, run the command |

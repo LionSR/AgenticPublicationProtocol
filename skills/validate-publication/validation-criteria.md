@@ -2,7 +2,7 @@
 
 Detailed criteria for the APP compliance checks in validate-publication.
 
-**Severity convention.** PROTOCOL.md `MUST` violations -> `error`; `SHOULD` -> `warning`; `MAY` -> `note`. When adding new checks, map the spec's normative keyword to the matching severity.
+**Severity convention.** By default, PROTOCOL.md `MUST` violations -> `error`; `SHOULD` -> `warning`; `MAY` -> `note`. Map new checks accordingly unless this file explicitly defines a narrower exception for a non-blocking organizational issue; such exceptions must be stated where the check is defined.
 
 ## APP factual consistency
 
@@ -82,6 +82,7 @@ The publication checklist is a skill-internal artifact of `/publish-paper` and i
 - If the figure-to-code mapping was ambiguous, the figure map should record the researcher clarification or state that clarification is still needed.
 - `AGENTS.md` must reference `code/figure-reproduction/README.md` and summarize the figure/table statuses.
 - README should either link to the same map or duplicate a compatible summary.
+- Each paper figure/table should map to a distinct direct script when feasible. Flag duplicates as `warning` unless the researcher explicitly documents why one script produces multiple figures or tables. This is an explicit exception to the severity convention: splitting may be non-trivial and the decision belongs to the researcher.
 
 **External links:**
 - Test with `curl -sIL <url>` — flag non-2xx responses
