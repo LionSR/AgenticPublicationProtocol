@@ -2,23 +2,40 @@
 
 **Version 0.1.0 — Draft**
 
-APP is a format for packaging a finished academic paper as a GitHub repository so an AI coding agent can speak for it. An APP publication is a public Git repository with a tagged release and an `AGENTS.md` at the root. A reader clones the repo, opens it in any agent that reads `AGENTS.md`, and gets an agent that explains the paper, reproduces figures, runs experiments, and answers questions grounded in the work.
+APP is a format for packaging a finished academic paper as a GitHub repository, enabling an AI agent to present and explain the work interactively. An APP publication is a public Git repository with a tagged release and an AGENTS.md file at the root. A reader can clone the repository, open it in any agent that supports AGENTS.md, and immediately access an agent that acts as a representative of the authors. This agent can explain the paper, reproduce figures, run experiments, and answer questions grounded in the work.
 
-APP defines what a publication looks like. It does not define how authors produce it — that is the job of the skills distributed alongside this specification. For installation and usage, see [README.md](README.md).
+The goal of APP is to transform the format of academic publication. Rather than serving as a static record of research results, an APP publication becomes an interactive and dynamic medium that significantly lowers the cost of understanding, reproducing, and building upon the work. APP defines what an agentic publication looks like; it does not prescribe how authors should create one. That aspect is handled by the skills distributed alongside this specification. For installation and usage, see [README.md](README.md).
 
 ## Principles
 
-- **Spokesperson, not assistant.** The agent represents the authors. It speaks in the paper's domain — a math paper's agent reasons like a mathematician; an experimental paper's agent thinks like an experimentalist.
-- **Paper is ground truth.** Every claim the agent makes traces back to the paper document. The authors designate the canonical form (LaTeX, PDF, Markdown, HTML, DOCX, video, slides). When supplementary material conflicts with the paper, the paper wins.
-- **One place for each thing.** Every file, dataset, and script referenced by AGENTS.md resolves to exactly one path in the repo. No duplicates, no shadow copies.
-- **A publication is a release, not a branch.** Citations and external links resolve to a specific git tag, never to HEAD. The main branch may keep evolving; each release is frozen.
+- **Faithfulness to Ground Truth.**  
+  The agent **MUST** base its responses on the authoritative contents of the publication, defined as the manuscript and primary code included in the repository. When multiple sources are present, the agent **MUST** prioritize these over supplementary materials or external knowledge. If the authors’ claims differ from mainstream views, the agent **SHOULD** present the authors’ perspective accurately and explicitly. The agent **MAY** provide additional context but **MUST** clearly distinguish it from the authors’ claims.
+
+- **Reproducibility.**  
+  An APP publication **SHOULD** include all artifacts necessary to reproduce the main results of the work, including figures, tables, and key experiments. The repository **MUST** provide executable instructions (via `AGENTS.md` or scripts) that allow an agent to run these reproductions. Dependencies, environments, and expected outputs **SHOULD** be specified to minimize ambiguity.
+
+- **Transparency and Provenance.**  
+  The agent **SHOULD** make the origin of its responses clear by linking claims to specific files, code, or sections of the manuscript when possible. This ensures that users can verify, trace, and build upon the work with confidence.
+
+- **Canonical Structure and Referencing.**  
+  Each dataset, script, and artifact **MUST** have a single canonical location within the repository. The agent **SHOULD** reference resources by explicit paths. Duplicate or conflicting versions of files **SHOULD NOT** be included, in order to avoid ambiguity and ensure consistent interpretation.
+
+- **Versioned Publication.**  
+  A published APP **MUST** correspond to a tagged GitHub release, which defines an immutable snapshot of the work. The main branch **MAY** continue to evolve, but agents and users **SHOULD** default to interacting with a specific release to ensure consistency and reproducibility.
+
+- **Agent Skills (Optional but Recommended).**  
+  If possible, authors **SHOULD** provide reusable “skills” defined according to the Agent Skills Protocol (https://agentskills.io/home). These skills encapsulate procedures, workflows, or domain-specific expertise that go beyond what is explicitly described in the manuscript. While not mandatory, providing skills is strongly recommended, as they enable the agent to perform meaningful tasks such as reproducing experiments, analyzing outputs, and adapting explanations to different audiences.
+
+
+
+
 
 ## Repository layout
 
 ```
 <repo-root>/
 ├── AGENTS.md          primary agent instructions
-├── CLAUDE.md          optional; one line: @AGENTS.md
+├── CLAUDE.md          one line: @AGENTS.md
 ├── README.md          human-facing README for readers
 ├── LICENSE
 ├── .gitignore         standard repo metadata; .gitattributes and .github/ are also allowed
