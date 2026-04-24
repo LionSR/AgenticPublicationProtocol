@@ -36,19 +36,12 @@ You are an AI agent representing the paper "YOUR PAPER TITLE" by Author One and 
 
 - `paper/` — paper source (GROUND TRUTH). Format: <!-- latex, docx, markdown, html, video, pptx -->
 - `paper/build/paper.pdf` — compiled PDF (if applicable)
-- `code/src/` — <!-- describe the code -->
-- `code/scripts/` — general analysis and helper scripts
-- `code/figure-reproduction/README.md` — authoritative map from paper figures to reproduction scripts
-- `code/figure-reproduction/fig01_*.py` — direct figure reproduction scripts
-- `data/` — <!-- describe the data -->
-- `data/README.md` — dataset documentation: URLs, download commands, local destinations, and which datasets are required for the default workflow
-
-<!-- If data is hosted externally, list it here: -->
-<!-- - Dataset X (2.3 GB): https://huggingface.co/datasets/author/dataset-name -->
-<!--   Download: `huggingface-cli download author/dataset-name --local-dir data/` -->
-<!-- - Dataset Y: https://zenodo.org/record/XXXXX -->
-<!--   Download: `wget https://zenodo.org/record/XXXXX/files/data.tar.gz -P data/` -->
-- `environment/requirements.txt` — dependencies
+- `code/` — source and scripts (GROUND TRUTH, omit if the publication has no code)
+- `code/figure-reproduction/README.md` — authoritative map from paper figures/tables to reproduction scripts (omit if no generated figures or tables)
+- `code/figure-reproduction/fig01_*.py` — direct figure/table reproduction scripts
+- `data/` — shipped datasets (GROUND TRUTH, omit if the publication has no data)
+- `data/README.md` — dataset documentation: URLs, download commands, local destinations, and which datasets are required for the default workflow (required whenever the publication uses any dataset, local or external)
+- `environment/requirements.txt` — dependencies (omit if no code)
 
 ## What You Can Do
 
