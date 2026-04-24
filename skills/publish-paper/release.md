@@ -38,8 +38,8 @@ PUBLICATION SUMMARY — please review before I publish:
 
   Repo name:    <repo-name>
   Visibility:   PUBLIC — anyone on the internet can see this
-  Version:      v1.0.0
-  Tag:          v1.0.0
+  Version:      <version>  (e.g. 1.0.0 for a first release)
+  Tag:          <tag>      (e.g. v1.0.0; reused throughout phase 6)
 
   Files included (<N> files):
     paper/          — <paper source format>, figures, bibliography
@@ -62,9 +62,9 @@ PUBLICATION SUMMARY — please review before I publish:
 
   What happens next:
     1. Commit all files to the publication repo
-    2. Tag as v1.0.0
+    2. Tag as <tag>
     3. Push to GitHub as a PUBLIC repository
-    4. Create a GitHub release (v1.0.0)
+    4. Create a GitHub release (<tag>) with drafted release notes
     5. Record this release in the working repo (.publications.md)
 ```
 
@@ -72,16 +72,16 @@ PUBLICATION SUMMARY — please review before I publish:
 
 Do NOT proceed without unambiguous confirmation.
 
-After confirmation, commit and tag locally. This does not push anything yet:
+After confirmation, commit and tag locally. This does not push anything yet. Pick `<tag>` now (e.g. `v1.0.0` for a first release, `v2.0.0` for a subsequent one) and reuse it everywhere below — 6.1a and the `gh release create` commands all reference the same value:
 
 ```bash
 cd <publication-repo>
 git add -A
 git commit -m "Initial publication"
-git tag -a v1.0.0 -m "Paper agent v1.0.0"
+git tag -a <tag> -m "Paper agent <tag>"
 ```
 
-Tell the researcher: "Everything is committed and tagged locally. Nothing has been pushed yet."
+Tell the researcher: "Everything is committed and tagged as `<tag>` locally. Nothing has been pushed yet."
 
 ### 6.1a Draft GitHub Release notes
 
@@ -91,8 +91,8 @@ For a **first release** (`v1.0.0`): notes summarize the publication itself — p
 
 For a **subsequent release**: base the notes on what actually changed.
 
-- Read `.publications.md` in the working repo to find the previous tag.
-- If the previous publication repo exists, diff against it (`git log <prev-tag>..HEAD --oneline`, inspect changed files).
+- Read `.publications.md` in the working repo to find the previous publication's repo URL and tag.
+- The previous tag lives in a different repo (the previous publication repo), not in this new one. If you cloned the previous publication earlier in phase 1 you can diff against it directly (`cd <prev-publication-clone> && git log <prev-tag>..main --oneline`, inspect changed files). Otherwise, shallow-clone it for comparison (`git clone --depth=50 <prev-repo-url> /tmp/prev-pub && git -C /tmp/prev-pub log <prev-tag>..main --oneline`) or skip the diff and rely on the researcher's summary. Do NOT run `git log <prev-tag>..HEAD` in the new publication repo — that tag does not exist here.
 - Ask the researcher, in their own words: "What changed in this version that a reader should know about?" Cover: results that were added/revised, figures that were redrawn, code that was refactored in ways readers will notice, data updates.
 
 Draft the notes and show them to the researcher for revision. Do not auto-generate boilerplate like "Bug fixes and improvements." After approval, write them to a file path that includes the actual tag so the later `gh release create` command can read them:
@@ -134,7 +134,8 @@ gh release create <tag> --title "<tag>" --notes-file /tmp/release-notes-<tag>.md
 **If `gh` is not available**, tell the researcher what to run manually:
 
 - Push: `git remote add origin <url> && git push -u origin main --tags`
-- Create the release on GitHub's web UI: Releases → Create a new release → tag `v1.0.0`.
+- Create the release on GitHub's web UI: Releases → Create a new release → tag `<tag>` (the value chosen above; e.g. `v1.0.0`).
+- Paste the release notes from `/tmp/release-notes-<tag>.md` into the release description field so the drafted notes aren't lost.
 
 Tell the researcher the publication is live and share the repo URL.
 
