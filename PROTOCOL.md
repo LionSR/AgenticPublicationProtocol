@@ -30,7 +30,7 @@ APP defines what a publication looks like. It does not define how authors produc
 └── skills/            optional: author-published SKILL.md capabilities
 ```
 
-At the root, publication artifacts live only in the entries above. No paper, code, data, or dependency files loose at root. Standard repository metadata (`.gitignore`, `.gitattributes`, `.github/`) is allowed. Not every directory is required: a minimal theory-only publication contains `paper/`, `AGENTS.md`, and `supplementary/checklist.md`.
+At the root, publication artifacts live only in the entries above. No paper, code, data, or dependency files loose at root. Standard repository metadata (`.gitignore`, `.gitattributes`, `.github/`) is allowed. Not every top-level directory is required: a minimal theory-only publication contains `paper/`, `supplementary/checklist.md`, plus the always-required root files `AGENTS.md`, `README.md`, and `LICENSE` (with `CLAUDE.md` recommended).
 
 The agent's value scales with what the repo contains: code makes figures reproducible, data makes experiments runnable, and paper-specific skills let a reader invoke the paper's methods directly. A `paper/`-only publication is valid but gives the agent nothing to do beyond discussing the text.
 

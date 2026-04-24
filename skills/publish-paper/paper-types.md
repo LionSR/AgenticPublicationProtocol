@@ -4,7 +4,7 @@ The paper can be in any format — LaTeX, DOCX, Markdown, HTML, video, PPTX, PDF
 
 ## Theory-only paper (no code)
 
-- The publication repo may be just `paper/`, `AGENTS.md`, and `supplementary/checklist.md`.
+- Minimal layout: `paper/`, `supplementary/checklist.md`, plus the always-required root files `AGENTS.md`, `README.md`, and `LICENSE`. `code/`, `data/`, `environment/` can all be absent.
 - Focus the agent on: explaining the theorems, the proof strategy, the assumptions.
 - The agent's value is discussing the ideas and connecting them to related work.
 - The phase 4 figure-reproduction table may be empty or absent; flag this in `AGENTS.md` rather than leaving a stub table.

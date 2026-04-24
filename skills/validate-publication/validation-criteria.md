@@ -31,15 +31,25 @@ The paper is the ground truth. Everything else is secondary.
 
 The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../PROTOCOL.md#repository-layout). This file does not restate it — validators resolve "what is required" against PROTOCOL.md, and flag deviations as follows.
 
-**What to flag:**
+**What to flag (all stages):**
 - Paper, code, data, or dependency files loose at root (e.g., `main.tex`, `*.py`, `requirements.txt`, `*.csv`) when a dedicated top-level directory exists.
 - Paper source outside `paper/` (e.g., in `src/` or at root).
 - Code files outside `code/` (e.g., scripts at root or in `paper/`).
 - Dependency files outside `environment/` (`requirements.txt`, `environment.yml`, `pyproject.toml`).
 - Supplementary materials outside `supplementary/` (e.g., `know-how.md` at root).
-- Missing `AGENTS.md`, `README.md`, or `LICENSE` at root — these are required by the protocol.
-- Missing `supplementary/checklist.md` — the protocol requires this for every publication, even when no other supplementary material ships.
-- Severity: `warning` for misplaced files (the repo works but the structure is inconsistent); `error` for missing required files.
+- Severity: `warning` for misplaced files (the repo works but the structure is inconsistent).
+
+**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout and the checklist; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`; the researcher adds `LICENSE` at some point before release. Validate accordingly so `--stage structure` does not block on files that phase 4 hasn't created yet.
+
+| Required file | `structure` | `agents-md` | `full` |
+|---------------|-------------|-------------|--------|
+| `paper/` with at least one document | error if missing | error if missing | error if missing |
+| `supplementary/checklist.md` | error if missing | error if missing | error if missing |
+| `.gitignore` at root | warning if missing | warning if missing | warning if missing |
+| `AGENTS.md` at root | — | error if missing | error if missing |
+| `CLAUDE.md` at root (`@AGENTS.md`) | — | warning if missing | warning if missing |
+| `README.md` at root | — | error if missing | error if missing |
+| `LICENSE` at root | — | — | error if missing |
 
 **File paths:**
 - Every path in AGENTS.md Repository Structure must resolve to a real file or directory
@@ -91,7 +101,7 @@ Extends `../extract-context/confidentiality-checklist.md` to cover the entire re
 **Internal consistency:**
 - `paper_format` in frontmatter matches the actual paper file type
 - Computational requirements match what the code actually needs (e.g., don't say "any laptop" if code imports CUDA)
-- Version in frontmatter matches the git tag (if released)
+- `version` in frontmatter matches the git tag per the normalization rule in [PROTOCOL.md § Versioning](../../PROTOCOL.md#versioning): for `vMAJOR.MINOR.PATCH` tags, `version` has no leading `v` (tag `v1.0.0` → `version: "1.0.0"`); for non-semver tags, `version` matches the tag exactly.
 
 ## Substance
 
