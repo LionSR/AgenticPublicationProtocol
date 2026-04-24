@@ -41,7 +41,7 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 - Supplementary materials outside `supplementary/` (e.g., `know-how.md` at root).
 - Severity: `warning` for misplaced files (the repo works but the structure is inconsistent).
 
-**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout, `data/README.md` when data ships, and `LICENSE`; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`. Validate accordingly so `--stage structure` does not block on files that phase 4 hasn't created yet.
+**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout, `data/README.md` whenever the publication uses any dataset (local or external), and `LICENSE`; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`. Validate accordingly so `--stage structure` does not block on files that phase 4 hasn't created yet.
 
 | Required file | `structure` | `agents-md` | `full` |
 |---------------|-------------|-------------|--------|

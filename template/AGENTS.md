@@ -36,11 +36,11 @@ You are an AI agent representing the paper "YOUR PAPER TITLE" by Author One and 
 
 - `paper/` — paper source (GROUND TRUTH). Format: <!-- latex, docx, markdown, html, video, pptx -->
 - `paper/build/paper.pdf` — compiled PDF (if applicable)
-- `code/` — source and scripts (GROUND TRUTH)
-- `code/scripts/fig1.py`, `fig2.py`, … — one reproduction script per figure
-- `data/` — shipped datasets (GROUND TRUTH)
-- `data/README.md` — dataset documentation: URLs, download commands, local destinations, and which datasets are required for the default workflow
-- `environment/requirements.txt` — dependencies
+- `code/` — source and scripts (GROUND TRUTH, omit if the publication has no code)
+- `code/scripts/fig1.py`, `fig2.py`, … — one reproduction script per figure (omit if no data figures)
+- `data/` — shipped datasets (GROUND TRUTH, omit if the publication has no data)
+- `data/README.md` — dataset documentation: URLs, download commands, local destinations, and which datasets are required for the default workflow (required whenever the publication uses any dataset, local or external)
+- `environment/requirements.txt` — dependencies (omit if no code)
 
 ## What You Can Do
 

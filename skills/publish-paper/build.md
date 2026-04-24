@@ -51,7 +51,7 @@ cp ../working-repo/data/results.csv data/
 cp ../working-repo/requirements.txt environment/
 ```
 
-Don't create an empty `LICENSE` placeholder at this point — wait until step 3.2a writes the real text. If `data/` will hold any files, `data/README.md` must also exist — authored in the next sub-step with the researcher.
+Don't create an empty `LICENSE` placeholder at this point — wait until step 3.2a writes the real text. If the publication uses any dataset (local files under `data/` or external references from AGENTS.md / code), `data/README.md` must also exist — authored in the next sub-step with the researcher.
 
 Use the file list from phase 2 — copy only what the researcher approved. Organize into the directory layout defined in [PROTOCOL.md § Repository layout](../../PROTOCOL.md#repository-layout). Not every directory is required — adapt to what is actually being published. See [`paper-types.md`](paper-types.md) for format-specific minimums.
 
@@ -64,7 +64,7 @@ Use the file list from phase 2 — copy only what the researcher approved. Organ
 - Files over 50 MB: suggest Git LFS or external hosting (Hugging Face, Zenodo).
 - Generated files that can be reproduced: add to `.gitignore` and document the generation command.
 
-**Author `data/README.md`.** The spec requires a `data/README.md` whenever `data/` has files. For each dataset — local or external — record:
+**Author `data/README.md`.** The spec requires a `data/README.md` whenever the publication uses any dataset — local files in `data/` or external references from AGENTS.md / code. A theory-only publication with no dataset skips this step. For each dataset — local or external — record:
 
 - what the dataset is and how it was produced;
 - which figures or scripts use it;

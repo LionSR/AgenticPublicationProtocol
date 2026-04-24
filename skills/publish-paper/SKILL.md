@@ -53,7 +53,7 @@ These apply across every phase. Keep them in mind as you read each phase file.
 
 - **Purpose.** Create the publication repo. Copy and organize the approved files. Run structure validation. Verify the code runs with the new paths.
 - **Assumes.** Publication plan from `gather.md`.
-- **Produces.** A working publication repo with files in the layout defined by [`PROTOCOL.md` § Repository layout](../../PROTOCOL.md#repository-layout); `.gitignore` in place; `LICENSE` written; `data/README.md` populated if data ships; supplementary materials copied; code verified to run.
+- **Produces.** A working publication repo with files in the layout defined by [`PROTOCOL.md` § Repository layout](../../PROTOCOL.md#repository-layout); `.gitignore` in place; `LICENSE` written; `data/README.md` populated whenever the publication uses any dataset (local or external); supplementary materials copied; code verified to run.
 - **Sub-skills called.** `/validate-publication --stage structure`.
 - **Skill-internal tracker.** [`publication-checklist.md`](publication-checklist.md) — walked with the researcher as items are completed.
 - **Interaction load.** Light — confirmation on the file list before copying, then mostly automated.

@@ -114,9 +114,9 @@ Ask: "Ready to create the public GitHub repo and push? This makes everything vis
 gh repo create <repo-name> --public --source . --push
 ```
 
-Then ask: "Repo is live. Shall I also create a GitHub release tagged v1.0.0?"
+Then ask: "Repo is live. Shall I also create a GitHub release tagged <tag>?" (where `<tag>` is the tag applied above, e.g. `v1.0.0` for the first release or `v2.0.0` for a subsequent one).
 ```bash
-gh release create v1.0.0 --title "v1.0.0" --notes-file /tmp/release-notes-v1.0.0.md  # match the filename you wrote in 6.1a
+gh release create <tag> --title "<tag>" --notes-file /tmp/release-notes-<tag>.md  # <tag> must match what you wrote in 6.1a
 ```
 
 **If the repo is already on GitHub:**
@@ -126,9 +126,9 @@ Ask: "Ready to push to GitHub? This makes everything visible."
 git push origin main --tags
 ```
 
-Then ask: "Push complete. Shall I also create a GitHub release tagged v1.0.0?"
+Then ask: "Push complete. Shall I also create a GitHub release tagged <tag>?"
 ```bash
-gh release create v1.0.0 --title "v1.0.0" --notes-file /tmp/release-notes-v1.0.0.md  # match the filename you wrote in 6.1a
+gh release create <tag> --title "<tag>" --notes-file /tmp/release-notes-<tag>.md  # <tag> must match what you wrote in 6.1a
 ```
 
 **If `gh` is not available**, tell the researcher what to run manually:
