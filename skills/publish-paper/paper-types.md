@@ -4,7 +4,7 @@ The paper can be in any format — LaTeX, DOCX, Markdown, HTML, video, PPTX, PDF
 
 ## Theory-only paper (no code)
 
-- Minimal layout: `paper/`, `supplementary/checklist.md`, plus the always-required root files `AGENTS.md`, `README.md`, and `LICENSE`. `code/`, `data/`, `environment/` can all be absent.
+- Minimal layout: `paper/` plus the always-required root files `AGENTS.md`, `README.md`, and `LICENSE`. `code/`, `data/`, `environment/` can all be absent.
 - Focus the agent on: explaining the theorems, the proof strategy, the assumptions.
 - The agent's value is discussing the ideas and connecting them to related work.
 - The phase 4 figure-reproduction table may be empty or absent; flag this in `AGENTS.md` rather than leaving a stub table.
@@ -30,6 +30,6 @@ The paper can be in any format — LaTeX, DOCX, Markdown, HTML, video, PPTX, PDF
 
 ## Video / slideware paper
 
-- The video or `.pptx` is the ground truth document.
+- The video or `.pptx` is the ground truth manuscript; any shipped code or data is ground truth too.
 - The agent should be able to discuss contents and reference specific sections or timestamps.
 - Supplementary materials may include a transcript or text summary to support the agent in answering questions — but the video/slides remain the authoritative reference.

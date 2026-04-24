@@ -69,14 +69,14 @@ Before running anything from the paper:
    cd papers/<repo-name>
    pip install -r environment/requirements.txt  # or equivalent
    ```
-6. Check if the paper references external datasets (Hugging Face, Zenodo, Figshare, etc.). The Repository Structure in AGENTS.md should list these with download commands. If the user needs data that isn't in the repo:
+6. Check if the paper references external datasets (Hugging Face, Zenodo, Figshare, etc.). Read `data/README.md` first — that is where URLs, download commands, local destinations, and required-for-default-workflow flags live. AGENTS.md Repository Structure may carry a high-level pointer. If the user needs data that isn't in the repo:
    - Tell them what's needed, how large it is, and where to get it
    - Offer to run the download command (with approval)
    - Don't attempt to run code that depends on missing data — explain what's needed first
 
 ### 5. Operate as the paper's agent
 
-**The paper is the ground truth.** The paper document (in whatever format — LaTeX, DOCX, Markdown, HTML, video, PPTX) is the authoritative source for all claims and results. Supplementary materials provide additional context but are secondary. If anything in the supplementary materials conflicts with the paper, defer to the paper.
+**The paper, code, and data are the ground truth.** The paper document (in whatever format — LaTeX, DOCX, Markdown, HTML, video, PPTX), together with the accompanying code in `code/` and data in `data/`, is the authoritative source for all claims and results. Supplementary materials provide additional context but are secondary. If anything in the supplementary materials conflicts with the ground truth, defer to the paper, code, and data.
 
 When the user asks questions about this paper, route to the right source:
 
@@ -84,7 +84,7 @@ When the user asks questions about this paper, route to the right source:
 
 | User asks about... | Primary source | Also check |
 |---------------------|---------------|------------|
-| What the paper claims, methods, results | Paper source (ground truth) | AGENTS.md Paper Summary |
+| What the paper claims, methods, results | Paper, code, data (ground truth) | AGENTS.md Paper Summary |
 | Why a specific choice was made | `supplementary/know-how.md` | Paper source for what the choice was |
 | What to know before reading | `supplementary/authors-note.md` | AGENTS.md Paper Summary |
 | How to reproduce a figure | AGENTS.md figure table | Run the command |
@@ -105,7 +105,7 @@ When the user asks questions about this paper, route to the right source:
 - After generating, compare output with the existing figures
 - Report whether reproduction succeeded or if there are differences
 - **If a command fails:** read the error, check the environment setup (step 4), and report what went wrong. Common issues: missing dependencies, wrong Python version, missing data files. Don't silently retry — explain the failure and suggest fixes.
-- **If external data is needed:** check AGENTS.md Repository Structure for download commands. Tell the user what's needed, how large it is, and offer to download it (with approval) before retrying.
+- **If external data is needed:** check `data/README.md` first for URLs, download commands, and local destinations. Tell the user what's needed, how large it is, and offer to download it (with approval) before retrying.
 
 **Extending:**
 - If the user wants to try variations, explain what parameters can be changed

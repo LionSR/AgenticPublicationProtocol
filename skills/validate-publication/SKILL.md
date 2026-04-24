@@ -35,7 +35,7 @@ Read the publication repo to understand what's being validated:
 - `README.md`
 - `supplementary/` — know-how, authors-note, sessions, materials
 - `skills/` — any author-published skills
-- `supplementary/checklist.md` — the publication checklist (if it exists)
+- `data/README.md` — dataset documentation (required whenever the publication uses any dataset, local or external)
 
 ### 2. Launch parallel validation agents
 
@@ -54,8 +54,10 @@ Only run at stages: `agents-md`, `full`.
 - Verify every file path in AGENTS.md Repository Structure exists in the repo
 - Verify every file path in README exists
 - Check that commands in the figure generation table are syntactically valid
+- Verify `data/README.md` exists whenever the publication uses any dataset (local in `data/` or external referenced from AGENTS.md / code); verify every dataset documented there resolves (local files present, external links reachable via `curl -sIL`)
 - Test external data links with `curl -sIL <url>` (flag non-2xx responses)
 - Check that `supplementary/` references point to real files
+- Check that each figure in AGENTS.md "Reproduce figures" maps to a distinct script in `code/`; flag duplicates as `warning`
 - **Check folder structure conformance** against the layout defined in [PROTOCOL.md](../../PROTOCOL.md#repository-layout). See `validation-criteria.md` for the detailed checklist of what to flag.
 
 Run at all stages.

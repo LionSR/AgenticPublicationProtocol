@@ -16,7 +16,6 @@ This repository contains:
   - [`template/AGENTS.md`](template/AGENTS.md) — starter for the publication's `AGENTS.md`.
   - [`template/README.md`](template/README.md) — starter for the publication's human-facing `README.md`.
   - [`template/CLAUDE.md`](template/CLAUDE.md) — one-line Claude Code import (`@AGENTS.md`).
-  - [`template/publication-checklist.md`](template/publication-checklist.md) — the publication checklist expanded into per-topic subchecks.
   - [`template/publications.md`](template/publications.md) — template for the working repo's `.publications.md` release log.
 
 ## Install

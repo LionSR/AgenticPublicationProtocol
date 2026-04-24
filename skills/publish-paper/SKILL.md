@@ -53,9 +53,9 @@ These apply across every phase. Keep them in mind as you read each phase file.
 
 - **Purpose.** Create the publication repo. Copy and organize the approved files. Run structure validation. Verify the code runs with the new paths.
 - **Assumes.** Publication plan from `gather.md`.
-- **Produces.** A working publication repo with files in the layout defined by [`PROTOCOL.md` § Repository layout](../../PROTOCOL.md#repository-layout); `.gitignore` in place; supplementary materials copied including `supplementary/checklist.md`; code verified to run.
+- **Produces.** A working publication repo with files in the layout defined by [`PROTOCOL.md` § Repository layout](../../PROTOCOL.md#repository-layout); `.gitignore` in place; `LICENSE` written; `data/README.md` populated whenever the publication uses any dataset (local or external); supplementary materials copied; code verified to run.
 - **Sub-skills called.** `/validate-publication --stage structure`.
-- **Templates used.** [`template/publication-checklist.md`](../../template/publication-checklist.md).
+- **Skill-internal tracker.** [`publication-checklist.md`](publication-checklist.md) — walked with the researcher as items are completed.
 - **Interaction load.** Light — confirmation on the file list before copying, then mostly automated.
 
 ### [`draft.md`](draft.md) — Phase 4
@@ -82,15 +82,16 @@ Not a workflow step. Format-specific guidance for theory-only, computational, ex
 
 ## Templates
 
-Five files ship in `template/` at the repo root. Phase files copy or adapt them at the right moment — do not re-author these artifacts; start from the template.
+Four files ship in `template/` at the repo root. Phase files copy or adapt them at the right moment — do not re-author these artifacts; start from the template.
 
 | Template | Adapted by | Lands as |
 |----------|------------|----------|
 | [`template/AGENTS.md`](../../template/AGENTS.md) | `draft.md` (phase 4) | `<publication-repo>/AGENTS.md`, populated and researcher-approved. |
 | [`template/CLAUDE.md`](../../template/CLAUDE.md) | `draft.md` (phase 4) | `<publication-repo>/CLAUDE.md` — one line: `@AGENTS.md`. |
 | [`template/README.md`](../../template/README.md) | `draft.md` (phase 4) | `<publication-repo>/README.md`, populated from phases 1–2 and the finalized `AGENTS.md`. |
-| [`template/publication-checklist.md`](../../template/publication-checklist.md) | `build.md` (phase 3) | `<publication-repo>/supplementary/checklist.md`, adapted (irrelevant sections removed). |
 | [`template/publications.md`](../../template/publications.md) | `release.md` (phase 6) | `<working-repo>/.publications.md` — a table of this working repo's publications. |
+
+The publication checklist lives beside this skill at [`publication-checklist.md`](publication-checklist.md). It is a skill-internal QA tracker — walked with the researcher during phases 3 and 5 but never copied into the publication repo.
 
 ## Sub-skills
 

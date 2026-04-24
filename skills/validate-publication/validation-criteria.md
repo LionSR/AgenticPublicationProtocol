@@ -2,9 +2,11 @@
 
 Detailed criteria for each validation agent in validate-publication.
 
+**Severity convention.** By default, PROTOCOL.md `MUST` violations → `error`; `SHOULD` → `warning`; `MAY` → `note`. Map new checks accordingly unless this file explicitly defines a narrower exception for a non-blocking organizational issue; such exceptions must be stated where the check is defined.
+
 ## Factuality
 
-The paper is the ground truth. Everything else is secondary.
+Paper, code, and data are the ground truth. Supplementary materials and external knowledge are secondary.
 
 **What to check:**
 - Every factual claim in AGENTS.md paper summary — find it in the paper source
@@ -39,17 +41,19 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 - Supplementary materials outside `supplementary/` (e.g., `know-how.md` at root).
 - Severity: `warning` for misplaced files (the repo works but the structure is inconsistent).
 
-**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout and the checklist; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`; the researcher adds `LICENSE` at some point before release. Validate accordingly so `--stage structure` does not block on files that phase 4 hasn't created yet.
+**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout, `data/README.md` whenever the publication uses any dataset (local or external), and `LICENSE`; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`. Validate accordingly so `--stage structure` does not block on files that phase 4 hasn't created yet.
 
 | Required file | `structure` | `agents-md` | `full` |
 |---------------|-------------|-------------|--------|
 | `paper/` with at least one document | error if missing | error if missing | error if missing |
-| `supplementary/checklist.md` | error if missing | error if missing | error if missing |
+| `data/README.md` (when the publication uses any dataset, local or external) | error if missing | error if missing | error if missing |
+| `LICENSE` at root | error if missing | error if missing | error if missing |
 | `.gitignore` at root | warning if missing | warning if missing | warning if missing |
 | `AGENTS.md` at root | — | error if missing | error if missing |
 | `CLAUDE.md` at root (`@AGENTS.md`) | — | warning if missing | warning if missing |
 | `README.md` at root | — | error if missing | error if missing |
-| `LICENSE` at root | — | — | error if missing |
+
+The publication checklist is a skill-internal artifact of `/publish-paper` and is **not** a publication file — do not flag its absence.
 
 **File paths:**
 - Every path in AGENTS.md Repository Structure must resolve to a real file or directory
@@ -61,6 +65,10 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 - Figure generation commands should be syntactically valid (parseable by the shell)
 - Install commands should reference real package files (e.g., `environment/requirements.txt` exists)
 - Don't run heavy commands — just check they parse and reference real files
+
+**Figure reproduction scripts (one per figure):**
+- Each row in AGENTS.md "Reproduce figures" maps to a distinct script in `code/`
+- Flag duplicates (two figures pointing at the same script) as `warning` — this is an explicit exception to the severity convention: the spec says MUST, but splitting may be non-trivial and the decision belongs to the researcher
 
 **External links:**
 - Test with `curl -sIL <url>` — flag non-2xx responses
@@ -124,6 +132,6 @@ Extends `../extract-context/confidentiality-checklist.md` to cover the entire re
 - The scope is clear (what dataset, what conditions)
 
 **Ground truth hierarchy check:**
-- AGENTS.md identity section must explicitly state the paper is the ground truth
+- AGENTS.md identity section must explicitly state that the paper, code, and data are the ground truth
 - Supplementary materials section must note they are secondary
 - If skills are present, the Skills section should note they are tools, not claims

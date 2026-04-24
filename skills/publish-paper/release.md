@@ -21,7 +21,7 @@ Wait for the researcher to engage with each item. If they say "all good" without
 
 ### 5.3 Walk the checklist
 
-Walk through `supplementary/checklist.md` with the researcher as the final quality gate. Go through each item and mark them off. Flag any unchecked items — the researcher decides whether to resolve or mark N/A before proceeding.
+Walk through [`publication-checklist.md`](publication-checklist.md) (the skill-internal tracker in this skill's directory) with the researcher as the final quality gate. Go through each item and mark them off. Flag any unchecked items — the researcher decides whether to resolve or mark N/A before proceeding. This file is not part of the publication; it stays with the skill.
 
 Do NOT proceed until the researcher has explicitly confirmed they reviewed the files, the `AGENTS.md`, and the supplementary materials.
 
@@ -38,15 +38,15 @@ PUBLICATION SUMMARY — please review before I publish:
 
   Repo name:    <repo-name>
   Visibility:   PUBLIC — anyone on the internet can see this
-  Version:      v1.0.0
-  Tag:          v1.0.0
+  Version:      <version>  (e.g. 1.0.0 for a first release)
+  Tag:          <tag>      (e.g. v1.0.0; reused throughout phase 6)
 
   Files included (<N> files):
     paper/          — <paper source format>, figures, bibliography
     code/           — <brief description>
     data/           — <brief description>
     environment/    — <dependencies file>
-    supplementary/  — <list which files: know-how, authors-note, sessions, checklist>
+    supplementary/  — <list which files: know-how, authors-note, sessions, materials>
     skills/         — <list skill names, or "none">
     AGENTS.md       — paper agent instructions
     README.md       — public README
@@ -57,14 +57,14 @@ PUBLICATION SUMMARY — please review before I publish:
   External data links:
     <list any URLs that will be referenced, or "none">
 
-  Checklist status:
+  Checklist status (skill-internal):
     <N>/<M> items checked — <list any unchecked items>
 
   What happens next:
     1. Commit all files to the publication repo
-    2. Tag as v1.0.0
+    2. Tag as <tag>
     3. Push to GitHub as a PUBLIC repository
-    4. Create a GitHub release (v1.0.0)
+    4. Create a GitHub release (<tag>) with drafted release notes
     5. Record this release in the working repo (.publications.md)
 ```
 
@@ -72,16 +72,38 @@ PUBLICATION SUMMARY — please review before I publish:
 
 Do NOT proceed without unambiguous confirmation.
 
-After confirmation, commit and tag locally. This does not push anything yet:
+After confirmation, commit and tag locally. This does not push anything yet. Pick `<tag>` now (e.g. `v1.0.0` for a first release, `v2.0.0` for a subsequent one) and reuse it everywhere below — 6.1a and the `gh release create` commands all reference the same value:
 
 ```bash
 cd <publication-repo>
 git add -A
 git commit -m "Initial publication"
-git tag -a v1.0.0 -m "Paper agent v1.0.0"
+git tag -a <tag> -m "Paper agent <tag>"
 ```
 
-Tell the researcher: "Everything is committed and tagged locally. Nothing has been pushed yet."
+Tell the researcher: "Everything is committed and tagged as `<tag>` locally. Nothing has been pushed yet."
+
+### 6.1a Draft GitHub Release notes
+
+The Release notes are where edit/version history lives — this is the substitute for any "changelog in the repo" approach, and the only place readers see what changed between versions. Draft them before creating the GitHub release, not after.
+
+For a **first release** (`v1.0.0`): notes summarize the publication itself — paper title, authors, a one-line statement of what the agent can do, and links (arXiv/DOI/PDF) if available.
+
+For a **subsequent release**: base the notes on what actually changed.
+
+- Read `.publications.md` in the working repo to find the previous publication's repo URL and tag.
+- The previous tag lives in a different repo (the previous publication repo), not in this new one. If you cloned the previous publication earlier in phase 1 you can diff against it directly (`cd <prev-publication-clone> && git log <prev-tag>..main --oneline`, inspect changed files). Otherwise, shallow-clone it for comparison (`git clone --depth=50 <prev-repo-url> /tmp/prev-pub && git -C /tmp/prev-pub log <prev-tag>..main --oneline`) or skip the diff and rely on the researcher's summary. Do NOT run `git log <prev-tag>..HEAD` in the new publication repo — that tag does not exist here.
+- Ask the researcher, in their own words: "What changed in this version that a reader should know about?" Cover: results that were added/revised, figures that were redrawn, code that was refactored in ways readers will notice, data updates.
+
+Draft the notes and show them to the researcher for revision. Do not auto-generate boilerplate like "Bug fixes and improvements." After approval, write them to a file path that includes the actual tag so the later `gh release create` command can read them:
+
+```bash
+cat > /tmp/release-notes-<tag>.md <<'NOTES'
+<the drafted notes>
+NOTES
+```
+
+Substitute `<tag>` with the tag you just applied (e.g. `v1.0.0`). The next step references this file via `--notes-file`; do not fall back to a stock `--notes "..."` string.
 
 **Separate confirmation before each remote action.** Each push or remote operation requires its own confirmation — do not chain them.
 
@@ -92,9 +114,9 @@ Ask: "Ready to create the public GitHub repo and push? This makes everything vis
 gh repo create <repo-name> --public --source . --push
 ```
 
-Then ask: "Repo is live. Shall I also create a GitHub release tagged v1.0.0?"
+Then ask: "Repo is live. Shall I also create a GitHub release tagged <tag>?" (where `<tag>` is the tag applied above, e.g. `v1.0.0` for the first release or `v2.0.0` for a subsequent one).
 ```bash
-gh release create v1.0.0 --title "v1.0.0" --notes "Paper agent publication"
+gh release create <tag> --title "<tag>" --notes-file /tmp/release-notes-<tag>.md  # <tag> must match what you wrote in 6.1a
 ```
 
 **If the repo is already on GitHub:**
@@ -104,15 +126,16 @@ Ask: "Ready to push to GitHub? This makes everything visible."
 git push origin main --tags
 ```
 
-Then ask: "Push complete. Shall I also create a GitHub release tagged v1.0.0?"
+Then ask: "Push complete. Shall I also create a GitHub release tagged <tag>?"
 ```bash
-gh release create v1.0.0 --title "v1.0.0" --notes "Paper agent publication"
+gh release create <tag> --title "<tag>" --notes-file /tmp/release-notes-<tag>.md  # <tag> must match what you wrote in 6.1a
 ```
 
 **If `gh` is not available**, tell the researcher what to run manually:
 
 - Push: `git remote add origin <url> && git push -u origin main --tags`
-- Create the release on GitHub's web UI: Releases → Create a new release → tag `v1.0.0`.
+- Create the release on GitHub's web UI: Releases → Create a new release → tag `<tag>` (the value chosen above; e.g. `v1.0.0`).
+- Paste the release notes from `/tmp/release-notes-<tag>.md` into the release description field so the drafted notes aren't lost.
 
 Tell the researcher the publication is live and share the repo URL.
 

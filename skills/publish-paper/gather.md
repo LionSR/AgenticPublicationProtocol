@@ -29,7 +29,7 @@ Read the working repo thoroughly before asking the researcher anything. Build a 
 
 **Code.** Language, framework, entry point. Dependency manifests (`setup.py`, `pyproject.toml`, `requirements.txt`, `environment.yml`, `package.json`, `Cargo.toml`). What the code does — simulation, data analysis, model, proof script. Figure-generating scripts. Config files that control parameters.
 
-**Data.** Is there data in the repo? How large? Raw, processed, or both? External data references — Hugging Face (`huggingface.co/datasets/…`), Zenodo (`zenodo.org/record/…`), Figshare, Dryad, Materials Project, Google Drive / Dropbox. For each external dataset, note URL and download command.
+**Data.** Is there data in the repo? How large? Raw, processed, or both? External data references — Hugging Face (`huggingface.co/datasets/…`), Zenodo (`zenodo.org/record/…`), Figshare, Dryad, Materials Project, Google Drive / Dropbox. For each external dataset, note URL and download command. Check whether a `data/README.md` already exists in the working repo — the spec requires one whenever the publication uses any dataset, whether the data lives in `data/` or is referenced externally by URL. A theory-only publication with no dataset skips this. Otherwise, if the working repo doesn't have one, record that it must be authored in phase 3, even when `data/` ships empty.
 
 **Environment.** Platform developed on (OS-specific code), GPU requirements, cluster job scripts, Dockerfiles.
 
@@ -40,6 +40,8 @@ Read the working repo thoroughly before asking the researcher anything. Build a 
 1. Find the figure reference in the paper source (`\includegraphics`, filenames).
 2. Find the script that generates it (`savefig`, `plt.save`, output paths).
 3. Identify the data the script reads.
+
+The spec requires one reproduction script per figure. Flag figures whose script also produces other figures — these need to be split in phase 3, or the overlap explicitly documented if splitting is impractical.
 
 Note anything you cannot figure out by reading — these become targeted questions for phase 2.
 
@@ -61,6 +63,7 @@ Ask **1–3 questions per round**, wait for answers, then move to the next round
 **Round 2 — The code.** Only what you couldn't determine from phase 1.
 
 - Show the script→figure mapping you built and ask the researcher to confirm or correct it.
+- For any multi-figure scripts flagged in phase 1, ask whether to split them or keep as-is; record the decision.
 - "What's the main experiment and how do you run it?"
 - If anything looked fragile or slow, ask about it specifically.
 
