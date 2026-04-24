@@ -1,8 +1,6 @@
 # Phase 3 — Build
 
-Create the publication repo, copy and organize the approved files per [PROTOCOL.md § Repository layout](../../PROTOCOL.md#repository-layout), and verify the code still runs with the new paths.
-
-Invoked from [`SKILL.md`](SKILL.md) after phase 2. Follow the cross-cutting principles declared there.
+Follow the cross-cutting principles in [`SKILL.md`](SKILL.md). The input/output contract for this phase is documented in [`SKILL.md`](SKILL.md).
 
 ## 3.1 Create the publication repo
 

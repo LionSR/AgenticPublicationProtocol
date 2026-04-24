@@ -8,7 +8,11 @@ This repository contains:
 
 - [`PROTOCOL.md`](PROTOCOL.md) — the specification of what an APP publication looks like.
 - [`skills/`](skills/) — tools that walk authors through producing one.
-- [`template/`](template/) — a starter `AGENTS.md`, `CLAUDE.md`, and publication checklist.
+- [`template/`](template/) — starter files the skills adapt:
+  - [`template/AGENTS.md`](template/AGENTS.md) — starter for the publication's `AGENTS.md`.
+  - [`template/CLAUDE.md`](template/CLAUDE.md) — one-line Claude Code import (`@AGENTS.md`).
+  - [`template/publication-checklist.md`](template/publication-checklist.md) — the publication checklist expanded into per-topic subchecks.
+  - [`template/publications.md`](template/publications.md) — template for the working repo's `.publications.md` release log.
 
 ## Install
 

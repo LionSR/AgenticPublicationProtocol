@@ -1,8 +1,6 @@
 # Phases 5–6 — Final review and Release
 
-Run the full validation sweep, walk the checklist, confirm, commit, tag, push, record in `.publications.md`. **This is the point of no return** — once pushed, the publication is public. Each remote action requires its own explicit confirmation.
-
-Invoked from [`SKILL.md`](SKILL.md) after phase 4. Follow the cross-cutting principles declared there.
+**Point of no return** — once pushed, the publication is public. Each remote action requires its own explicit confirmation. Follow the cross-cutting principles in [`SKILL.md`](SKILL.md). The input/output contract is documented in [`SKILL.md`](SKILL.md).
 
 ## Phase 5 — Final review
 

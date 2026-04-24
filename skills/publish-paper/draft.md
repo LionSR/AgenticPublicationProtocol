@@ -1,8 +1,6 @@
 # Phase 4 — Draft
 
-Draft `AGENTS.md` and `README.md` for the publication repo, iterate with the researcher until they agree the agent represents their intent, not just their words.
-
-Invoked from [`SKILL.md`](SKILL.md) after phase 3. The **author's voice principle** declared in `SKILL.md` is especially load-bearing here.
+Follow the cross-cutting principles in [`SKILL.md`](SKILL.md) — the **author's voice principle** declared there is especially load-bearing in this phase. The input/output contract is documented in [`SKILL.md`](SKILL.md).
 
 ## 4.1 Create `AGENTS.md`
 
@@ -20,7 +18,7 @@ Use [`template/AGENTS.md`](../../template/AGENTS.md) as a starting skeleton.
 - **Computational Requirements.** Classify every task (figure generation, individual experiments, full reproduction) by time, hardware, and memory. Note the platform tested on (OS, language version). The agent MUST warn before running anything heavy.
 - **Identity.** Keep the spokesperson framing — the agent represents *these authors' work*, not a generic assistant. Domain voice matters: a math paper's agent reasons like a mathematician; an experimental paper's agent thinks like an experimentalist.
 
-Also create `CLAUDE.md` containing a single line: `@AGENTS.md`.
+Also create `CLAUDE.md` — one line: `@AGENTS.md`. You can copy [`template/CLAUDE.md`](../../template/CLAUDE.md) verbatim.
 
 **Self-check before showing the researcher:**
 

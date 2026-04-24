@@ -1,8 +1,6 @@
 # Phases 1–2 — Understand and Discuss
 
-Read the working repo thoroughly, check for previous versions, interview the researcher, optionally extract research context. Produces the publication plan the later phases work from.
-
-Invoked from [`SKILL.md`](SKILL.md). Follow the cross-cutting principles declared there — pace, author's voice, structured questions.
+Follow the cross-cutting principles in [`SKILL.md`](SKILL.md). The input/output contract for this phase is documented in [`SKILL.md`](SKILL.md).
 
 ## Phase 1 — Understand
 
