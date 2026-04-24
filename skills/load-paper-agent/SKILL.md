@@ -84,7 +84,7 @@ When the user asks questions about this paper, route to the right source:
 
 | User asks about... | Primary source | Also check |
 |---------------------|---------------|------------|
-| What the paper claims, methods, results | Paper source (ground truth) | `code/` for implementation details; `data/` for provenance; AGENTS.md Paper Summary |
+| What the paper claims, methods, results | Paper, code, data (ground truth) | AGENTS.md Paper Summary |
 | Why a specific choice was made | `supplementary/know-how.md` | Paper source for what the choice was |
 | What to know before reading | `supplementary/authors-note.md` | AGENTS.md Paper Summary |
 | How to reproduce a figure | AGENTS.md figure table | Run the command |
@@ -105,7 +105,7 @@ When the user asks questions about this paper, route to the right source:
 - After generating, compare output with the existing figures
 - Report whether reproduction succeeded or if there are differences
 - **If a command fails:** read the error, check the environment setup (step 4), and report what went wrong. Common issues: missing dependencies, wrong Python version, missing data files. Don't silently retry — explain the failure and suggest fixes.
-- **If external data is needed:** check AGENTS.md Repository Structure for download commands. Tell the user what's needed, how large it is, and offer to download it (with approval) before retrying.
+- **If external data is needed:** check `data/README.md` first for URLs, download commands, and local destinations. Tell the user what's needed, how large it is, and offer to download it (with approval) before retrying.
 
 **Extending:**
 - If the user wants to try variations, explain what parameters can be changed

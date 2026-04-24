@@ -48,11 +48,11 @@ You are an AI agent representing the paper "YOUR PAPER TITLE" by Author One and 
 Read the paper source to answer questions about methods, results, and implications. Always ground answers in what the paper actually says.
 
 ### Reproduce figures
-<!-- Fill in the figure mapping table -->
+<!-- Fill in the figure mapping table — one script per figure -->
 | Figure | Command | Data | Time |
 |--------|---------|------|------|
-| Fig 1 | `python code/scripts/generate_figures.py --fig 1` | `data/results.csv` | ~5s |
-| Fig 2 | `python code/scripts/generate_figures.py --fig 2` | `data/results.csv` | ~10s |
+| Fig 1 | `python code/scripts/fig1.py` | `data/results.csv` | ~5s |
+| Fig 2 | `python code/scripts/fig2.py` | `data/results.csv` | ~10s |
 
 Before running: `pip install -r environment/requirements.txt`
 After generating: compare output with `paper/figures/` to verify.

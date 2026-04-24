@@ -95,7 +95,15 @@ For a **subsequent release**: base the notes on what actually changed.
 - If the previous publication repo exists, diff against it (`git log <prev-tag>..HEAD --oneline`, inspect changed files).
 - Ask the researcher, in their own words: "What changed in this version that a reader should know about?" Cover: results that were added/revised, figures that were redrawn, code that was refactored in ways readers will notice, data updates.
 
-Draft the notes and show them to the researcher for revision. Do not auto-generate boilerplate like "Bug fixes and improvements." When you create the GitHub release in the next step, pass the drafted notes via `--notes` (or `--notes-file`); do not fall back to a stock string.
+Draft the notes and show them to the researcher for revision. Do not auto-generate boilerplate like "Bug fixes and improvements." After approval, write them to a file path that includes the actual tag so the later `gh release create` command can read them:
+
+```bash
+cat > /tmp/release-notes-<tag>.md <<'NOTES'
+<the drafted notes>
+NOTES
+```
+
+Substitute `<tag>` with the tag you just applied (e.g. `v1.0.0`). The next step references this file via `--notes-file`; do not fall back to a stock `--notes "..."` string.
 
 **Separate confirmation before each remote action.** Each push or remote operation requires its own confirmation — do not chain them.
 
@@ -108,7 +116,7 @@ gh repo create <repo-name> --public --source . --push
 
 Then ask: "Repo is live. Shall I also create a GitHub release tagged v1.0.0?"
 ```bash
-gh release create v1.0.0 --title "v1.0.0" --notes-file /tmp/release-notes-v1.0.0.md
+gh release create v1.0.0 --title "v1.0.0" --notes-file /tmp/release-notes-v1.0.0.md  # match the filename you wrote in 6.1a
 ```
 
 **If the repo is already on GitHub:**
@@ -120,7 +128,7 @@ git push origin main --tags
 
 Then ask: "Push complete. Shall I also create a GitHub release tagged v1.0.0?"
 ```bash
-gh release create v1.0.0 --title "v1.0.0" --notes-file /tmp/release-notes-v1.0.0.md
+gh release create v1.0.0 --title "v1.0.0" --notes-file /tmp/release-notes-v1.0.0.md  # match the filename you wrote in 6.1a
 ```
 
 **If `gh` is not available**, tell the researcher what to run manually:

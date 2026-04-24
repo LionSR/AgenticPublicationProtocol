@@ -2,7 +2,7 @@
 
 Detailed criteria for each validation agent in validate-publication.
 
-**Severity convention.** PROTOCOL.md `MUST` violations → `error`; `SHOULD` → `warning`; `MAY` → `note`. When adding new checks, map the spec's normative keyword to the matching severity.
+**Severity convention.** By default, PROTOCOL.md `MUST` violations → `error`; `SHOULD` → `warning`; `MAY` → `note`. Map new checks accordingly unless this file explicitly defines a narrower exception for a non-blocking organizational issue; such exceptions must be stated where the check is defined.
 
 ## Factuality
 
@@ -46,7 +46,7 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 | Required file | `structure` | `agents-md` | `full` |
 |---------------|-------------|-------------|--------|
 | `paper/` with at least one document | error if missing | error if missing | error if missing |
-| `data/README.md` (when `data/` has files) | error if missing | error if missing | error if missing |
+| `data/README.md` (when the publication uses any dataset, local or external) | error if missing | error if missing | error if missing |
 | `LICENSE` at root | error if missing | error if missing | error if missing |
 | `.gitignore` at root | warning if missing | warning if missing | warning if missing |
 | `AGENTS.md` at root | — | error if missing | error if missing |
@@ -68,7 +68,7 @@ The publication checklist is a skill-internal artifact of `/publish-paper` and i
 
 **Figure reproduction scripts (one per figure):**
 - Each row in AGENTS.md "Reproduce figures" maps to a distinct script in `code/`
-- Flag duplicates (two figures pointing at the same script) as `warning` — the spec says MUST, but splitting may be non-trivial and is a researcher decision
+- Flag duplicates (two figures pointing at the same script) as `warning` — this is an explicit exception to the severity convention: the spec says MUST, but splitting may be non-trivial and the decision belongs to the researcher
 
 **External links:**
 - Test with `curl -sIL <url>` — flag non-2xx responses
