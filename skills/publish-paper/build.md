@@ -21,8 +21,8 @@ Create target directories first, then copy. Example — adapt to what's actually
 ```bash
 mkdir -p publication-staging/paper/figures \
          publication-staging/paper/build \
-        publication-staging/code/src \
-        publication-staging/code/scripts \
+         publication-staging/code/src \
+         publication-staging/code/scripts \
          publication-staging/code/figure-reproduction \
          publication-staging/data \
          publication-staging/reproduction/figures \
@@ -37,6 +37,8 @@ cp data/results.csv publication-staging/data/
 cp requirements.txt publication-staging/environment/
 ```
 
+If the publication uses any dataset, local or external, `publication-staging/data/README.md` must also exist — authored below with the researcher.
+
 Use the file list from phase 2 — copy only what the researcher approved. Organize into the directory layout defined in [PROTOCOL.md § Repository layout](../../PROTOCOL.md#repository-layout). Not every directory is required — adapt to what is actually being published. See [`paper-types.md`](paper-types.md) for format-specific minimums.
 
 **Single source of truth.** Each public file lives in exactly one place inside `publication-staging/`. No duplicates, no ambiguity about which version is current.
@@ -47,6 +49,15 @@ Use the file list from phase 2 — copy only what the researcher approved. Organ
 
 - Files over 50 MB: suggest Git LFS or external hosting (Hugging Face, Zenodo).
 - Generated files that can be reproduced: add to `.gitignore` and document the generation command.
+
+**Author `data/README.md`.** The spec requires `data/README.md` whenever the publication uses any dataset, local or external. For each dataset, record:
+
+- what the dataset is and how it was produced;
+- which figures, tables, or scripts use it;
+- for external datasets: URL, exact download command, local destination under `data/`, and whether it is required for the default workflow;
+- file size for anything the reader will download.
+
+Detail lives here; `AGENTS.md` carries only a concise pointer to `data/README.md`.
 
 **Verify external data links.** For every external data URL identified in phase 1 (Hugging Face, Zenodo, Figshare, etc.):
 
@@ -69,7 +80,27 @@ Do not create a procedural checklist inside `publication-staging/`. Track phase 
 
 Tell the researcher what was copied and how it is organized. Flag anything that needed special handling (large files, updated paths, broken data links).
 
-## 3.3 Create direct figure/table reproduction scripts
+## 3.3 Write `LICENSE`
+
+The spec requires a `LICENSE` file at the repo root with no extension. Ask the researcher which license they want using a structured choice: `MIT`, `Apache-2.0`, `CC-BY-4.0`, `BSD-3-Clause`, or `Other`.
+
+Fetch the canonical text rather than paraphrasing. Try GitHub's licenses API first, falling back to choosealicense.com raw for licenses the API does not carry, notably CC licenses:
+
+```bash
+curl -sS https://api.github.com/licenses/<spdx> > LICENSE.tmp
+jq -r '.body' LICENSE.tmp > publication-staging/LICENSE
+
+curl -sS https://raw.githubusercontent.com/github/choosealicense.com/gh-pages/_licenses/<spdx>.txt \
+  | awk 'f;/^---$/{c++;if(c==2)f=1}' > publication-staging/LICENSE
+```
+
+SPDX identifiers for the menu: `mit`, `apache-2.0`, `cc-by-4.0`, `bsd-3-clause`.
+
+Fill placeholders: MIT and BSD-3-Clause have `[year]` and `[fullname]` — substitute the current year and the authors' names from phase 2. Apache-2.0's canonical text has no placeholders; mention that the researcher may add a `NOTICE` file separately if they want attribution callouts. For `Other`, ask the researcher to paste the full license text; write it verbatim.
+
+Show the populated `LICENSE` to the researcher and write it only after explicit confirmation. If paper, code, and data are not all under the same license, the single `LICENSE` file must explicitly call this out.
+
+## 3.4 Create direct figure/table reproduction scripts
 
 For any paper with generated figures or tables, make a serious attempt to directly reproduce every paper figure/table from code. Do not downgrade to "selected reproduction" merely because the source repo is messy.
 
@@ -128,7 +159,7 @@ Only mark a figure/table as not directly reproduced after documenting in `code/f
 
 Invoke `/validate-publication --stage structure` with `publication-staging/` as the effective repository root. Review the validation report, fix any errors, and summarize warnings or manual verification items for the researcher.
 
-## 3.4 Verify the code works from staging root
+## 3.5 Verify the code works from staging root
 
 Tell the researcher you're testing that everything runs with the new staging-root paths.
 

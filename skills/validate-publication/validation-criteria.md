@@ -2,9 +2,11 @@
 
 Detailed criteria for the APP compliance checks in validate-publication.
 
+**Severity convention.** PROTOCOL.md `MUST` violations -> `error`; `SHOULD` -> `warning`; `MAY` -> `note`. When adding new checks, map the spec's normative keyword to the matching severity.
+
 ## APP factual consistency
 
-The paper is the ground truth. Everything else is secondary.
+The manuscript, primary code, and data are the ground truth. Supplementary materials and external knowledge are secondary.
 
 **What to check:**
 - Stated numbers, figure/table references, dataset names, and result summaries in AGENTS.md and README — verify they do not conflict with the paper
@@ -42,18 +44,21 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 - Supplementary materials outside `supplementary/` (e.g., `know-how.md` at root).
 - Severity: `warning` for misplaced files (the repo works but the structure is inconsistent).
 
-**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`; final validation produces `supplementary/validation-report.md`; the researcher adds `LICENSE` at some point before release. Validate accordingly so `--stage structure` does not block on files that phase 4 or phase 5 haven't created yet.
+**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout, `data/README.md` when any dataset is used, and `LICENSE`; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`; final validation produces `supplementary/validation-report.md`. Validate accordingly so `--stage structure` does not block on files that phase 4 or phase 5 haven't created yet.
 
 | Required file | `structure` | `agents-md` | `full` |
 |---------------|-------------|-------------|--------|
 | `paper/` with at least one document | error if missing | error if missing | error if missing |
+| `data/README.md` (when the publication uses any dataset, local or external) | error if missing | error if missing | error if missing |
+| `LICENSE` at root | error if missing | error if missing | error if missing |
 | `.gitignore` at root | warning if missing | warning if missing | warning if missing |
 | `AGENTS.md` at root | — | error if missing | error if missing |
 | `CLAUDE.md` at root (`@AGENTS.md`) | — | warning if missing | warning if missing |
 | `README.md` at root | — | error if missing | error if missing |
 | `code/figure-reproduction/README.md` for papers with generated figures/tables | warning if missing | error if missing | error if missing |
 | `supplementary/validation-report.md` | — | — | warning if missing during final `/publish-paper` validation; not required for standalone pre-report audits |
-| `LICENSE` at root | — | — | error if missing |
+
+The publication checklist is a skill-internal artifact of `/publish-paper` and is **not** a publication file — do not flag its absence.
 
 **File paths:**
 - Every path in AGENTS.md Repository Structure must resolve to a real file or directory

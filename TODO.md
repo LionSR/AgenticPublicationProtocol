@@ -9,4 +9,4 @@ Work items deferred past the current draft of the Agentic Publication Protocol.
 
 ## Protocol
 
-- **Conformance automation.** A lightweight checker (CLI or GitHub Action) that validates an APP publication against `PROTOCOL.md` — paths resolve, frontmatter is well-formed, tag matches `version`. Could be packaged as a companion tool to `/validate-publication`.
+- **Conformance automation.** A lightweight checker (CLI or GitHub Action) that validates an APP publication against `PROTOCOL.md` — frontmatter is well-formed, tag matches `version`, every MUST file at the publication root is present (`AGENTS.md`, `README.md`, `LICENSE`, and `data/README.md` when `data/` has files), every figure in `AGENTS.md` "Reproduce figures" maps to a distinct script in `code/`, and every path in `AGENTS.md` resolves. Could be packaged as a companion tool to `/validate-publication`.

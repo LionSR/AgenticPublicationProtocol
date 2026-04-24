@@ -186,14 +186,14 @@ Before running anything from the paper:
    cd <repo-root>
    pip install -r environment/requirements.txt  # or equivalent
    ```
-6. Check if the paper references external datasets (Hugging Face, Zenodo, Figshare, etc.). For APP repos, the Repository Structure in AGENTS.md should list these with download commands. For non-APP repos, search README, docs, scripts, notebooks, configs, and paper source. If the user needs data that isn't in the repo:
+6. Check if the paper references external datasets (Hugging Face, Zenodo, Figshare, etc.). For APP repos, read `data/README.md` first for URLs, download commands, local destinations, and required-for-default-workflow flags; AGENTS.md Repository Structure may carry a high-level pointer. For non-APP repos, search README, docs, scripts, notebooks, configs, and paper source. If the user needs data that isn't in the repo:
    - Tell them what's needed, how large it is, and where to get it
    - Offer to run the download command (with approval)
    - Don't attempt to run code that depends on missing data — explain what's needed first
 
 ### 5. Operate as the paper's agent
 
-**The paper is the ground truth.** The paper document (in whatever format — LaTeX, DOCX, Markdown, HTML, video, PPTX) is the authoritative source for all claims and results. Supplementary materials provide additional context but are secondary. If anything in the supplementary materials conflicts with the paper, defer to the paper. For non-APP repos, first identify the most likely canonical paper file by inspecting filenames, README/docs, build files, and paper directories.
+**The paper, code, and data are the ground truth.** For APP repos, the paper document, accompanying code in `code/`, and data documented in `data/README.md` are authoritative for claims, results, and reproduction details. Supplementary materials provide additional context but are secondary. If anything in the supplementary materials conflicts with the ground truth, defer to the paper, code, and data. For non-APP repos, first identify the most likely canonical paper file by inspecting filenames, README/docs, build files, and paper directories.
 
 When the user asks questions about this paper, route to the right source:
 
@@ -201,7 +201,7 @@ When the user asks questions about this paper, route to the right source:
 
 | User asks about... | Primary source | Also check |
 |---------------------|---------------|------------|
-| What the paper claims, methods, results | Paper source (ground truth) | AGENTS.md Paper Summary, README/docs if present |
+| What the paper claims, methods, results | Paper source (ground truth) | `code/` for implementation details; `data/` for provenance; AGENTS.md Paper Summary |
 | Why a specific choice was made | `supplementary/know-how.md` | Paper source for what the choice was |
 | What to know before reading | `supplementary/authors-note.md` | AGENTS.md Paper Summary |
 | How to reproduce a figure | `code/figure-reproduction/README.md` if present | AGENTS.md figure summary, README/docs, scripts, notebooks, paper source, run the command |
@@ -210,7 +210,7 @@ When the user asks questions about this paper, route to the right source:
 | Computational requirements | AGENTS.md Computational Requirements if present | README/docs, environment files, imports, scripts |
 
 **Explaining:**
-- Read the paper source to answer — it is the ground truth
+- Read the paper source to answer claims; check code and data when the question concerns implementation, reproduction, or provenance
 - Ground every answer in what the paper actually says
 - Distinguish between paper claims and your inference
 - If supplementary materials exist in `supplementary/`, use them to explain the reasoning behind decisions — but note that these provide context, not authoritative claims
@@ -224,7 +224,7 @@ When the user asks questions about this paper, route to the right source:
 - After generating, compare output with the existing figures
 - Report whether reproduction succeeded or if there are differences
 - **If a command fails:** read the error, check the environment setup (step 4), and report what went wrong. Common issues: missing dependencies, wrong Python version, missing data files. Don't silently retry — explain the failure and suggest fixes.
-- **If external data is needed:** check AGENTS.md Repository Structure when present; otherwise search README/docs, scripts, notebooks, configs, and paper source for download instructions. Tell the user what's needed, how large it is, and offer to download it (with approval) before retrying.
+- **If external data is needed:** check `data/README.md` first for APP repos; otherwise search README/docs, scripts, notebooks, configs, and paper source for download instructions. Tell the user what's needed, how large it is, and offer to download it (with approval) before retrying.
 
 **Extending:**
 - If the user wants to try variations, explain what parameters can be changed

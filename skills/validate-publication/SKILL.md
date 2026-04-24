@@ -39,6 +39,7 @@ Read the publication repo or staging tree to understand what's being validated:
 - `README.md`
 - `supplementary/` — know-how, authors-note, sessions, materials
 - `skills/` — any author-published skills
+- `data/README.md` — dataset provenance, access, and download instructions when the publication uses data
 - `supplementary/validation-report.md` — prior validation report, if this is a final/revalidation pass
 - `APP_PUBLICATION.json` release asset — only when auditing a public tagged release, not when validating `publication-staging/`
 
@@ -102,6 +103,7 @@ Cross-check information across files:
 - Computational requirements vs actual code — for example, do not claim "runs on any laptop" if the code requires CUDA.
 - Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.
 - Required APP files exist for the current validation stage.
+- `data/README.md` exists whenever the publication uses any dataset, local or external.
 - Setup, data access, and reproduction instructions are complete enough for a reader agent to know what can be run, what data is required, and what requires manual/human steps.
 
 This is a completeness/usability check, not a prose-quality review. Do not flag wording only because it sounds generic; flag missing information only when it blocks APP use.
