@@ -1,5 +1,9 @@
 # Agentic Publication Protocol (APP)
 
+[![Protocol version](https://img.shields.io/badge/protocol-0.1.0--draft-orange)](PROTOCOL.md)
+[![Latest release](https://img.shields.io/github/v/release/LionSR/AgenticPublicationProtocol?include_prereleases&sort=semver)](https://github.com/LionSR/AgenticPublicationProtocol/releases)
+[![License: CC-BY-4.0 / MIT](https://img.shields.io/badge/license-CC--BY--4.0%20%2F%20MIT-blue)](#license)
+
 APP is a format for authors to publish a finished paper as a GitHub repository any AI coding agent can represent. The repo carries the paper alongside the code, data, and context needed for the agent to explain the work, reproduce figures, run experiments, and answer questions — more of what the research actually contains than a static PDF can convey. Readers clone the repo, open it in [Claude Code](https://claude.ai/claude-code), [Codex](https://github.com/openai/codex), or any other agent that reads [`AGENTS.md`](https://agents.md), and the agent speaks for the paper.
 
 APP packages results authors have already produced; it does not help write or produce the research. Bring a finished paper, and APP defines how to publish it.
@@ -10,6 +14,7 @@ This repository contains:
 - [`skills/`](skills/) — tools that walk authors through producing one.
 - [`template/`](template/) — starter files the skills adapt:
   - [`template/AGENTS.md`](template/AGENTS.md) — starter for the publication's `AGENTS.md`.
+  - [`template/README.md`](template/README.md) — starter for the publication's human-facing `README.md`.
   - [`template/CLAUDE.md`](template/CLAUDE.md) — one-line Claude Code import (`@AGENTS.md`).
   - [`template/publication-checklist.md`](template/publication-checklist.md) — the publication checklist expanded into per-topic subchecks.
   - [`template/publications.md`](template/publications.md) — template for the working repo's `.publications.md` release log.
@@ -23,8 +28,6 @@ This repository contains:
 /plugin install paper-protocol@paper-protocol
 ```
 
-Update: `/plugin update paper-protocol`
-
 ### Codex
 
 Tell Codex:
@@ -33,11 +36,19 @@ Tell Codex:
 Fetch and follow instructions from https://raw.githubusercontent.com/LionSR/AgenticPublicationProtocol/refs/heads/main/.codex/INSTALL.md
 ```
 
-Update: `cd ~/.codex/paper-protocol && git pull`
-
 ### Other tools
 
-Clone this repo and point your agent at the `skills/` directory. Update with `git pull`.
+Clone this repo and point your agent at the `skills/` directory.
+
+## Update
+
+| Platform | Command |
+|----------|---------|
+| Claude Code | `/plugin update paper-protocol` |
+| Codex | `cd ~/.codex/paper-protocol && git pull` |
+| Other tools | `git pull` in the cloned directory |
+
+New skills, reference files, and templates appear automatically after update — no re-install needed.
 
 ## Publish a paper
 

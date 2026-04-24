@@ -1,6 +1,6 @@
 # Phase 4 — Draft
 
-Follow the cross-cutting principles in [`SKILL.md`](SKILL.md) — the **author's voice principle** declared there is especially load-bearing in this phase. The input/output contract is documented in [`SKILL.md`](SKILL.md).
+The **author's voice** principle declared in [`SKILL.md`](SKILL.md) is especially load-bearing in this phase.
 
 ## 4.1 Create `AGENTS.md`
 
@@ -52,54 +52,12 @@ Revise `AGENTS.md` based on their feedback. Go back and forth until the research
 
 ## 4.3 Create `README.md`
 
-Show the researcher the README draft. The publication README is for readers who want to use the paper agent — not a copy of the working repo's README.
+Copy [`template/README.md`](../../template/README.md) to the publication repo root and fill in each placeholder using information from phases 1–2 and the finalized `AGENTS.md`. The figure table uses the same schema as the `AGENTS.md` "Reproduce figures" table — `Figure | Command | Data | Time` — so the two tables stay checkable against each other.
 
-Skeleton to adapt:
+The publication `README.md` is for readers who want to use the paper agent; it is not a copy of the working repo's README.
 
-```markdown
-# [Paper Title]
-
-[Authors, affiliations]
-
-[1–2 sentence summary of the paper]
-
-[Link to arXiv / DOI / PDF if available]
-
-## Talk to this paper
-
-This paper is published with an AI agent ([Agentic Publication Protocol](https://github.com/LionSR/AgenticPublicationProtocol)). Clone this repo and open it in an AI coding agent to ask questions, reproduce figures, and explore the work.
-
-**Claude Code:** clone and open — it reads `AGENTS.md` automatically. Or use `/load-paper-agent https://github.com/<owner>/<repo>`.
-
-**Codex or other agents:** clone and open — any agent that reads `AGENTS.md` picks up the paper context.
-
-## Figures
-
-| Figure | Script | Data | Output |
-|--------|--------|------|--------|
-| Fig 1 (description) | `code/scripts/fig1.py` | `data/results.csv` | `paper/figures/fig1.pdf` |
-| Fig 2 (description) | `code/scripts/fig2.py` | `data/sim_output.h5` | `paper/figures/fig2.pdf` |
-
-## Reproducing results
-
-### Setup
-[how to install dependencies — platform-agnostic]
-
-### Run figures
-[commands]
-
-### Full experiment
-[how to run from scratch, if applicable]
-
-## Citation
-
-\`\`\`bibtex
-[bibtex entry]
-\`\`\`
-```
-
-Get the researcher's feedback on the README before finalizing.
+Show the README draft to the researcher and iterate on it before finalising.
 
 ## Handoff
 
-Summarise: `AGENTS.md`, `CLAUDE.md`, and `README.md` are drafted and the researcher is satisfied. Announce that phases 5–6 (Final review and Release) are next. Open [`release.md`](release.md) to continue.
+`AGENTS.md`, `CLAUDE.md`, and `README.md` drafted and approved. Next: [`release.md`](release.md).

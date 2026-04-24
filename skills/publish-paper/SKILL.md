@@ -5,20 +5,39 @@ description: Orchestrate the publication of an academic paper as an AI agent fol
 
 # Publish Paper as Agent — Orchestrator
 
-This skill produces an APP-compliant publication repo — the format defined in [`PROTOCOL.md`](../../PROTOCOL.md). It is a **four-phase orchestrator**: the agent reads this file first to understand the flow, the cross-cutting principles, and the available templates and sub-skills; then it opens each phase file in turn to execute.
+This skill produces an APP-compliant publication repo — the format defined in [`PROTOCOL.md`](../../PROTOCOL.md). It is a four-phase orchestrator: read this file in full, then open each phase file in turn to execute. The phase files hold the actual instructions; this file holds the roadmap, the cross-cutting principles, and the input/output contracts that let the agent reason about state and resume points.
 
 **Scope.** APP publishes a paper that is already written. This skill does not help write the paper, run experiments, or produce results — those must already exist in the author's working repo before the skill is useful.
 
-## Orchestration model
+## Roadmap to show the researcher
 
-The work happens in the **phase files** — `gather.md`, `build.md`, `draft.md`, `release.md`. This `SKILL.md` does **not** duplicate their content. What lives here instead:
+Show this at the very start of the process:
 
-- The roadmap the researcher sees at the start.
-- The cross-cutting principles (pace, author's voice, structured questions) that apply to every phase.
-- The input/output contract for each phase — enough to know which phase you're in, whether you can skip ahead on resume, and what state each phase leaves behind.
-- The list of templates and sub-skills the phase files draw on.
+```
+PUBLICATION ROADMAP
 
-Read this file in full at the start. Open each phase file only when you reach that phase — they are intentionally scoped to one step at a time.
+  Phase 1 — Understand        [ ]  Read the repo, check for previous versions
+  Phase 2 — Discuss           [ ]  Interview (up to 5 short rounds), extract context
+  Phase 3 — Build             [ ]  Create repo, organize files, verify code
+  Phase 4 — Draft             [ ]  AGENTS.md, iterate with you, README
+  Phase 5 — Final review      [ ]  Walk through everything, validation sweep
+  Phase 6 — Release           [ ]  Publish (with your explicit confirmation)
+
+  This is a deliberate process — it can span multiple sessions.
+  I'll update this checklist as we go.
+```
+
+For phase-to-phase transitions after the start, a brief status line is enough: "Phase 3 complete. Moving to Phase 4 — Draft."
+
+## Cross-cutting principles
+
+These apply across every phase. Keep them in mind as you read each phase file.
+
+**Pace.** Never treat a partial answer as a complete one. If you asked three questions and the researcher answered one, follow up on the unanswered ones before moving on — they may have missed them, not declined them. When showing the researcher something for feedback (a draft, a file list, a checklist), wait for them to engage substantively. A one-word acknowledgement ("ok", "sure", "fine") after presenting five things to review is not confirmation — ask which specific items they've looked at. The researcher's attention is finite; work with that, not against it.
+
+**Author's voice.** The supplementary materials (`authors-note.md`, `know-how.md`), the `AGENTS.md` paper summary, and any content that speaks for the researcher must reflect what *they* want to convey — not what the agent thinks is important. Before drafting, ask the researcher what they want the document to say and who the intended audience is. Draft from their intent, then iterate. Never generate these documents first and ask for approval after — that inverts the authorship.
+
+**Structured questions.** When asking the researcher to make choices, use structured question tools if the platform supports them (e.g. `AskUserQuestion` in Claude Code). Present clear options rather than open-ended text prompts. This is faster and less ambiguous, and keeps the researcher's typing load low.
 
 ## Phase files (read in order)
 
@@ -45,7 +64,7 @@ Read this file in full at the start. Open each phase file only when you reach th
 - **Assumes.** Publication repo with organized files and verified code from `build.md`.
 - **Produces.** `AGENTS.md` (per the schema in [`PROTOCOL.md` § AGENTS.md](../../PROTOCOL.md#agentsmd)), `CLAUDE.md` (`@AGENTS.md`), and `README.md` — all approved by the researcher.
 - **Sub-skills called.** `/validate-publication --stage agents-md`.
-- **Templates used.** [`template/AGENTS.md`](../../template/AGENTS.md), [`template/CLAUDE.md`](../../template/CLAUDE.md).
+- **Templates used.** [`template/AGENTS.md`](../../template/AGENTS.md), [`template/CLAUDE.md`](../../template/CLAUDE.md), [`template/README.md`](../../template/README.md).
 - **Interaction load.** Heavy — walk the researcher through `AGENTS.md` one section at a time and revise until intent matches.
 
 ### [`release.md`](release.md) — Phases 5–6
@@ -63,12 +82,13 @@ Not a workflow step. Format-specific guidance for theory-only, computational, ex
 
 ## Templates
 
-Four files ship in `template/` at the repo root. Phase files copy or adapt them at the right moment — do not re-author these artifacts; start from the template.
+Five files ship in `template/` at the repo root. Phase files copy or adapt them at the right moment — do not re-author these artifacts; start from the template.
 
 | Template | Adapted by | Lands as |
 |----------|------------|----------|
 | [`template/AGENTS.md`](../../template/AGENTS.md) | `draft.md` (phase 4) | `<publication-repo>/AGENTS.md`, populated and researcher-approved. |
 | [`template/CLAUDE.md`](../../template/CLAUDE.md) | `draft.md` (phase 4) | `<publication-repo>/CLAUDE.md` — one line: `@AGENTS.md`. |
+| [`template/README.md`](../../template/README.md) | `draft.md` (phase 4) | `<publication-repo>/README.md`, populated from phases 1–2 and the finalized `AGENTS.md`. |
 | [`template/publication-checklist.md`](../../template/publication-checklist.md) | `build.md` (phase 3) | `<publication-repo>/supplementary/checklist.md`, adapted (irrelevant sections removed). |
 | [`template/publications.md`](../../template/publications.md) | `release.md` (phase 6) | `<working-repo>/.publications.md` — a table of this working repo's publications. |
 
@@ -79,41 +99,14 @@ Separate skills that phase files invoke. Read the linked SKILL.md if the phase-f
 - [`/extract-context`](../extract-context/SKILL.md) — pull research context from local Claude Code / Codex session history (called in phase 2).
 - [`/validate-publication`](../validate-publication/SKILL.md) — automated quality checks at each phase's checkpoint (`--stage structure`, `--stage agents-md`, `--stage full`).
 
-## Roadmap to show the researcher
-
-Show this at the very start of the process:
-
-```
-PUBLICATION ROADMAP
-
-  Phase 1 — Understand        [ ]  Read the repo, check for previous versions
-  Phase 2 — Discuss           [ ]  Interview (up to 5 short rounds), extract context
-  Phase 3 — Build             [ ]  Create repo, organize files, verify code
-  Phase 4 — Draft             [ ]  AGENTS.md, iterate with you, README
-  Phase 5 — Final review      [ ]  Walk through everything, validation sweep
-  Phase 6 — Release           [ ]  Publish (with your explicit confirmation)
-
-  This is a deliberate process — it can span multiple sessions.
-  I'll update this checklist as we go.
-```
-
-For phase-to-phase transitions after the start, a brief status line is enough: "Phase 3 complete. Moving to Phase 4 — Draft."
-
 ## Resuming a session
 
-If the researcher has already begun, detect progress from the filesystem before dispatching. Use the phase-file "Assumes/Produces" contracts above to decide where to resume:
+If the researcher has already begun, detect filesystem state and jump to the matching phase file:
 
-- No publication repo yet → start at `gather.md`.
-- Publication repo exists but no `AGENTS.md` → resume in `build.md` (or its tail if the structure is already valid).
-- `AGENTS.md` exists but no tagged release → resume in `draft.md` or `release.md`, depending on whether iteration with the researcher has happened.
-- Tagged release exists → the publication is live. This run is a new version; `gather.md` picks it up from `.publications.md`.
-
-## Cross-cutting principles
-
-These apply across every phase. Keep them in mind as you read each phase file.
-
-**Pace.** Never treat a partial answer as a complete one. If you asked three questions and the researcher answered one, follow up on the unanswered ones before moving on — they may have missed them, not declined them. When showing the researcher something for feedback (a draft, a file list, a checklist), wait for them to engage substantively. A one-word acknowledgement ("ok", "sure", "fine") after presenting five things to review is not confirmation — ask which specific items they've looked at. The researcher's attention is finite; work with that, not against it.
-
-**Author's voice.** The supplementary materials (`authors-note.md`, `know-how.md`), the `AGENTS.md` paper summary, and any content that speaks for the researcher must reflect what *they* want to convey — not what the agent thinks is important. Before drafting, ask the researcher what they want the document to say and who the intended audience is. Draft from their intent, then iterate. Never generate these documents first and ask for approval after — that inverts the authorship.
-
-**Structured questions.** When asking the researcher to make choices, use structured question tools if the platform supports them (e.g. `AskUserQuestion` in Claude Code). Present clear options rather than open-ended text prompts. This is faster and less ambiguous, and keeps the researcher's typing load low.
+| State | Resume at |
+|-------|-----------|
+| No publication repo yet | `gather.md` |
+| Publication repo exists, no `AGENTS.md` | `build.md` |
+| `AGENTS.md` exists, drafts not yet reviewed with researcher | `draft.md` |
+| Drafts reviewed, no tagged release | `release.md` |
+| Tagged release exists | `gather.md` (new version; `.publications.md` provides prior-version context) |

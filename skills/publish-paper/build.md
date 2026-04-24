@@ -1,7 +1,5 @@
 # Phase 3 — Build
 
-Follow the cross-cutting principles in [`SKILL.md`](SKILL.md). The input/output contract for this phase is documented in [`SKILL.md`](SKILL.md).
-
 ## 3.1 Create the publication repo
 
 Offer the researcher a structured choice:
@@ -53,7 +51,7 @@ cp ../working-repo/data/results.csv data/
 cp ../working-repo/requirements.txt environment/
 ```
 
-Use the file list from phase 2 — copy only what the researcher approved. Organize into the directory layout defined in [PROTOCOL.md § Repository layout](../../PROTOCOL.md#repository-layout). Not every directory is required — adapt to what is actually being published. A theory paper might just have `paper/`, `AGENTS.md`, and `supplementary/checklist.md`.
+Use the file list from phase 2 — copy only what the researcher approved. Organize into the directory layout defined in [PROTOCOL.md § Repository layout](../../PROTOCOL.md#repository-layout). Not every directory is required — adapt to what is actually being published. See [`paper-types.md`](paper-types.md) for format-specific minimums.
 
 **Single source of truth.** Each file lives in exactly one place. No duplicates, no ambiguity about which version is current.
 
@@ -78,7 +76,7 @@ Use the file list from phase 2 — copy only what the researcher approved. Organ
 - If research context was extracted in phase 2, copy it into `supplementary/` now.
 - For `supplementary/authors-note.md`: ask the researcher what message they want to leave for readers — what should someone know that isn't in the paper? Draft from their answer and the phase 2 interview, then show them for revision. This is their voice, not the agent's.
 - Copy any approved slides, talks, posters into `supplementary/materials/`.
-- Copy `template/publication-checklist.md` to `supplementary/checklist.md` and adapt it by removing sections that do not apply.
+- Copy [`template/publication-checklist.md`](../../template/publication-checklist.md) to `supplementary/checklist.md` and adapt it by removing sections that do not apply.
 
 **Create skills.** If the researcher defined skills in phase 2, create `skills/<name>/SKILL.md` for each, with `name` and `description` in frontmatter and step-by-step instructions in the body.
 
@@ -102,4 +100,4 @@ Fix anything that broke from the copy/reorganization. Report to the researcher: 
 
 ## Handoff
 
-Summarise what the publication repo now contains and announce that phase 4 (Draft) is next. Open [`draft.md`](draft.md) to continue.
+Summarise what the publication repo now contains. Next: [`draft.md`](draft.md).

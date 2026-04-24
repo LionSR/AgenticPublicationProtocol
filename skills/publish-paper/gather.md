@@ -1,7 +1,5 @@
 # Phases 1–2 — Understand and Discuss
 
-Follow the cross-cutting principles in [`SKILL.md`](SKILL.md). The input/output contract for this phase is documented in [`SKILL.md`](SKILL.md).
-
 ## Phase 1 — Understand
 
 ### 1.1 Check for previous versions
@@ -104,4 +102,4 @@ If extracting from sessions, run `/extract-context` in the **working repo** (tha
 
 ## Handoff
 
-Summarise the publication plan — file list, repo name, title, key results, previous-version info if any — and announce that phase 3 (Build) is next. Open [`build.md`](build.md) to continue.
+Summarise the publication plan to the researcher. Next: [`build.md`](build.md).

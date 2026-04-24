@@ -1,6 +1,6 @@
 # Phases 5–6 — Final review and Release
 
-**Point of no return** — once pushed, the publication is public. Each remote action requires its own explicit confirmation. Follow the cross-cutting principles in [`SKILL.md`](SKILL.md). The input/output contract is documented in [`SKILL.md`](SKILL.md).
+**Point of no return** — once pushed, the publication is public. Each remote action requires its own explicit confirmation.
 
 ## Phase 5 — Final review
 
@@ -148,6 +148,4 @@ git commit -m "Record publication: <repo-name> v1.0.0"
 
 This file is the link between the working repo and its publication repos. [`gather.md`](gather.md) reads it to detect previous versions automatically on the next run.
 
-## Handoff
-
-Report to the researcher: the publication URL, the tag, and the release page. Done.
+Report to the researcher: the publication URL, the tag, and the release page.
