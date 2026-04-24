@@ -56,7 +56,7 @@ Only run at stages: `agents-md`, `full`.
 - Check that commands in the figure generation table are syntactically valid
 - Test external data links with `curl -sIL <url>` (flag non-2xx responses)
 - Check that `supplementary/` references point to real files
-- **Check folder structure conformance** against the layout defined in [PROTOCOL.md](../../PROTOCOL.md#publication-repo-structure). See `validation-criteria.md` for the detailed checklist of what to flag.
+- **Check folder structure conformance** against the layout defined in [PROTOCOL.md](../../PROTOCOL.md#repository-layout). See `validation-criteria.md` for the detailed checklist of what to flag.
 
 Run at all stages.
 

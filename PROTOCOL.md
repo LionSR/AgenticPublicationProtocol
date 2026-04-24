@@ -2,31 +2,77 @@
 
 **Version 0.1.0 — Draft**
 
-This document is the protocol specification. For installation and usage, see the [README](README.md).
+APP is a format for packaging a finished academic paper as a GitHub repository so an AI coding agent can speak for it. An APP publication is a public Git repository with a tagged release and an `AGENTS.md` at the root. A reader clones the repo, opens it in any agent that reads `AGENTS.md`, and gets an agent that explains the paper, reproduces figures, runs experiments, and answers questions grounded in the work.
 
-## Overview
+APP defines what a publication looks like. It does not define how authors produce it — that is the job of the skills distributed alongside this specification. For installation and usage, see [README.md](README.md).
 
-APP turns a paper into an AI agent. Create a publication repo with `AGENTS.md` at the root, tag a release, and any AI coding agent can represent the work — explain it, reproduce figures, run experiments, answer questions.
+## Principles
 
-The publication repo is typically separate from the researcher's working repo. It contains only the curated subset of code, data, and documentation meant for public consumption. The working repo stays private.
+- **Spokesperson, not assistant.** The agent represents the authors. It speaks in the paper's domain — a math paper's agent reasons like a mathematician; an experimental paper's agent thinks like an experimentalist.
+- **Paper is ground truth.** Every claim the agent makes traces back to the paper document. The authors designate the canonical form (LaTeX, PDF, Markdown, HTML, DOCX, video, slides). When supplementary material conflicts with the paper, the paper wins.
+- **One place for each thing.** Every file, dataset, and script referenced by AGENTS.md resolves to exactly one path in the repo. No duplicates, no shadow copies.
+- **A publication is a release, not a branch.** Citations and external links resolve to a specific git tag, never to HEAD. The main branch may keep evolving; each release is frozen.
 
-APP builds on [agents.md](https://agents.md) (the cross-platform standard, 25+ tools) and is inspired by [MCP](https://modelcontextprotocol.io).
+## Repository layout
 
-## Core principles
+```
+<repo-root>/
+├── AGENTS.md          primary agent instructions
+├── CLAUDE.md          optional; one line: @AGENTS.md
+├── README.md          human-facing README for readers
+├── LICENSE
+├── .gitignore         standard repo metadata; .gitattributes and .github/ are also allowed
+├── paper/             paper source (ground truth), figures, compiled PDF
+├── code/              source and scripts
+├── data/              shipped datasets; external datasets are documented in AGENTS.md
+├── environment/       requirements.txt, environment.yml, Dockerfile, or equivalent
+├── supplementary/     optional: know-how, authors' note, slides, sessions, checklist
+└── skills/            optional: author-published SKILL.md capabilities
+```
 
-**Spokesperson, not assistant.** The published agent represents the authors to outside readers. It explains, presents, and defends the work from the paper's perspective. It speaks in the domain's voice — a math paper agent reasons like a mathematician, an experimental physics paper agent thinks like an experimentalist.
+At the root, publication artifacts live only in the entries above. No paper, code, data, or dependency files loose at root. Standard repository metadata (`.gitignore`, `.gitattributes`, `.github/`) is allowed. Not every top-level directory is required: a minimal theory-only publication contains `paper/`, `supplementary/checklist.md`, plus the always-required root files `AGENTS.md`, `README.md`, and `LICENSE` (with `CLAUDE.md` recommended).
 
-**Paper is the ground truth.** The paper document — in whatever format the authors designate (LaTeX, DOCX, Markdown, HTML, video, PPTX) — is the authoritative source for the work's claims and results. All other materials (talks, slides, supplementary notes, conversation history, skills) are secondary. When any supplementary material conflicts with the paper, the paper takes precedence. The agent must understand and respect this hierarchy.
+The agent's value scales with what the repo contains: code makes figures reproducible, data makes experiments runnable, and paper-specific skills let a reader invoke the paper's methods directly. A `paper/`-only publication is valid but gives the agent nothing to do beyond discussing the text.
 
-**Single source of truth.** The published repo should have exactly one canonical location for each piece of code, data, and documentation. No duplicates, no ambiguity about which version is current. Every file referenced in the paper, scripts, or AGENTS.md resolves to one real path.
+For a concrete starter, see [`template/`](template/) — example `AGENTS.md`, `CLAUDE.md`, and publication-checklist files that conform to this layout.
 
-**Honest and grounded.** The agent distinguishes between the paper's claims and its own inferences. It knows the paper's limitations and says so. It says clearly when something is outside the paper's scope.
+### `paper/`
 
-## AGENTS.md
+The paper itself plus everything needed to read it: the main document, any compiled output, figure files, bibliography. Exactly one document is the canonical paper; its format is declared in the AGENTS.md frontmatter (`paper_format`) and its path is listed in the Repository Structure section of AGENTS.md. Everything in `paper/` is ground truth.
 
-The core of the protocol. One file at the repo root that tells any coding agent how to represent the paper. Standard Markdown (compatible with agents.md). Optional YAML frontmatter for machine-readable metadata.
+### `code/`
 
-### Frontmatter
+Source code that ships with the publication. Typical subdivisions are `code/src/` for libraries, `code/scripts/` for entry points, `code/notebooks/` for notebooks, `code/configs/` for configuration files. Paths inside scripts resolve relative to the repo root — no absolute paths from the authors' machines.
+
+### `data/`
+
+Datasets small enough to live comfortably in git (under a few tens of megabytes each). A `data/README.md` describes each dataset — what it is, how it was produced, which figures or scripts use it. Large datasets stay on external hosts (Hugging Face, Zenodo, Figshare, …); AGENTS.md records the URL, exact download command, local destination, and whether the dataset is needed for the default workflow.
+
+### `environment/`
+
+Whatever recreates the runtime: `requirements.txt`, `pyproject.toml`, `environment.yml`, `package.json`, `Dockerfile`, or equivalent. If multiple dependency files are present (e.g. pip and conda), AGENTS.md names the canonical one.
+
+### `supplementary/`
+
+Secondary material. Everything here is subordinate to `paper/` — it adds context, never overrides. Typical files:
+
+- `supplementary/know-how.md` — methodology decisions, tacit insights, practical knowledge from the research process.
+- `supplementary/authors-note.md` — what the authors want readers to know beyond the paper.
+- `supplementary/sessions/` — curated conversation transcripts from development.
+- `supplementary/materials/` — slides, talks, posters, tutorials.
+- `supplementary/checklist.md` — the publication checklist (see below).
+
+### `skills/`
+
+Optional agent capabilities shipped with the paper. Each skill is a directory `skills/<name>/` containing a `SKILL.md` file with `name` and `description` in YAML frontmatter and step-by-step instructions in the body. A typical use is to expose a paper-specific computation — a reader can invoke the skill and the agent walks through it using the paper's method.
+
+Skills are tools, not claims. Running a skill does not override the paper's findings.
+
+### `AGENTS.md`
+
+The file an agent reads first when the repo is opened. Standard Markdown, compatible with [agents.md](https://agents.md). Two parts: YAML frontmatter and the body.
+
+#### Frontmatter
 
 ```yaml
 ---
@@ -36,78 +82,66 @@ title: "Your Paper Title"
 authors:
   - name: "Author Name"
     affiliation: "Institution"
-arxiv_id: "XXXX.XXXXX"
-paper_format: "latex"  # or "docx", "markdown", "html", "video", "pptx", "pdf"
-version: "1.0.0"
+arxiv_id: "XXXX.XXXXX"       # optional
+paper_format: "latex"          # latex, docx, markdown, html, video, pptx, pdf
+version: "1.0.0"               # matches the git tag, without the leading v
 domain: "your-field"
 tags: ["keyword1", "keyword2"]
 ---
 ```
 
-### Required sections
+| Field | Required | Notes |
+|-------|----------|-------|
+| `protocol` | yes | Always the literal string `agentic-publication-protocol`. |
+| `protocol_version` | yes | APP version this publication targets. |
+| `title` | yes | Paper title. |
+| `authors` | yes | List of `{name, affiliation}` entries. |
+| `arxiv_id` | no | arXiv identifier, if applicable. |
+| `paper_format` | yes | Format of the canonical document in `paper/`. |
+| `version` | yes | Publication version. Matches the git tag, without the leading `v` (tag `v1.0.0` → `"1.0.0"`). |
+| `domain` | yes | Short field tag (e.g. `condensed-matter`, `nlp`, `combinatorics`). |
+| `tags` | no | Free-form keyword list. |
 
-**Identity** — Who the agent is and how it should behave. References the paper title, authors, and domain. Must establish that the paper is the ground truth for all claims.
+#### Required sections
 
-**Paper Summary** — 2-4 paragraphs covering: what problem, what approach, what results, what implications. Written by the authors (or from their words). The paper can be in any format (LaTeX, DOCX, Markdown, HTML, video, PPTX); the agent should read and reference the designated main document. This is what the agent relies on most.
+- **Identity** — who the agent is and how it should behave. References the paper title, authors, and domain. States that the paper is the ground truth for all claims.
+- **Paper Summary** — 2–4 paragraphs covering the problem, the approach, the results, and the implications. In the authors' own words.
+- **Key Results** — numbered list of the main contributions, phrased as the authors want them cited.
+- **Repository Structure** — every important file with its path and purpose, grouped by function. External datasets include URL, download command, and local destination.
+- **What You Can Do** — concrete capabilities: *explain the paper* (what to read for what), *reproduce figures* (a table mapping each figure to its command, data, and runtime), *run experiments* (real commands, real parameters), *extend the work* (what to vary).
+- **Computational Requirements** — time, hardware, and memory for each class of task; platform tested. The agent warns before running anything heavy.
+- **Citation** — full BibTeX entry.
 
-**Key Results** — Numbered list of the main contributions.
+#### Optional sections
 
-**Repository Structure** — Every important file with its path and purpose. Group by function: paper source, figure generation, experiments, data, config. For external data (Hugging Face, Zenodo, etc.), include the URL, download command, and local destination.
-
-**What You Can Do** — Concrete agent capabilities:
-- *Explain the paper*: which files to read for which topics
-- *Reproduce figures*: a table mapping every figure to its command, data source, and runtime
-- *Run experiments*: exact commands with real parameters
-- *Extend the work*: what parameters to vary, what's interesting to try
-
-**Computational Requirements** — Classify every task by time, hardware, and memory. Note the platform tested on. The agent must warn before running anything heavy.
-
-**Citation** — Full BibTeX entry.
-
-### Optional sections
-
-**Supplementary Materials** — Pointer to `supplementary/` if the authors included additional materials beyond the paper:
-- `supplementary/know-how.md` — practical knowledge, methodology decisions, tacit insights extracted from the research process
-- `supplementary/authors-note.md` — what the authors want readers to know beyond the paper
-- `supplementary/sessions/` — (optional) curated conversation history from development sessions
-- `supplementary/materials/` — (optional) slides, talks, posters, tutorials. These are secondary to the paper — useful context, not ground truth.
-
-**Skills** — Pointer to `skills/` if the paper provides additional agent capabilities. Authors can publish custom skills as SKILL.md files in `skills/`. Each skill is a self-contained capability the agent can perform — e.g., a specialized analysis workflow, a visualization pipeline, or a guided exploration of the results. Skills follow the standard SKILL.md format (name and description in frontmatter, instructions in body). Skills are tools, not claims — they do not override the paper's findings.
+- **Supplementary Materials** — pointers to `supplementary/`. One line per item, noting what it is and that it is secondary to the paper.
+- **Skills** — list of `skills/<name>/` entries, each with a one-line description.
 
 ## Versioning
 
-A published version is a GitHub Release on the publication repo (which creates a git tag). The `version` in AGENTS.md frontmatter should match the release tag. The main branch of the publication repo can keep evolving; each release is a frozen snapshot.
+A publication is the pair `(repo URL, tag)`. Tags are immutable; the main branch is not. The recommended tag format is `vMAJOR.MINOR.PATCH` ([semver](https://semver.org)); other immutable tag names are allowed. Every tag corresponds to a GitHub Release. When the tag uses the recommended `vMAJOR.MINOR.PATCH` form, the `version` field in AGENTS.md matches the tag without the leading `v` (tag `v1.0.0` → `version: "1.0.0"`); otherwise, `version` matches the tag exactly. External references — citations, arXiv ancillary links, personal pages — always point to a specific tag.
 
-When publishing a new version, the previous version's AGENTS.md, supplementary materials, and skills should be used as a starting point. Most content carries forward — only update what has actually changed.
+When publishing a new version, start from the previous version's AGENTS.md, supplementary materials, and skills, then update only what changed.
+
+## Publication checklist
+
+Every publication includes a completed checklist at `supplementary/checklist.md`. `supplementary/` itself stays optional: a publication that ships no other supplementary material still includes `supplementary/checklist.md` as its only entry.
+
+The checklist records that the authors explicitly confirmed at least the following. Items that do not apply can be marked N/A.
+
+- The paper in `paper/` is the canonical, up-to-date source.
+- Every path referenced in AGENTS.md resolves in the repo.
+- Every external data link is reachable.
+- No private credentials, internal URLs, or unpublished data are in the repo.
+- The license in `LICENSE` is what the authors intend.
+- The git tag and the AGENTS.md `version` field match.
+
+The reference template at [`template/publication-checklist.md`](template/publication-checklist.md) expands these into per-topic subchecks.
 
 ## Using a published paper
 
-| Method | How |
-|--------|-----|
-| **Direct** | Clone the release, open in any coding agent — it reads AGENTS.md |
-| **Sub-agent** | Clone into a subfolder of your project; the nested AGENTS.md is picked up |
-| **Group** | Multiple paper repos as subfolders with an orchestrator AGENTS.md |
-
-## Publication repo structure
-
-Publication repos should follow a consistent directory layout. Not every directory is required — a theory paper may only need `paper/` — but files should be in the right place.
-
-```
-paper/              ← paper source (GROUND TRUTH), figures, bibliography, compiled PDF
-code/               ← src/, scripts/, configs/, notebooks/
-data/               ← raw/, processed/, README
-environment/        ← requirements.txt (or equivalent), setup instructions
-supplementary/      ← know-how.md, authors-note.md, checklist.md, sessions/, materials/
-skills/             ← <name>/SKILL.md per author-published skill
-AGENTS.md           ← paper agent instructions
-CLAUDE.md           ← @AGENTS.md (Claude Code import)
-README.md           ← public README for readers
-LICENSE
-.gitignore
-```
-
-Root should only contain the files listed above and the top-level directories. Code, data, paper source, and dependencies each have their own directory — don't put them loose at root.
+Clone the repo at a given tag and open it in any agent that reads `AGENTS.md`. No special runtime or server is needed. For parallel use, multiple publications can sit side-by-side as subdirectories of a working project; each nested `AGENTS.md` is picked up by the parent agent.
 
 ## License
 
-CC-BY-4.0
+This specification is released under CC-BY-4.0.
