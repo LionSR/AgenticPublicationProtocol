@@ -30,10 +30,9 @@ This repository contains:
 
 ### Codex
 
-Tell Codex:
-
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/LionSR/AgenticPublicationProtocol/refs/heads/main/.codex/INSTALL.md
+codex plugin marketplace add LionSR/AgenticPublicationProtocol
+codex plugin install paper-protocol
 ```
 
 ### Other tools
@@ -45,7 +44,7 @@ Clone this repo and point your agent at the `skills/` directory.
 | Platform | Command |
 |----------|---------|
 | Claude Code | `/plugin update paper-protocol` |
-| Codex | `cd ~/.codex/paper-protocol && git pull` |
+| Codex | `codex plugin update paper-protocol` |
 | Other tools | `git pull` in the cloned directory |
 
 New skills, reference files, and templates appear automatically after update — no re-install needed.
