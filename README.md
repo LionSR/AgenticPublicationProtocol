@@ -45,7 +45,7 @@ Clone this repo and point your agent at the `skills/` directory.
 | Platform | Command |
 |----------|---------|
 | Claude Code | `/plugin update paper-protocol` |
-| Codex | `codex plugin marketplace refresh paper-protocol` |
+| Codex | `codex plugin marketplace upgrade paper-protocol` |
 | Other tools | `git pull` in the cloned directory |
 
 New skills, reference files, and templates appear automatically after update — no re-install needed.
