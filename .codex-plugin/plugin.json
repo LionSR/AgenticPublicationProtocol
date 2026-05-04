@@ -1,0 +1,18 @@
+{
+  "name": "paper-protocol",
+  "version": "0.1.0",
+  "description": "Publish academic papers as AI agents",
+  "author": {
+    "name": "LionSR"
+  },
+  "repository": "https://github.com/LionSR/AgenticPublicationProtocol",
+  "license": "MIT",
+  "keywords": ["paper", "publication", "agent", "research"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Agentic Publication Protocol",
+    "shortDescription": "Publish academic papers as AI agents",
+    "longDescription": "Package a finished paper as a GitHub repository any AI coding agent can represent — paper, code, data, and context together. Walks authors through producing a publication that follows the Agentic Publication Protocol, then validates it.",
+    "category": "Productivity"
+  }
+}
