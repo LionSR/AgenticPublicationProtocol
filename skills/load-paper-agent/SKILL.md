@@ -1,6 +1,6 @@
 ---
 name: load-paper-agent
-description: Load a published paper agent or local publication-staging tree into your current project as a sub-agent. Use when a user wants to consult, build on, test, or discuss a paper that follows the Agentic Publication Protocol. Also works with non-APP repos that have code and a README.
+description: Load a published paper agent or local publication-staging tree into your current project as a sub-agent. Use when a user wants to consult, build on, test, or discuss a paper that follows the Agentic Publication Protocol. Also works with non-APP repos by using AGENTS.md, CLAUDE.md, README, paper files, and code when available.
 ---
 
 # Load Paper Agent
@@ -52,16 +52,24 @@ If the clone fails (private repo, wrong URL), inform the user and ask for the co
 
 Do not treat `AGENTS.md` or `CLAUDE.md` alone as proof of APP compliance. Classify the repo into one of three levels:
 
-1. **Agent-readable repo** — has `AGENTS.md`, `CLAUDE.md`, README, or other useful docs, but no APP protocol frontmatter.
+1. **Agent-readable repo** — has `AGENTS.md`, `CLAUDE.md`, README, or other useful docs, but no verified APP release manifest.
 2. **APP-structured candidate** — has `AGENTS.md` with YAML frontmatter containing `protocol: agentic-publication-protocol`, but no verified release manifest.
 3. **Verified APP publication** — the current checkout corresponds to a public tagged release with a valid `APP_PUBLICATION.json` release manifest. The manifest must match the repo URL, tag, commit, tree, validation report hash, and human approval record, and its `app_publication_id` must recompute correctly.
 
-Read `<repo-root>/AGENTS.md` (for a clone, `papers/<repo-name>/AGENTS.md`; for local staging, `publication-staging/AGENTS.md`). Check:
+Look for agent and human documentation:
 
-- Does it exist?
+- `AGENTS.md`
+- `CLAUDE.md`
+- `README.md`
+- docs directories or paper-specific instructions if present
+
+If `AGENTS.md` exists, read it and check:
+
 - Does it have YAML frontmatter with `protocol: agentic-publication-protocol`?
 - Does the checkout correspond to a tag?
 - Is there a release asset named `APP_PUBLICATION.json` for that tag?
+
+If `AGENTS.md` does not exist, still continue. Read `CLAUDE.md`, README, docs, paper files, and code entry points directly. The repo is not APP-structured, but it may still be useful.
 
 For local `publication-staging/`, stop at **APP-structured candidate** at most. Staging can be tested for reader-agent usability, but it is not a verified APP publication because it has no public release manifest.
 
@@ -128,7 +136,7 @@ If any check fails, report the highest level that is still supported:
 
 - APP frontmatter but invalid/missing manifest: **APP-structured candidate, not verified**.
 - No APP frontmatter but usable docs: **agent-readable repo, not APP-compliant**.
-- No useful docs: **non-APP repo; manual exploration required**.
+- No useful docs: **non-APP repo; direct content exploration required**.
 
 ### 3. Explore and report
 
@@ -143,17 +151,34 @@ If any check fails, report the highest level that is still supported:
 - Available supplementary materials (if `supplementary/` exists) — know-how, author notes, sessions, additional materials
 - Available skills (if `skills/` exists) — list each skill with its name and description from the SKILL.md frontmatter
 
-**For non-APP repos**, explore the repo and report:
+**For agent-readable non-APP repos**, read the available docs in this order:
+
+1. `AGENTS.md`, if present, even without APP frontmatter.
+2. `CLAUDE.md`, especially for imports or pointers to other docs.
+3. `README.md`.
+4. docs directories, examples, notebooks, scripts, or paper-specific instructions.
+
+Report:
+
+- APP status: agent-readable repo, not verified APP.
+- What the repo docs say the paper/project is.
+- Any paper title, authors, abstract, or citation you can identify.
+- Obvious entry points for reading, setup, reproduction, or experiments.
+- Any warnings about missing APP metadata or unclear ground truth.
+
+**For non-APP repos with no agent-readable docs**, proceed by inspecting the content directly. Do not stop just because `AGENTS.md`, `CLAUDE.md`, or README is missing. Report:
+
 - What the repo contains (paper, code, data, notebooks)
 - What language/framework the code uses
-- Whether there are obvious entry points (README, scripts, notebooks)
+- Whether there are obvious entry points (paper files, scripts, notebooks, tests, examples)
+- Which file appears to be the canonical paper or main result
 - What you'd need to figure out to use this
 
 ### 4. Set up the environment (if the user wants to run code)
 
 Before running anything from the paper:
 1. Check `environment/requirements.txt` or equivalent
-2. Check the computational requirements section of AGENTS.md
+2. Check computational requirements in AGENTS.md if present; otherwise check README, docs, environment files, scripts, notebooks, and obvious hardware-specific imports
 3. If anything is heavy or requires special hardware, warn the user
 4. If the platform differs from what was tested, warn about potential compatibility issues
 5. Only install dependencies with user approval:
@@ -161,14 +186,14 @@ Before running anything from the paper:
    cd <repo-root>
    pip install -r environment/requirements.txt  # or equivalent
    ```
-6. Check if the paper references external datasets (Hugging Face, Zenodo, Figshare, etc.). The Repository Structure in AGENTS.md should list these with download commands. If the user needs data that isn't in the repo:
+6. Check if the paper references external datasets (Hugging Face, Zenodo, Figshare, etc.). For APP repos, the Repository Structure in AGENTS.md should list these with download commands. For non-APP repos, search README, docs, scripts, notebooks, configs, and paper source. If the user needs data that isn't in the repo:
    - Tell them what's needed, how large it is, and where to get it
    - Offer to run the download command (with approval)
    - Don't attempt to run code that depends on missing data — explain what's needed first
 
 ### 5. Operate as the paper's agent
 
-**The paper is the ground truth.** The paper document (in whatever format — LaTeX, DOCX, Markdown, HTML, video, PPTX) is the authoritative source for all claims and results. Supplementary materials provide additional context but are secondary. If anything in the supplementary materials conflicts with the paper, defer to the paper.
+**The paper is the ground truth.** The paper document (in whatever format — LaTeX, DOCX, Markdown, HTML, video, PPTX) is the authoritative source for all claims and results. Supplementary materials provide additional context but are secondary. If anything in the supplementary materials conflicts with the paper, defer to the paper. For non-APP repos, first identify the most likely canonical paper file by inspecting filenames, README/docs, build files, and paper directories.
 
 When the user asks questions about this paper, route to the right source:
 
@@ -176,13 +201,13 @@ When the user asks questions about this paper, route to the right source:
 
 | User asks about... | Primary source | Also check |
 |---------------------|---------------|------------|
-| What the paper claims, methods, results | Paper source (ground truth) | AGENTS.md Paper Summary |
+| What the paper claims, methods, results | Paper source (ground truth) | AGENTS.md Paper Summary, README/docs if present |
 | Why a specific choice was made | `supplementary/know-how.md` | Paper source for what the choice was |
 | What to know before reading | `supplementary/authors-note.md` | AGENTS.md Paper Summary |
-| How to reproduce a figure | AGENTS.md figure table | Run the command |
-| How to run an analysis or workflow | `skills/` (check for matching skill) | AGENTS.md "What You Can Do" |
-| What parameters to change | AGENTS.md "Extend the work" | Code configs |
-| Computational requirements | AGENTS.md Computational Requirements | |
+| How to reproduce a figure | AGENTS.md figure table if present | README/docs, scripts, notebooks, paper source, run the command |
+| How to run an analysis or workflow | `skills/` if present | AGENTS.md "What You Can Do", README/docs, scripts |
+| What parameters to change | AGENTS.md "Extend the work" if present | Code configs, scripts, notebooks |
+| Computational requirements | AGENTS.md Computational Requirements if present | README/docs, environment files, imports, scripts |
 
 **Explaining:**
 - Read the paper source to answer — it is the ground truth
@@ -193,11 +218,12 @@ When the user asks questions about this paper, route to the right source:
 - If `supplementary/authors-note.md` exists, use it for the authors' perspective on what matters beyond the paper
 
 **Reproducing:**
-- Follow the figure generation commands from AGENTS.md exactly
+- For APP repos, follow the figure generation commands from AGENTS.md exactly.
+- For non-APP repos, infer reproduction commands from README/docs, scripts, notebooks, Makefiles, paper source figure references, and test/example files; explain uncertainty before running.
 - After generating, compare output with the existing figures
 - Report whether reproduction succeeded or if there are differences
 - **If a command fails:** read the error, check the environment setup (step 4), and report what went wrong. Common issues: missing dependencies, wrong Python version, missing data files. Don't silently retry — explain the failure and suggest fixes.
-- **If external data is needed:** check AGENTS.md Repository Structure for download commands. Tell the user what's needed, how large it is, and offer to download it (with approval) before retrying.
+- **If external data is needed:** check AGENTS.md Repository Structure when present; otherwise search README/docs, scripts, notebooks, configs, and paper source for download instructions. Tell the user what's needed, how large it is, and offer to download it (with approval) before retrying.
 
 **Extending:**
 - If the user wants to try variations, explain what parameters can be changed
