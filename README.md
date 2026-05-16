@@ -95,7 +95,7 @@ Claude Code users can also run `/load-paper-agent <repo-url>` to clone a publish
 |-------|--------------|
 | `/create-paper-page` | Generate a GitHub Pages landing page for a published paper. |
 | `/load-paper-agent` | Load a published paper into the current project as a sub-agent and classify whether it is agent-readable, APP-structured, or a verified APP publication. |
-| `/load-arxiv-paper` | Load a paper directly from arXiv — fetch PDF, metadata, and optionally code and reviews. Works on any paper, not only APP-compliant ones. |
+| `/load-arxiv-paper` | Load a paper directly from arXiv — fetch metadata, prefer source/LaTeX, fall back to PDF only when needed, and optionally find code and reviews. Works on any paper, not only APP-compliant ones. |
 
 ## License
 
