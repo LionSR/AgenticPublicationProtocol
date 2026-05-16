@@ -1,6 +1,6 @@
 # Session Output Formats
 
-Templates and formatting guidance for the three output levels in extract-context.
+Templates and formatting guidance for the three output levels in extract-chat-context.
 
 ## Know-how (default — `supplementary/know-how.md`)
 

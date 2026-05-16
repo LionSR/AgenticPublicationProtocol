@@ -71,7 +71,7 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 
 ## Privacy & confidentiality
 
-Extends `../extract-context/confidentiality-checklist.md` to cover the entire repo, not just supplementary materials.
+Extends `../extract-chat-context/confidentiality-checklist.md` to cover the entire repo, not just supplementary materials.
 
 **Additional places to check (beyond supplementary/):**
 - Paper source (LaTeX, Markdown, etc.) — check for hardcoded paths in `\input{}`, comments with TODOs mentioning names

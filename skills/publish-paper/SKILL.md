@@ -24,7 +24,7 @@ Show this at the very start of the process:
 PUBLICATION ROADMAP
 
   Phase 1 — Understand        [ ]  Read the repo, check previous versions or staging
-  Phase 2 — Discuss           [ ]  Interview (up to 5 short rounds), extract context
+  Phase 2 — Discuss           [ ]  Interview (up to 5 short rounds), extract chat context
   Phase 3 — Build staging     [ ]  Create/revise publication-staging/, organize files, verify code
   Phase 4 — Paper-agent docs  [ ]  AGENTS.md, iterate with you, README
   Phase 5 — Final review      [ ]  Validate staging, test paper-agent, freeze tree
@@ -60,10 +60,10 @@ These apply across every phase. Keep them in mind as you read each phase file.
 
 ### [`gather.md`](gather.md) — Phases 1-2
 
-- **Purpose.** Understand the working repo. Interview the researcher. Optionally extract research context from conversation history.
+- **Purpose.** Understand the working repo. Interview the researcher. Optionally extract publication-safe research context from agent chat/session history.
 - **Assumes.** Invoked in the researcher's private working repo, or an explicit developer sandbox target that stands in for one.
-- **Produces.** A staging plan: the canonical paper document and format; previous public release or existing staging info; new-vs-revision decision; key results in the researcher's words; include / exclude / defer file list; intended publication/repo name; optional extracted research context.
-- **Sub-skills called.** `/extract-context` (optional).
+- **Produces.** A staging plan: the canonical paper document and format; previous public release or existing staging info; new-vs-revision decision; key results in the researcher's words; include / exclude / defer file list; intended publication/repo name; optional extracted chat context.
+- **Sub-skills called.** `/extract-chat-context` (optional).
 - **Interaction load.** Heavy — up to five short interview rounds with the researcher.
 
 ### [`build.md`](build.md) — Phase 3
@@ -114,7 +114,7 @@ Five files ship in `template/` at the repo root. Phase files copy or adapt them 
 
 Separate skills that phase files invoke. Read the linked SKILL.md if the phase-file summary is not enough.
 
-- [`/extract-context`](../extract-context/SKILL.md) — pull research context from local Claude Code / Codex session history (called in phase 2).
+- [`/extract-chat-context`](../extract-chat-context/SKILL.md) — pull publication-safe research context from local Claude Code / Codex chat/session history for supplementary materials (called in phase 2).
 - [`/validate-publication`](../validate-publication/SKILL.md) — automated quality checks at each phase's checkpoint (`--stage structure`, `--stage agents-md`, `--stage full`) with `publication-staging/` as root during `/publish-paper`.
 - [`/load-paper-agent`](../load-paper-agent/SKILL.md) — load/test the staged paper agent from `publication-staging/` before public release.
 

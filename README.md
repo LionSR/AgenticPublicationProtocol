@@ -87,7 +87,7 @@ Claude Code users can also run `/load-paper-agent <repo-url>` to clone a publish
 | Skill | What it does |
 |-------|--------------|
 | `/validate-publication` | Check APP structure, paths, privacy, clear factual consistency, reader-agent usability, and release manifest verification when applicable. |
-| `/extract-context` | Pull research context (decisions, reasoning, dead ends) from local Claude Code / Codex conversation history. |
+| `/extract-chat-context` | Pull publication-safe research context from local Claude Code / Codex chat/session history for supplementary materials. |
 
 **Standalone**
 

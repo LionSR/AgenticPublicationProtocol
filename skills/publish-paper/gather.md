@@ -110,7 +110,7 @@ Ask the researcher if they want to include research context from their conversat
 
 This context is valuable for writing `AGENTS.md` in phase 4, because the agent can answer "why did you do X?" from real reasoning rather than guessing.
 
-If extracting from sessions, run `/extract-context` in the **working repo** (that's where the sessions are). The approved output will be copied into `publication-staging/` later in phase 3. `/extract-context` runs its own confidentiality screening; phase 4 checks again when incorporating context into `AGENTS.md`.
+If extracting from sessions, run `/extract-chat-context` in the **working repo** (that's where the sessions are). The approved output will be copied into `publication-staging/` later in phase 3. `/extract-chat-context` runs its own confidentiality screening; phase 4 checks again when incorporating context into `AGENTS.md`.
 
 ## Handoff
 

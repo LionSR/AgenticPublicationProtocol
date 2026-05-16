@@ -85,7 +85,7 @@ Scan all files in the repo — not just supplementary materials, but also the pa
 - Names of people not listed as authors
 - Access-controlled dataset identifiers
 
-See `validation-criteria.md` for the full pattern list and `../extract-context/confidentiality-checklist.md` for the extended reference.
+See `validation-criteria.md` for the full pattern list and `../extract-chat-context/confidentiality-checklist.md` for the extended reference.
 
 Run at all stages.
 

@@ -1,15 +1,15 @@
 ---
-name: extract-context
-description: Extract research context from Claude Code or Codex conversation history. Use when a researcher wants to capture the reasoning behind their work — key decisions, methodology choices, debugging insights — from their actual sessions. Can be used standalone or as part of /publish-paper.
+name: extract-chat-context
+description: Extract publication-safe research context from Claude Code or Codex chat/session history and prepare it as supplementary material. Use when a researcher wants to capture the reasoning behind their work — key decisions, methodology choices, debugging insights — from their actual sessions. Can be used standalone or as part of /publish-paper.
 ---
 
-# Extract Research Context
+# Extract Chat Context
 
-Extract and curate conversation history from Claude Code or Codex sessions into structured research context that can be published alongside a paper.
+Extract and curate conversation history from Claude Code or Codex sessions into structured research context that can be published as supplementary material alongside a paper.
 
 ## When to use
 
-- During `/publish-paper` when the researcher wants to include research context — run this in the **working repo** (where the sessions are), then copy output to the publication repo
+- During `/publish-paper` when the researcher wants to include research context — run this in the **working repo** (where the sessions are), then copy approved output to `publication-staging/`
 - Standalone when a researcher wants to document their reasoning process
 - When preparing supplementary material for a paper
 
@@ -30,7 +30,7 @@ EXTRACT_SCRIPT=$(find ~/.claude/plugins -name extract_sessions.py 2>/dev/null | 
 
 If not found (e.g. running outside Claude Code):
 ```bash
-curl -sO https://raw.githubusercontent.com/LionSR/AgenticPublicationProtocol/main/skills/extract-context/scripts/extract_sessions.py
+curl -sO https://raw.githubusercontent.com/LionSR/AgenticPublicationProtocol/main/skills/extract-chat-context/scripts/extract_sessions.py
 EXTRACT_SCRIPT=./extract_sessions.py
 ```
 

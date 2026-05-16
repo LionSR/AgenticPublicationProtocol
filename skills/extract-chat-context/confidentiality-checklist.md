@@ -1,6 +1,6 @@
 # Confidentiality and Privacy Screening
 
-This checklist is used in step 5 of the extract-context process. All output files (`supplementary/know-how.md`, `supplementary/authors-note.md`, any session files in `supplementary/sessions/`, and any files in `supplementary/materials/`) must be screened before publishing.
+This checklist is used in step 5 of the extract-chat-context process. All output files (`supplementary/know-how.md`, `supplementary/authors-note.md`, any session files in `supplementary/sessions/`, and any files in `supplementary/materials/`) must be screened before publishing.
 
 ## Patterns to flag
 
