@@ -105,6 +105,41 @@ Extends `../extract-context/confidentiality-checklist.md` to cover the entire re
 - Computational requirements match what the code actually needs (e.g., don't say "any laptop" if code imports CUDA)
 - `version` in frontmatter matches the git tag per the normalization rule in [PROTOCOL.md § Versioning](../../PROTOCOL.md#versioning): for `vMAJOR.MINOR.PATCH` tags, `version` has no leading `v` (tag `v1.0.0` → `version: "1.0.0"`); for non-semver tags, `version` matches the tag exactly.
 
+## Verified APP publication manifest
+
+The manifest is required only for a public tagged release. It is not required during `publication-staging/` validation because the public commit and release do not exist yet.
+
+**Manifest location:**
+- Canonical: GitHub Release asset named `APP_PUBLICATION.json`.
+- Optional mirrors: annotated tag message or public APP registry.
+- Do not trust a committed `APP_PUBLICATION.json` alone as proof of verified APP publication.
+
+**Manifest checks:**
+- `protocol` is `agentic-publication-protocol`.
+- `manifest_version` is present.
+- `publication_type` is `app-publication`.
+- `repo_url` identifies the same GitHub repository as the clone remote after normalizing SSH/HTTPS forms.
+- `tag` equals the checked-out tag.
+- `commit` equals `git rev-parse HEAD`.
+- `tree` equals `git rev-parse HEAD^{tree}`.
+- `validation.stage` is `full`.
+- `validation.result` is `passed`.
+- `validation.validation_report_sha256` matches the validation report distributed with the publication.
+- `human_approval.approved` is `true`.
+- `human_approval.approved_by` lists the approving authors.
+- Recomputed `app_publication_id` equals the manifest value.
+
+**ID recomputation:**
+- Remove `app_publication_id` from the manifest.
+- Canonicalize the remaining JSON with sorted keys and compact separators.
+- SHA-256 hash the canonical JSON.
+- Compare `app-v1:sha256:<digest>` to `app_publication_id`.
+
+**Classification:**
+- Valid manifest: verified APP publication.
+- APP frontmatter but missing/invalid manifest: APP-structured candidate.
+- Agent docs without APP frontmatter: agent-readable repo, not APP-compliant.
+
 ## APP completeness and usability
 
 This is not a referee or prose-quality check. Do not flag wording simply because it sounds generic, promotional, or insufficiently polished. Flag only missing or inconsistent information that would prevent a reader agent from understanding the paper's ground truth, locating artifacts, setting up the environment, or reproducing documented results.

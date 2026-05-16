@@ -5,7 +5,7 @@ description: Orchestrate preparation, validation, and release of an academic pap
 
 # Publish Paper as Agent — Orchestrator
 
-This skill prepares an APP-compliant candidate release tree in `publication-staging/`, validates it as if it were the root of the future public repository, and then either publishes that validated tree or records a developer-sandbox outcome.
+This skill prepares an APP-structured candidate release tree in `publication-staging/`, validates it as if it were the root of the future public repository, and then either publishes that validated tree with a verifiable APP manifest or records a developer-sandbox outcome.
 
 **Scope.** APP publishes a paper that is already written. This skill does not help write the paper, run experiments, or produce results — those must already exist in the author's working repo before the skill is useful.
 
@@ -13,7 +13,7 @@ This skill prepares an APP-compliant candidate release tree in `publication-stag
 
 **Modes.** Phases 1-5 are mode-neutral. The only workflow branch is the final outcome:
 
-- **Real publication mode** (default): promote the validated `publication-staging/` tree to a public publication repo, tag/version it, and record the public URL plus commit/tree hash.
+- **Real publication mode** (default): promote the validated `publication-staging/` tree to a public publication repo, tag/version it, create `APP_PUBLICATION.json`, and record the public URL, tag, commit/tree hash, and `app_publication_id`.
 - **Developer sandbox mode** (`--mode dev-sandbox`): exercise the same prepare and validate standards against an explicit sandbox target, then record an implementation test result. Do not create a public repo and do not write APP compliance records.
 
 ## Roadmap to show the researcher
@@ -46,7 +46,8 @@ These apply across every phase. Keep them in mind as you read each phase file.
 
 - `publication-staging/` is staging, not the public APP publication.
 - The final public release must equal the validated `publication-staging/` tree.
-- APP compliance records attach only to public versions and their repo URL plus commit/tree hash.
+- Full APP compliance requires a public tagged release plus a valid `APP_PUBLICATION.json` release manifest whose `app_publication_id` verifies against the repo URL, tag, commit, tree, validation report hash, and human approval record.
+- APP compliance records attach only to public versions and their repo URL, tag, commit/tree hash, and `app_publication_id`.
 - Dev-sandbox runs have no publication meaning and must not create APP compliance records.
 
 **Pace.** Never treat a partial answer as a complete one. If you asked three questions and the researcher answered one, follow up on the unanswered ones before moving on — they may have missed them, not declined them. When showing the researcher something for feedback (a draft, a file list, a checklist), wait for them to engage substantively. A one-word acknowledgement ("ok", "sure", "fine") after presenting five things to review is not confirmation — ask which specific items they've looked at. The researcher's attention is finite; work with that, not against it.
@@ -87,7 +88,7 @@ These apply across every phase. Keep them in mind as you read each phase file.
 
 - **Purpose.** Run a full validation sweep from staging root, test/load the paper agent from `publication-staging/`, freeze the validated tree, then execute the final outcome.
 - **Assumes.** Paper-agent docs approved from `draft.md`.
-- **Produces in real publication mode.** A tagged public release whose tree equals the validated staging tree; working repo publication record updated with public URL and commit/tree hash.
+- **Produces in real publication mode.** A tagged public release whose tree equals the validated staging tree; `APP_PUBLICATION.json` release manifest; working repo publication record updated with public URL, tag, commit/tree hash, and `app_publication_id`.
 - **Produces in dev-sandbox mode.** An implementation test result; optional logs or preserved failing state; no public repo and no APP compliance record.
 - **Sub-skills called.** `/validate-publication --stage full`, `/load-paper-agent` for local staging-root testing.
 - **Templates used.** [`template/publications.md`](../../template/publications.md).

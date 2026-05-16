@@ -26,7 +26,7 @@ Invoke with `--stage <name>` to validate specific artifacts. Omit for a full val
 |-------|------|----------------|
 | `structure` | After organizing files (phase 3) | Folder structure, file paths, sensitive files, data links, `.gitignore` |
 | `agents-md` | After creating AGENTS.md (phase 4) | APP metadata, ground-truth hierarchy, paths, commands, clear factual consistency |
-| `full` | Final review (phase 5) or standalone | All of the above + README consistency, confidentiality sweep, checklist, local reader-agent usability |
+| `full` | Final review (phase 5) or standalone | All of the above + README consistency, confidentiality sweep, checklist, local reader-agent usability, and release manifest verification when validating a public tagged release |
 
 ## Process
 
@@ -40,6 +40,7 @@ Read the publication repo or staging tree to understand what's being validated:
 - `supplementary/` — know-how, authors-note, sessions, materials
 - `skills/` — any author-published skills
 - `supplementary/checklist.md` — the publication checklist (if it exists)
+- `APP_PUBLICATION.json` release asset — only when auditing a public tagged release, not when validating `publication-staging/`
 
 ### 2. Run APP validation checks
 
@@ -103,6 +104,21 @@ Cross-check information across files:
 This is a completeness/usability check, not a prose-quality review. Do not flag wording only because it sounds generic; flag missing information only when it blocks APP use.
 
 Only run at stages: `agents-md`, `full`.
+
+**Check 5: Verified release manifest**
+
+Only run this check when validating a public tagged release or an already-published repo. Do not require `APP_PUBLICATION.json` during `/publish-paper` staging validation; the manifest is created in the real publication final-outcome step after the public commit exists.
+
+For a public tagged release:
+
+- Download `APP_PUBLICATION.json` from the GitHub Release asset for the current tag.
+- Verify manifest fields match the current checkout: `repo_url`, `tag`, `commit`, and `tree`.
+- Recompute `app_publication_id` from the manifest payload excluding `app_publication_id`; it must equal the manifest ID.
+- Verify `validation.stage == "full"` and `validation.result == "passed"`.
+- Verify the `validation.validation_report_sha256` matches `supplementary/validation-report.md` if that report is committed, or the validation report release asset if the report is distributed as an asset.
+- Verify `human_approval.approved == true` and approving authors are listed.
+
+If any manifest check fails, report the repo as not fully verified APP-compliant. It may still be an APP-structured candidate.
 
 ### 3. Collect and classify results
 

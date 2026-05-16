@@ -4,7 +4,7 @@
 [![Latest release](https://img.shields.io/github/v/release/LionSR/AgenticPublicationProtocol?include_prereleases&sort=semver)](https://github.com/LionSR/AgenticPublicationProtocol/releases)
 [![License: CC-BY-4.0 / MIT](https://img.shields.io/badge/license-CC--BY--4.0%20%2F%20MIT-blue)](#license)
 
-APP is a format for authors to publish a finished paper as a GitHub repository any AI coding agent can represent. The repo carries the paper alongside the code, data, and context needed for the agent to explain the work, reproduce figures, run experiments, and answer questions — more of what the research actually contains than a static PDF can convey. Readers clone the repo, open it in [Claude Code](https://claude.ai/claude-code), [Codex](https://github.com/openai/codex), or any other agent that reads [`AGENTS.md`](https://agents.md), and the agent speaks for the paper.
+APP is a format for authors to publish a finished paper as a GitHub repository any AI coding agent can represent. The repo carries the paper alongside the code, data, and context needed for the agent to explain the work, reproduce figures, run experiments, and answer questions — more of what the research actually contains than a static PDF can convey. A verified APP publication is a tagged public release with `AGENTS.md` plus an `APP_PUBLICATION.json` release manifest tying the release to validation and author approval. Readers clone the repo, open it in [Claude Code](https://claude.ai/claude-code), [Codex](https://github.com/openai/codex), or any other agent that reads [`AGENTS.md`](https://agents.md), and the agent speaks for the paper.
 
 APP packages results authors have already produced; it does not help write or produce the research. Bring a finished paper, and APP defines how to publish it.
 
@@ -58,7 +58,7 @@ Open your working repo in an AI coding agent with this plugin installed, then in
 /publish-paper
 ```
 
-The skill interviews you about the paper, copies the approved files into a new publication repo, drafts `AGENTS.md` with you, runs validation, and walks you through tagging a release. The process can span multiple sessions.
+The skill interviews you about the paper, copies the approved files into `publication-staging/`, creates the paper-agent docs with you, runs validation, and walks you through publishing a tagged release with a verifiable APP manifest. The process can span multiple sessions.
 
 ## Use a published paper
 
@@ -86,7 +86,7 @@ Claude Code users can also run `/load-paper-agent <repo-url>` to clone a publish
 
 | Skill | What it does |
 |-------|--------------|
-| `/validate-publication` | Check a publication against `PROTOCOL.md` — paths, privacy, factuality, consistency. |
+| `/validate-publication` | Check APP structure, paths, privacy, clear factual consistency, reader-agent usability, and release manifest verification when applicable. |
 | `/extract-context` | Pull research context (decisions, reasoning, dead ends) from local Claude Code / Codex conversation history. |
 
 **Standalone**
@@ -94,7 +94,7 @@ Claude Code users can also run `/load-paper-agent <repo-url>` to clone a publish
 | Skill | What it does |
 |-------|--------------|
 | `/create-paper-page` | Generate a GitHub Pages landing page for a published paper. |
-| `/load-paper-agent` | Load a published paper into the current project as a sub-agent. |
+| `/load-paper-agent` | Load a published paper into the current project as a sub-agent and classify whether it is agent-readable, APP-structured, or a verified APP publication. |
 | `/load-arxiv-paper` | Load a paper directly from arXiv — fetch PDF, metadata, and optionally code and reviews. Works on any paper, not only APP-compliant ones. |
 
 ## License

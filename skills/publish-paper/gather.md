@@ -13,7 +13,7 @@ First, check the **working repo** for existing publication state:
 
 **If `.publications.md` exists:**
 
-- Read it to find the previous public publication repo URL, version, date, and recorded commit/tree hash if present.
+- Read it to find the previous public publication repo URL, version, date, recorded commit/tree hash, and `app_publication_id` if present.
 - Clone or locate that public publication repo.
 - Read its `AGENTS.md`, `README.md`, `supplementary/`, and `skills/` thoroughly.
 - Most content already exists and just needs updating.

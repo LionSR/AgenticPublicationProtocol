@@ -42,22 +42,101 @@ If the user specifies a version:
 git clone --branch v1.0.0 <url> papers/<repo-name>
 ```
 
+If the user does not specify a version and the default branch is not exactly at a release tag, the repo can still be explored, but it cannot be verified as an APP publication from that checkout. For APP verification, prefer checking out an explicit release tag. If GitHub release metadata is available, identify the latest release tag and offer to check it out before verification.
+
 If the user gives an arXiv ID instead of a GitHub URL, prefer using the `/load-arxiv-paper` skill — it fetches the PDF and metadata directly from arXiv and can optionally search for code repos, blog posts, and OpenReview reviews. If that skill is not available, fall back to searching for the corresponding repo (check the paper's PDF for a GitHub link, or search GitHub for the arXiv ID).
 
 If the clone fails (private repo, wrong URL), inform the user and ask for the correct URL or access.
 
-### 2. Check for APP compliance
+### 2. Classify APP status
+
+Do not treat `AGENTS.md` or `CLAUDE.md` alone as proof of APP compliance. Classify the repo into one of three levels:
+
+1. **Agent-readable repo** — has `AGENTS.md`, `CLAUDE.md`, README, or other useful docs, but no APP protocol frontmatter.
+2. **APP-structured candidate** — has `AGENTS.md` with YAML frontmatter containing `protocol: agentic-publication-protocol`, but no verified release manifest.
+3. **Verified APP publication** — the current checkout corresponds to a public tagged release with a valid `APP_PUBLICATION.json` release manifest. The manifest must match the repo URL, tag, commit, tree, validation report hash, and human approval record, and its `app_publication_id` must recompute correctly.
 
 Read `<repo-root>/AGENTS.md` (for a clone, `papers/<repo-name>/AGENTS.md`; for local staging, `publication-staging/AGENTS.md`). Check:
-- Does it exist? If yes, this is an APP-compliant paper.
-- Does it have YAML frontmatter with `protocol: agentic-publication-protocol`? If yes, it's a fully structured APP paper.
-- If AGENTS.md doesn't exist, check for `README.md`, `CLAUDE.md`, or any documentation. The repo can still be useful — you'll just need to explore it manually.
+
+- Does it exist?
+- Does it have YAML frontmatter with `protocol: agentic-publication-protocol`?
+- Does the checkout correspond to a tag?
+- Is there a release asset named `APP_PUBLICATION.json` for that tag?
+
+For local `publication-staging/`, stop at **APP-structured candidate** at most. Staging can be tested for reader-agent usability, but it is not a verified APP publication because it has no public release manifest.
+
+### 2.1 Verify APP publication manifest
+
+For remote public repos, verify the manifest before calling the repo fully APP-compliant.
+
+Identify the checkout and tag:
+
+```bash
+cd <repo-root>
+COMMIT_SHA=$(git rev-parse HEAD)
+TREE_SHA=$(git rev-parse HEAD^{tree})
+TAG=$(git describe --tags --exact-match 2>/dev/null || true)
+```
+
+If `TAG` is empty, the checkout is not a verified APP publication. Report it as an APP-structured candidate if `AGENTS.md` has APP frontmatter.
+
+Download the release manifest:
+
+```bash
+gh release download "$TAG" --pattern APP_PUBLICATION.json --dir /tmp/app-manifest
+```
+
+If `gh` is unavailable, use the GitHub releases API or ask the user to provide the `APP_PUBLICATION.json` release asset. Do not trust a committed `APP_PUBLICATION.json` file as the canonical manifest unless it exactly matches the release asset.
+
+Verify manifest fields:
+
+```bash
+jq -e '.protocol == "agentic-publication-protocol"' /tmp/app-manifest/APP_PUBLICATION.json
+jq -e '.publication_type == "app-publication"' /tmp/app-manifest/APP_PUBLICATION.json
+jq -e --arg tag "$TAG" '.tag == $tag' /tmp/app-manifest/APP_PUBLICATION.json
+jq -e --arg commit "$COMMIT_SHA" '.commit == $commit' /tmp/app-manifest/APP_PUBLICATION.json
+jq -e --arg tree "$TREE_SHA" '.tree == $tree' /tmp/app-manifest/APP_PUBLICATION.json
+jq -e '.validation.stage == "full" and .validation.result == "passed"' /tmp/app-manifest/APP_PUBLICATION.json
+jq -e '.human_approval.approved == true' /tmp/app-manifest/APP_PUBLICATION.json
+```
+
+Verify the validation report hash if the report is present in the repo:
+
+```bash
+REPORT_SHA=$(shasum -a 256 supplementary/validation-report.md | awk '{print $1}')
+jq -e --arg report "$REPORT_SHA" '.validation.validation_report_sha256 == $report' \
+  /tmp/app-manifest/APP_PUBLICATION.json
+```
+
+If the validation report is a release asset rather than committed in the repo, download that asset and hash it instead.
+
+Recompute the APP publication ID. Remove `app_publication_id` from the manifest, canonicalize the payload with sorted keys and compact JSON, hash it, and compare:
+
+```bash
+jq 'del(.app_publication_id)' /tmp/app-manifest/APP_PUBLICATION.json \
+  | jq -S -c . > /tmp/app-manifest/APP_PUBLICATION.payload.canonical.json
+COMPUTED_ID="app-v1:sha256:$(shasum -a 256 /tmp/app-manifest/APP_PUBLICATION.payload.canonical.json | awk '{print $1}')"
+MANIFEST_ID=$(jq -r '.app_publication_id' /tmp/app-manifest/APP_PUBLICATION.json)
+test "$COMPUTED_ID" = "$MANIFEST_ID"
+```
+
+Also compare the manifest `repo_url` to the clone URL after normalizing common GitHub forms (`git@github.com:user/repo.git`, `https://github.com/user/repo`, `https://github.com/user/repo.git`). If they do not identify the same GitHub repo, do not mark the publication as verified.
+
+If all checks pass, report the repo as a **verified APP publication** and include the `app_publication_id`.
+
+If any check fails, report the highest level that is still supported:
+
+- APP frontmatter but invalid/missing manifest: **APP-structured candidate, not verified**.
+- No APP frontmatter but usable docs: **agent-readable repo, not APP-compliant**.
+- No useful docs: **non-APP repo; manual exploration required**.
 
 ### 3. Explore and report
 
-**For APP-compliant papers**, read the AGENTS.md and report to the user:
+**For verified APP publications or APP-structured candidates**, read the AGENTS.md and report to the user:
 - Paper title and authors
 - Paper format (from `paper_format` in frontmatter)
+- APP status: verified APP publication, APP-structured candidate, or agent-readable repo
+- `app_publication_id` if verified
 - Paper summary (from the agent's own summary section)
 - What the agent can do (explain, reproduce figures, run experiments, extend)
 - Computational requirements (what's light, what's heavy)

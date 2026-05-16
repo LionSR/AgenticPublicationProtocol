@@ -2,7 +2,7 @@
 
 **Version 0.1.0 — Draft**
 
-APP is a format for packaging a finished academic paper as a GitHub repository, enabling an AI agent to present and explain the work interactively. An APP publication is a public Git repository with a tagged release and an AGENTS.md file at the root. A reader can clone the repository, open it in any agent that supports AGENTS.md, and immediately access an agent that acts as a representative of the authors. This agent can explain the paper, reproduce figures, run experiments, and answer questions grounded in the work.
+APP is a format for packaging a finished academic paper as a GitHub repository, enabling an AI agent to present and explain the work interactively. An APP publication is a public Git repository with a tagged release, an AGENTS.md file at the root, and a verifiable APP publication manifest attached to the release. A reader can clone the repository, open it in any agent that supports AGENTS.md, and immediately access an agent that acts as a representative of the authors. This agent can explain the paper, reproduce figures, run experiments, and answer questions grounded in the work.
 
 The goal of APP is to transform the format of academic publication. Rather than serving as a static record of research results, an APP publication becomes an interactive and dynamic medium that significantly lowers the cost of understanding, reproducing, and building upon the work. APP defines what an agentic publication looks like; it does not prescribe how authors should create one. That aspect is handled by the skills distributed alongside this specification. For installation and usage, see [README.md](README.md).
 
@@ -138,6 +138,72 @@ Each APP publication **MUST** include a `LICENSE` file at the root of the reposi
 ## Versioning
 
 A publication is the pair `(repo URL, tag)`. Tags are immutable; the main branch is not. The recommended tag format is `vMAJOR.MINOR.PATCH` ([semver](https://semver.org)); other immutable tag names are allowed. Every tag corresponds to a GitHub Release. When the tag uses the recommended `vMAJOR.MINOR.PATCH` form, the `version` field in AGENTS.md matches the tag without the leading `v` (tag `v1.0.0` → `version: "1.0.0"`); otherwise, `version` matches the tag exactly. External references — citations, arXiv ancillary links, personal pages — should always point to a specific tag.
+
+## Verified APP publication manifest
+
+An `AGENTS.md` file makes a repository agent-readable, but it does not by itself prove that the repository is a validated APP publication. A fully verified APP publication **MUST** have an APP publication manifest associated with the public release.
+
+The manifest is a JSON object distributed as a GitHub Release asset named `APP_PUBLICATION.json`. It **MAY** also be copied into the annotated tag message or another public registry, but the release asset is the canonical location for verification.
+
+The manifest **MUST** include:
+
+```json
+{
+  "protocol": "agentic-publication-protocol",
+  "protocol_version": "0.1.0",
+  "manifest_version": "1",
+  "publication_type": "app-publication",
+  "repo_url": "https://github.com/user/paper-repo",
+  "tag": "v1.0.0",
+  "commit": "<git-commit-sha>",
+  "tree": "<git-tree-sha>",
+  "app_publication_id": "app-v1:sha256:<hex-digest>",
+  "validation": {
+    "validated_by": "validate-publication",
+    "validator_protocol_version": "0.1.0",
+    "stage": "full",
+    "result": "passed",
+    "validated_at": "YYYY-MM-DD",
+    "validation_report_sha256": "<sha256>"
+  },
+  "human_approval": {
+    "approved": true,
+    "approved_at": "YYYY-MM-DD",
+    "approved_by": ["Author Name"],
+    "approval_statement": "The listed authors approved this release as an APP publication."
+  }
+}
+```
+
+The `app_publication_id` **MUST** be computed from a canonical JSON payload that excludes `app_publication_id` itself and includes at least:
+
+- `protocol`
+- `protocol_version`
+- `manifest_version`
+- `publication_type`
+- `repo_url`
+- `tag`
+- `commit`
+- `tree`
+- `validation.validation_report_sha256`
+- `validation.result`
+- `human_approval.approved`
+- `human_approval.approved_at`
+- `human_approval.approved_by`
+
+The recommended identifier format is:
+
+```text
+app-v1:sha256:<sha256(canonical-json-payload)>
+```
+
+The manifest is valid only for the exact `(repo_url, tag, commit, tree)` it names. A loader verifies APP status by downloading the release manifest, checking that the local checkout matches the manifest commit and tree, recomputing `app_publication_id`, and confirming that validation passed and human approval is recorded.
+
+Repositories without a valid manifest can still be useful:
+
+- `AGENTS.md` present, no APP frontmatter: agent-readable repository.
+- `AGENTS.md` with `protocol: agentic-publication-protocol`, no valid manifest: APP-structured candidate.
+- Valid release manifest matching the checkout: verified APP publication.
 
 
 ## License

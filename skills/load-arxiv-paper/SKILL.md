@@ -53,6 +53,8 @@ If the API returns no results or an error, inform the user and ask them to verif
 
 Create `papers/arxiv-ARXIV_ID/AGENTS.md` following the structure defined in [PROTOCOL.md](../../PROTOCOL.md#agentsmd), populated with the fetched metadata. Use the YAML frontmatter fields from the protocol (`protocol`, `protocol_version`, `title`, `authors`, `arxiv_id`, `paper_format`, `version`, `domain`, `tags`).
 
+This creates an APP-structured local import, not a verified APP publication. It has no public tagged release, no validation manifest, and no `app_publication_id`.
+
 Since this is an import (not an author publication), fill in what the metadata provides and mark the rest as placeholders:
 - **Paper Summary**: Use the arXiv abstract (note it's not an author-written agent summary)
 - **Key Results**: Leave as placeholder — the abstract doesn't enumerate contributions clearly enough
@@ -90,7 +92,7 @@ Use a tiered approach — run the first tier in parallel, fall back only if need
 If code is found:
 - Report the repo URL(s) to the user
 - Ask if they want to clone it into the paper directory (via `/load-paper-agent`)
-- If the repo has an AGENTS.md, note that it's APP-compliant
+- If the repo has an AGENTS.md, note only that it is agent-readable. Use `/load-paper-agent` to classify whether it is an APP-structured candidate or a verified APP publication.
 
 If no code is found, report that clearly.
 
