@@ -1,11 +1,13 @@
 ---
 name: load-paper-agent
-description: Load a published paper agent into your current project as a sub-agent. Use when a user wants to consult, build on, or discuss a paper that follows the Agentic Publication Protocol. Also works with non-APP repos that have code and a README.
+description: Load a published paper agent or local publication-staging tree into your current project as a sub-agent. Use when a user wants to consult, build on, test, or discuss a paper that follows the Agentic Publication Protocol. Also works with non-APP repos that have code and a README.
 ---
 
 # Load Paper Agent
 
-Load a published paper into your project so you can consult it, reproduce results, and build on the work.
+Load a published paper into your project so you can consult it, reproduce results, and build on the work. During pre-publication validation, load a local `publication-staging/` tree so it can be tested exactly as a future reader agent would see it.
+
+During `/publish-paper`, this skill can also be used in local staging-root mode to test `publication-staging/` before it is promoted to a public repo. In that case, do not clone anything; treat the supplied local staging directory as the paper repo root.
 
 ## Triggering
 
@@ -14,10 +16,21 @@ User says something like:
 - "I want to consult the paper at <url>"
 - "Add this paper as a sub-agent: <url>"
 - "Load <arxiv-id> as a paper agent"
+- "Test/load the paper agent from publication-staging"
 
 ## Steps
 
-### 1. Clone the paper
+### 1. Locate the paper repo
+
+If the user or `/publish-paper` supplies a local staging path such as `publication-staging/`, skip cloning:
+
+```bash
+cd publication-staging
+```
+
+Then continue with the APP compliance and exploration checks below, treating this directory as the repo root. This is a pre-publication test; it does not imply the staged tree is publicly released.
+
+For remote public repos:
 
 ```bash
 mkdir -p papers/
@@ -35,7 +48,7 @@ If the clone fails (private repo, wrong URL), inform the user and ask for the co
 
 ### 2. Check for APP compliance
 
-Read `papers/<repo-name>/AGENTS.md`. Check:
+Read `<repo-root>/AGENTS.md` (for a clone, `papers/<repo-name>/AGENTS.md`; for local staging, `publication-staging/AGENTS.md`). Check:
 - Does it exist? If yes, this is an APP-compliant paper.
 - Does it have YAML frontmatter with `protocol: agentic-publication-protocol`? If yes, it's a fully structured APP paper.
 - If AGENTS.md doesn't exist, check for `README.md`, `CLAUDE.md`, or any documentation. The repo can still be useful — you'll just need to explore it manually.
@@ -66,7 +79,7 @@ Before running anything from the paper:
 4. If the platform differs from what was tested, warn about potential compatibility issues
 5. Only install dependencies with user approval:
    ```bash
-   cd papers/<repo-name>
+   cd <repo-root>
    pip install -r environment/requirements.txt  # or equivalent
    ```
 6. Check if the paper references external datasets (Hugging Face, Zenodo, Figshare, etc.). The Repository Structure in AGENTS.md should list these with download commands. If the user needs data that isn't in the repo:

@@ -1,18 +1,21 @@
 ---
 name: validate-publication
-description: Validate a publication repo for factuality, privacy, consistency, and completeness. Use after major steps in /publish-paper or standalone to audit an existing publication. Launches parallel specialized agents to check different aspects and leaves inline comments in files.
+description: Validate whether a publication repo or publication-staging tree is compliant with the Agentic Publication Protocol. Use after major steps in /publish-paper or standalone to check APP structure, reproducibility, privacy, consistency, and reader-agent usability.
 ---
 
 # Validate Publication
 
-Automated quality checks for publication repos. Launches parallel agents to independently check factuality, privacy, file integrity, and substance, then leaves inline comments directly in the files for the researcher to resolve.
+Automated APP compliance checks for publication repos or `publication-staging/` candidate release trees. The goal is to make sure the paper-as-agent can help a reader understand and reproduce the paper smoothly, and that the publication contains the information APP requires.
 
-Modeled on the code-review pattern: parallel specialized agents, high-signal filtering, independent validation of flagged issues.
+This skill is not a referee report. Do not judge novelty, writing style, scientific importance, or whether the paper is "good." Restrict factual checks to clear APP-relevant inconsistencies: conflicting stated numbers, commands that do not run, missing files, unreproducible figures/tables, broken links, privacy issues, or documentation that would mislead a reader agent.
+
+When called by `/publish-paper`, treat `publication-staging/` as the effective repository root. Do not validate paths against the private parent working repo. A staged candidate passes only if a reader agent could use the staging tree on its own.
 
 ## When to use
 
 - Called by `/publish-paper` as a sub-skill at validation checkpoints
 - Standalone to audit an existing publication repo
+- Standalone to audit a local `publication-staging/` tree before publication
 - Before tagging a new release of an existing publication
 
 ## Stages
@@ -21,15 +24,16 @@ Invoke with `--stage <name>` to validate specific artifacts. Omit for a full val
 
 | Stage | When | What's checked |
 |-------|------|----------------|
-| `structure` | After organizing files (phase 3) | Folder structure, file paths, sensitive files, data links, .gitignore |
-| `agents-md` | After creating AGENTS.md (phase 4) | Factuality, paths, ground truth, substance, commands |
-| `full` | Final review (phase 5) or standalone | All of the above + README consistency, confidentiality sweep + checklist |
+| `structure` | After organizing files (phase 3) | Folder structure, file paths, sensitive files, data links, `.gitignore` |
+| `agents-md` | After creating AGENTS.md (phase 4) | APP metadata, ground-truth hierarchy, paths, commands, clear factual consistency |
+| `full` | Final review (phase 5) or standalone | All of the above + README consistency, confidentiality sweep, checklist, local reader-agent usability |
 
 ## Process
 
 ### 1. Gather context
 
-Read the publication repo to understand what's being validated:
+Read the publication repo or staging tree to understand what's being validated:
+
 - `AGENTS.md` — the agent's instructions (if it exists yet)
 - The paper source — whatever format is designated as ground truth
 - `README.md`
@@ -37,31 +41,42 @@ Read the publication repo to understand what's being validated:
 - `skills/` — any author-published skills
 - `supplementary/checklist.md` — the publication checklist (if it exists)
 
-### 2. Launch parallel validation agents
+### 2. Run APP validation checks
 
-Launch these agents in parallel. Each returns a list of issues with severity, location, and suggested fix.
+You may use parallel agents internally when useful, but the user-facing output is a validation report, not inline review comments. Do not edit files to insert validation markers.
 
-**Agent 1: Factuality**
-Compare every claim in AGENTS.md (paper summary, key results, "What You Can Do") against the actual paper source. Also check supplementary materials:
-- Flag anything in AGENTS.md that isn't grounded in the paper
-- Flag claims in `supplementary/know-how.md` or `supplementary/authors-note.md` that contradict the paper
-- Flag skills that make claims about the paper's results
-- Check that the paper summary uses specific language, not generic filler
+**Check 1: APP factual consistency**
+
+Compare APP-facing claims in `AGENTS.md`, `README.md`, supplementary materials, and skills against the paper and runnable artifacts.
+
+Flag only clear inconsistencies or unsupported operational claims, such as:
+
+- stated numbers that conflict between the paper, `AGENTS.md`, README, or figures/tables;
+- a claim that a command reproduces a figure/table when the command is missing or fails;
+- a described dataset, experiment, or artifact that is absent or named differently;
+- supplementary notes or skills that contradict the ground-truth paper;
+- a skill description that promises a workflow the staged repo cannot support.
+
+Do not flag generic language merely because it is stylistically weak. Do not evaluate novelty, significance, or paper quality.
 
 Only run at stages: `agents-md`, `full`.
 
-**Agent 2: Path & structure validator**
-- Verify every file path in AGENTS.md Repository Structure exists in the repo
-- Verify every file path in README exists
-- Check that commands in the figure generation table are syntactically valid
-- Test external data links with `curl -sIL <url>` (flag non-2xx responses)
-- Check that `supplementary/` references point to real files
-- **Check folder structure conformance** against the layout defined in [PROTOCOL.md](../../PROTOCOL.md#repository-layout). See `validation-criteria.md` for the detailed checklist of what to flag.
+**Check 2: Path, structure, and command validity**
+
+- Verify every file path in `AGENTS.md` Repository Structure exists in the repo.
+- Verify every file path in README exists.
+- Check that commands in the figure/table reproduction sections are syntactically valid.
+- When validating `publication-staging/`, verify commands and paths work with staging as the current working directory, and flag references to private parent-repo files.
+- Test external data links with `curl -sIL <url>` when appropriate; flag non-2xx responses or mark authentication-limited links as needing manual verification.
+- Check that `supplementary/` references point to real files.
+- Check folder structure conformance against the layout defined in [PROTOCOL.md](../../PROTOCOL.md#repository-layout). See `validation-criteria.md` for the detailed checklist of what to flag.
 
 Run at all stages.
 
-**Agent 3: Privacy & confidentiality**
-Scan ALL files in the repo — not just supplementary materials, but also the paper source, code files, code comments, notebook outputs, config files, and README. Flag:
+**Check 3: Privacy and confidentiality**
+
+Scan all files in the repo — not just supplementary materials, but also the paper source, code files, code comments, notebook outputs, config files, and README. Flag:
+
 - API keys, tokens, credentials (`sk-...`, `ghp_...`, `Bearer ...`, `key=...`)
 - Email addresses, phone numbers, physical addresses
 - File paths revealing private directory structure (`/Users/name/...`)
@@ -73,85 +88,87 @@ See `validation-criteria.md` for the full pattern list and `../extract-context/c
 
 Run at all stages.
 
-**Agent 4: Consistency & substance**
+**Check 4: APP completeness and reader-agent usability**
+
 Cross-check information across files:
-- AGENTS.md paper summary vs README description — should be consistent
-- Figure table in AGENTS.md vs README — should match
-- Citation in AGENTS.md vs README — should be identical
-- Computational requirements vs actual code (e.g., GPU mentioned but no GPU code)
-- Ground truth hierarchy explicitly stated in AGENTS.md identity section
-- Paper summary is substantive — flag generic phrases like "novel method", "we propose", "state-of-the-art" without specifics
-- Key results are concrete — flag vague results like "improved performance"
+
+- `AGENTS.md` paper summary vs README description — should be compatible.
+- Figure/table reproduction information in `AGENTS.md` vs README — commands and paths should match.
+- Citation in `AGENTS.md` vs README — should be identical when both exist.
+- Computational requirements vs actual code — for example, do not claim "runs on any laptop" if the code requires CUDA.
+- Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.
+- Required APP files exist for the current validation stage.
+- Setup, data access, and reproduction instructions are complete enough for a reader agent to know what can be run, what data is required, and what requires manual/human steps.
+
+This is a completeness/usability check, not a prose-quality review. Do not flag wording only because it sounds generic; flag missing information only when it blocks APP use.
 
 Only run at stages: `agents-md`, `full`.
 
-### 3. Collect and classify issues
+### 3. Collect and classify results
 
-Each agent returns issues with:
+Classify findings with:
+
+- **Passed checks**: APP requirements that were checked and passed.
+- **Issues needing changes**: concrete changes required or recommended.
+- **Manual verification needed**: items the agent could not verify, such as authenticated data links or commands too heavy to run.
+
+For each issue include:
+
 - **Severity**: `error` (must fix before release), `warning` (should fix), `note` (consider)
-- **File** and **location** (line number or section)
-- **Description** of the issue
+- **File** and **location** (line number or section when available)
+- **Description**
 - **Suggested fix**
 
 ### 4. Validate error-level issues
 
-For each `error`-level issue, launch a validation subagent to independently confirm it's real. The validator reads the relevant files fresh and checks whether the issue actually exists. Filter out any issues that don't validate.
+Before reporting an `error`, independently confirm it by rereading the relevant files or rerunning the lightweight check. Filter out anything that does not validate.
 
-This reduces false positives — the cost of a false error is high (blocks the researcher), so we validate before reporting.
+This reduces false blocking errors. Warnings and notes can be reported with lower confidence if clearly labeled.
 
-### 5. Write inline comments
+### 5. Report results
 
-For every validated issue, write a comment directly in the file:
+Do not write inline comments or modify files. Produce a validation report in the terminal/chat output.
 
-```
-<!-- REVIEW: error — The paper summary states "we achieve 95% accuracy" but the paper (Section 4.2) reports 93.7%. Fix: update to match paper. -->
-```
+The report should include both what passed and what needs work:
 
-```
-<!-- REVIEW: warning — Generic language: "we propose a novel method." What specifically is novel? -->
-```
-
-```
-<!-- REVIEW: note — Consider adding the runtime for Figure 3 to the computational requirements. -->
-```
-
-The `REVIEW:` prefix is a short, scannable marker — it doesn't refer to the skill name. Place the comment immediately above or next to the problematic content. The researcher resolves each by fixing the issue and removing the `<!-- REVIEW: -->` marker.
-
-For code files, use the appropriate comment syntax:
-```python
-# REVIEW: warning — This path `/Users/john/data/` should be relative.
-```
-
-### 6. Report to terminal
-
-Output a summary:
-
-```
+```text
 ## Publication validation (stage: agents-md)
 
-### Errors (2)
-1. AGENTS.md:23 — Paper summary claims "95% accuracy"; paper reports 93.7%
-2. AGENTS.md:45 — Path `code/scripts/fig3.py` does not exist
+### Passed
+- Required APP files for this stage are present.
+- Paths listed in AGENTS.md resolve from the staging root.
+- README and AGENTS.md cite the same paper title and authors.
 
-### Warnings (3)
-1. AGENTS.md:18 — Generic language: "novel method" — be specific
-2. supplementary/know-how.md:12 — Contains email address: john@university.edu
-3. README.md:34 — Figure table missing Fig 4 (present in AGENTS.md)
+### Issues needing changes
+Errors (2)
+1. AGENTS.md:45 — Path `code/scripts/fig3.py` does not exist.
+   Suggested fix: update the path or copy the missing script into staging.
+2. README.md:34 — Figure 4 command differs from AGENTS.md.
+   Suggested fix: make both tables use the same command.
 
-### Notes (1)
-1. AGENTS.md:67 — Computational requirements don't mention GPU; code imports torch.cuda
+Warnings (1)
+1. supplementary/know-how.md:12 — Contains an email address for a non-author.
+   Suggested fix: remove or anonymize before release.
 
-Inline comments placed in 3 files. Search for `<!-- REVIEW:` to find them.
+### Manual verification needed
+- External data link requires authentication; researcher should confirm it is accessible to intended readers.
+
+### Brief summary for chat
+Validation found two release-blocking APP issues: a missing figure script and inconsistent Figure 4 commands. The rest of the checked structure, paths, and metadata passed.
 ```
 
-If no issues found: "No issues found. Checked factuality, privacy, paths, and consistency."
+If no issues are found, say clearly:
+
+```text
+No APP compliance issues found. Checked structure, paths, privacy, clear factual consistency, README/AGENTS.md consistency, and reader-agent usability for the requested stage.
+```
 
 ## Standalone usage
 
-When used outside `/publish-paper` (e.g., auditing an existing publication repo):
+When used outside `/publish-paper` (e.g., auditing an existing publication repo or local staging tree):
 
-```
+```text
 /validate-publication
 ```
 
-This runs `--stage full` by default. The agent reads the entire repo, runs all four validation agents, and reports findings with inline comments.
+This runs `--stage full` by default. The agent reads the entire repo, runs the APP validation checks, and reports passed checks, issues needing changes, and manual verification items.

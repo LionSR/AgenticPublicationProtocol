@@ -1,45 +1,84 @@
-# Phases 5–6 — Final review and Release
+# Phases 5-6 — Final Review and Final Outcome
+
+Phase 5 is shared by real publication mode and developer-sandbox mode. Phase 6 is the only branch:
+
+- **Real publication mode:** promote the validated `publication-staging/` tree to a public repo, tag/version it, and record the public release.
+- **Developer sandbox mode:** record an implementation test result, optionally preserve logs or failure state, and reset/preserve the sandbox according to the test plan. Do not create public repos or APP compliance records.
+
+## Phase 5 — Final review and staging freeze
+
+### 5.1 Full validation from staging root
+
+Invoke `/validate-publication --stage full` with `publication-staging/` as the effective repository root — APP structure, privacy, paths, clear factual consistency, README↔AGENTS.md cross-checks, checklist status, and reader-agent usability. Fix any errors before showing the validation report to the researcher.
+
+Also check that `publication-staging/` has no dependency on the private parent repo:
+
+- no commands that require files outside staging;
+- no absolute private paths;
+- no references to unpublished notes, drafts, or private remotes;
+- no symlinks that escape staging;
+- no generated artifacts that are required but ignored or missing.
+
+### 5.2 Test/load the paper agent from staging root
+
+Before public release, test the candidate as a reader agent would see it. Use `/load-paper-agent` in local staging mode, or manually perform the equivalent:
+
+```bash
+cd publication-staging
+```
+
+Then read `AGENTS.md`, `README.md`, the ground-truth paper file, `supplementary/`, and any `skills/`. Confirm that a fresh agent can answer basic questions, identify the ground truth, understand what it can run, and follow any reproduction commands without needing the parent repo.
+
+For real publication mode, this is the final check that the public repo will work. For dev-sandbox mode, this is the key implementation test of the protocol.
+
+### 5.3 Walk the researcher through the final staged state
+
+Present the final staged state **one piece at a time**, not as a single wall of information.
+
+1. **File inventory.** Show what's included in `publication-staging/` and what stayed outside it. Ask: "Is this the right set of files? Anything missing or anything that shouldn't be here?"
+2. **`AGENTS.md` and `README.md`.** Briefly confirm they still read correctly after all revisions — this is a staleness check, not a full re-review (that was phase 4).
+3. **Supplementary materials.** List what's in `publication-staging/supplementary/`. Ask: "Are you comfortable with all of this being public?" In dev-sandbox mode, phrase this as "safe for this sandbox test" if the fixture is not intended for publication.
+4. **Validation results.** Show any remaining warnings from the validation sweep. Walk through each one — don't just list them.
+5. **Paper-agent test.** Summarise what the local staging-root test showed.
+
+Wait for the researcher to engage with each item. If they say "all good" without engaging, ask about one specific thing — e.g. "I want to double-check: the supplementary materials include [X]. Are you sure that should be in the staged release tree?"
+
+### 5.4 Walk the checklist
+
+Walk through `publication-staging/supplementary/checklist.md` with the researcher as the final quality gate. Go through each item and mark them off. Flag any unchecked items — the researcher decides whether to resolve or mark N/A before proceeding.
+
+Do not proceed until the researcher has explicitly confirmed they reviewed the staged files, `AGENTS.md`, and the supplementary materials.
+
+### 5.5 Freeze the validated release tree
+
+Once approved, freeze the staging tree. At minimum:
+
+- record the validation date;
+- record the exact `publication-staging/` tree hash or archive checksum if available;
+- avoid further edits except controlled fixes that return to phase 5.1.
+
+The final public release in real publication mode must equal this validated tree.
+
+## Phase 6 — Final outcome
+
+Determine the mode before doing anything irreversible.
+
+### 6A. Real publication mode
 
 **Point of no return** — once pushed, the publication is public. Each remote action requires its own explicit confirmation.
 
-## Phase 5 — Final review
-
-### 5.1 Full validation
-
-Invoke `/validate-publication --stage full` — factuality, privacy, paths, consistency, substance, and README↔AGENTS.md cross-checks. Fix any errors before showing results to the researcher.
-
-### 5.2 Walk the researcher through the final state
-
-Present the final state **one piece at a time**, not as a single wall of information.
-
-1. **File inventory.** Show what's included and what was excluded. Ask: "Is this the right set of files? Anything missing or anything that shouldn't be here?"
-2. **`AGENTS.md` and `README.md`.** Briefly confirm they still read correctly after all revisions — this is a staleness check, not a full re-review (that was phase 4).
-3. **Supplementary materials.** List what's in `supplementary/`. Ask: "Are you comfortable with all of this being public?"
-4. **Validation results.** Show any remaining warnings from the validation sweep. Walk through each one — don't just list them.
-
-Wait for the researcher to engage with each item. If they say "all good" without engaging, ask about one specific thing — e.g. "I want to double-check: the supplementary materials include [X]. Are you sure that should be public?"
-
-### 5.3 Walk the checklist
-
-Walk through `supplementary/checklist.md` with the researcher as the final quality gate. Go through each item and mark them off. Flag any unchecked items — the researcher decides whether to resolve or mark N/A before proceeding.
-
-Do NOT proceed until the researcher has explicitly confirmed they reviewed the files, the `AGENTS.md`, and the supplementary materials.
-
-## Phase 6 — Release
-
-### 6.1 Confirm and publish
-
-Before doing anything in this step, present a concrete summary. This is the point of no return; the confirmation must be specific, not a generic "should I proceed?"
+Before doing anything in this step, present a concrete summary. The confirmation must be specific, not a generic "should I proceed?"
 
 Fill in the actual values and show:
 
-```
+```text
 PUBLICATION SUMMARY — please review before I publish:
 
-  Repo name:    <repo-name>
-  Visibility:   PUBLIC — anyone on the internet can see this
-  Version:      v1.0.0
-  Tag:          v1.0.0
+  Source tree:   publication-staging/
+  Repo name:     <repo-name>
+  Visibility:    PUBLIC — anyone on the internet can see this
+  Version:       v1.0.0
+  Tag:           v1.0.0
 
   Files included (<N> files):
     paper/          — <paper source format>, figures, bibliography
@@ -51,7 +90,7 @@ PUBLICATION SUMMARY — please review before I publish:
     AGENTS.md       — paper agent instructions
     README.md       — public README
 
-  Files NOT included (stayed in working repo):
+  Files NOT included (stayed outside publication-staging/):
     <list key excluded files/directories, or "nothing excluded">
 
   External data links:
@@ -60,82 +99,102 @@ PUBLICATION SUMMARY — please review before I publish:
   Checklist status:
     <N>/<M> items checked — <list any unchecked items>
 
+  Staging validation:
+    <validation status, local paper-agent test status, tree hash/checksum if available>
+
   What happens next:
-    1. Commit all files to the publication repo
-    2. Tag as v1.0.0
-    3. Push to GitHub as a PUBLIC repository
-    4. Create a GitHub release (v1.0.0)
-    5. Record this release in the working repo (.publications.md)
+    1. Export the validated publication-staging/ tree to the public repo
+    2. Commit all files to the public publication repo
+    3. Tag as v1.0.0
+    4. Push to GitHub as a PUBLIC repository
+    5. Create a GitHub release (v1.0.0)
+    6. Record this release in the working repo (.publications.md) with URL and commit/tree hash
 ```
 
-**Wait for the researcher to explicitly confirm.** A clear "yes", "go ahead", "publish it", or equivalent. Do NOT proceed on ambiguous responses like "looks good" or "ok" — ask: "Just to be clear — shall I push this as a public repo now?"
+**Wait for the researcher to explicitly confirm.** A clear "yes", "go ahead", "publish it", or equivalent. Do not proceed on ambiguous responses like "looks good" or "ok" — ask: "Just to be clear — shall I publish this validated staging tree as a public repo now?"
 
-Do NOT proceed without unambiguous confirmation.
+Do not proceed without unambiguous confirmation.
 
-After confirmation, commit and tag locally. This does not push anything yet:
+#### 6A.1 Create or update the public repo from staging
+
+Create a separate public publication repo or working directory whose contents equal the validated `publication-staging/` tree. Use a structured copy tool that preserves file contents and excludes parent-repo-only metadata. For example:
 
 ```bash
-cd <publication-repo>
+rsync -a --delete publication-staging/ ../<repo-name>/
+cd ../<repo-name>
+git init
 git add -A
-git commit -m "Initial publication"
-git tag -a v1.0.0 -m "Paper agent v1.0.0"
+git commit -m "Initial APP publication"
+git tag -a v1.0.0 -m "APP publication v1.0.0"
 ```
 
-Tell the researcher: "Everything is committed and tagged locally. Nothing has been pushed yet."
+For a revision, update the existing public repo working copy from `publication-staging/`, commit, and tag the new version.
 
-**Separate confirmation before each remote action.** Each push or remote operation requires its own confirmation — do not chain them.
+After committing and tagging locally, tell the researcher: "Everything is committed and tagged locally in the public publication repo. Nothing has been pushed yet."
 
-**If `gh` is available and the repo isn't on GitHub yet:**
+#### 6A.2 Remote publication
 
-Ask: "Ready to create the public GitHub repo and push? This makes everything visible."
+Separate confirmation before each remote action. Do not chain remote operations.
+
+If `gh` is available and the repo is not on GitHub yet, ask: "Ready to create the public GitHub repo and push? This makes everything visible."
+
 ```bash
 gh repo create <repo-name> --public --source . --push
 ```
 
 Then ask: "Repo is live. Shall I also create a GitHub release tagged v1.0.0?"
+
 ```bash
-gh release create v1.0.0 --title "v1.0.0" --notes "Paper agent publication"
+gh release create v1.0.0 --title "v1.0.0" --notes "APP paper-agent publication"
 ```
 
-**If the repo is already on GitHub:**
+If the repo is already on GitHub, ask: "Ready to push to GitHub? This makes everything visible."
 
-Ask: "Ready to push to GitHub? This makes everything visible."
 ```bash
 git push origin main --tags
 ```
 
 Then ask: "Push complete. Shall I also create a GitHub release tagged v1.0.0?"
+
 ```bash
-gh release create v1.0.0 --title "v1.0.0" --notes "Paper agent publication"
+gh release create v1.0.0 --title "v1.0.0" --notes "APP paper-agent publication"
 ```
 
-**If `gh` is not available**, tell the researcher what to run manually:
+If `gh` is not available, tell the researcher what to run manually:
 
 - Push: `git remote add origin <url> && git push -u origin main --tags`
-- Create the release on GitHub's web UI: Releases → Create a new release → tag `v1.0.0`.
+- Create the release on GitHub's web UI: Releases -> Create a new release -> tag `v1.0.0`.
 
 Tell the researcher the publication is live and share the repo URL.
 
-### 6.2 Record the release in the working repo
+#### 6A.3 Record the public release in the working repo
 
 After the publication is live, switch back to the **working repo** and record the release in `.publications.md`. This ensures that future sessions know a publication repo exists — no need to ask the researcher or guess.
 
-**If `.publications.md` doesn't exist**, create it (the template lives at [`template/publications.md`](../../template/publications.md)):
+Record enough information to attach APP compliance to a concrete public version:
+
+- public repo URL;
+- version/tag;
+- date;
+- commit hash and/or tree hash;
+- brief notes.
+
+If `.publications.md` doesn't exist, create it (the template lives at [`template/publications.md`](../../template/publications.md)):
 
 ```markdown
 # Publications
 
 Repos created from this working repo via the Agentic Publication Protocol.
 
-| Repo | Version | Date | Notes |
-|------|---------|------|-------|
-| [<repo-name>](<repo-url>) | v1.0.0 | YYYY-MM-DD | Initial publication |
+| Repo | Version | Date | Commit/Tree | Notes |
+|------|---------|------|-------------|-------|
+| [<repo-name>](<repo-url>) | v1.0.0 | YYYY-MM-DD | `<hash>` | Initial publication |
 ```
 
-**If `.publications.md` already exists**, append a new row:
+If `.publications.md` already exists, append a new row:
 
 ```markdown
-| [<repo-name>](<repo-url>) | v2.0.0 | YYYY-MM-DD | Updated results, new figures |
+| [<repo-name>](<repo-url>) | v2.0.0 | YYYY-MM-DD | `<hash>` | Updated results, new figures |
 ```
 
 Commit in the working repo:
@@ -143,9 +202,45 @@ Commit in the working repo:
 ```bash
 cd <working-repo>
 git add .publications.md
-git commit -m "Record publication: <repo-name> v1.0.0"
+git commit -m "Record APP publication: <repo-name> v1.0.0"
 ```
 
-This file is the link between the working repo and its publication repos. [`gather.md`](gather.md) reads it to detect previous versions automatically on the next run.
+Report to the researcher: the publication URL, the tag, the release page, and the recorded hash.
 
-Report to the researcher: the publication URL, the tag, and the release page.
+### 6B. Developer sandbox mode
+
+Dev-sandbox mode is an implementation-testing workflow, not a publication workflow. It uses the same prepare and validate standards up through phase 5, then substitutes a sandbox outcome for public release.
+
+Before finalizing the sandbox run, show:
+
+```text
+DEV-SANDBOX RESULT SUMMARY:
+
+  Sandbox target:          <path>
+  Candidate tree:          publication-staging/
+  Test case:               <new publication example | revision example | fixture name>
+  Validation status:       <passed | failed>
+  Paper-agent test status: <passed | failed>
+  Tree hash/checksum:      <hash if available>
+
+  Outcome:
+    <record success | preserve failing state for debugging | reset sandbox>
+
+  Important:
+    No public repo will be created.
+    No APP compliance record will be written.
+```
+
+Record the implementation test result in the agreed sandbox log or test notes for the protocol implementation. Include:
+
+- date;
+- protocol/skill version or commit;
+- sandbox target;
+- source fixture/example;
+- validation result;
+- paper-agent test result;
+- failures and fixes needed, if any.
+
+If the run passed and the sandbox policy says to reset, reset the reusable sandbox to baseline. If the run failed or the researcher wants to inspect it, preserve `publication-staging/` and relevant logs temporarily.
+
+Never write `.publications.md` as a compliance record in dev-sandbox mode. If a sandbox log is needed, use an implementation-test location whose name makes clear it is not an APP publication record.

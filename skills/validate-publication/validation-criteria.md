@@ -1,29 +1,31 @@
 # Validation Criteria
 
-Detailed criteria for each validation agent in validate-publication.
+Detailed criteria for the APP compliance checks in validate-publication.
 
-## Factuality
+## APP factual consistency
 
 The paper is the ground truth. Everything else is secondary.
 
 **What to check:**
-- Every factual claim in AGENTS.md paper summary — find it in the paper source
-- Every key result — verify the numbers, claims, and scope match the paper
-- "What You Can Do" section — are the described capabilities actually supported by the code?
+- Stated numbers, figure/table references, dataset names, and result summaries in AGENTS.md and README — verify they do not conflict with the paper
+- Key results listed in AGENTS.md — verify the numbers, claims, and scope match the paper when the claim is concrete enough to check
+- "What You Can Do" section — are the described capabilities actually supported by the code and files in the repo?
 - `supplementary/know-how.md` — does it contradict anything in the paper?
-- `supplementary/authors-note.md` — does it make claims beyond what the paper supports?
+- `supplementary/authors-note.md` — does it contain factual claims that contradict the paper or could mislead a reader agent?
 - Skills — do any skill descriptions make claims about the paper's findings?
 
-**What counts as ungrounded:**
+**What counts as an APP-relevant inconsistency:**
 - A specific number (accuracy, speed, size) that doesn't match the paper
 - A claim about what the method achieves that the paper doesn't make
 - An implication about generality that the paper's experiments don't support
 - Causal claims where the paper only shows correlation
+- A figure/table reproduction claim that is not supported by runnable code or documented manual steps
 
 **What's OK:**
 - Paraphrasing the paper in simpler terms (as long as the meaning is preserved)
 - Stating implications the paper explicitly discusses
 - The know-how describing methodology choices not mentioned in the paper (that's its purpose)
+- Generic or high-level author language, unless it creates a clear contradiction or blocks reader-agent use
 
 ## Path, structure & command validity
 
@@ -55,7 +57,7 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 - Every path in AGENTS.md Repository Structure must resolve to a real file or directory
 - Every path in README must resolve
 - Every path in `supplementary/` references must resolve
-- Relative paths should be relative to the repo root
+- Relative paths should be relative to the repo root, or to `publication-staging/` when validating a staged candidate release
 
 **Commands:**
 - Figure generation commands should be syntactically valid (parseable by the shell)
@@ -103,25 +105,18 @@ Extends `../extract-context/confidentiality-checklist.md` to cover the entire re
 - Computational requirements match what the code actually needs (e.g., don't say "any laptop" if code imports CUDA)
 - `version` in frontmatter matches the git tag per the normalization rule in [PROTOCOL.md § Versioning](../../PROTOCOL.md#versioning): for `vMAJOR.MINOR.PATCH` tags, `version` has no leading `v` (tag `v1.0.0` → `version: "1.0.0"`); for non-semver tags, `version` matches the tag exactly.
 
-## Substance
+## APP completeness and usability
 
-**Red flags for generic language:**
-- "We propose a novel method" — what specifically is novel?
-- "State-of-the-art results" — on what benchmark? by what margin?
-- "Significant improvement" — how much? over what baseline?
-- "Various experiments" — which experiments?
-- "Extensive evaluation" — how extensive?
+This is not a referee or prose-quality check. Do not flag wording simply because it sounds generic, promotional, or insufficiently polished. Flag only missing or inconsistent information that would prevent a reader agent from understanding the paper's ground truth, locating artifacts, setting up the environment, or reproducing documented results.
 
-**What makes a summary substantive:**
-- Names the specific problem (not just the field)
-- Describes the specific approach (not just "a new method")
-- States specific results with numbers
-- Explains why this matters with concrete implications
-
-**What makes key results specific:**
-- Each result is a concrete claim (not a restatement of the approach)
-- Numbers are included where the paper provides them
-- The scope is clear (what dataset, what conditions)
+**Reader-agent usability checks:**
+- The paper source designated as ground truth is easy to identify.
+- AGENTS.md explains what the agent can do with concrete paths or commands where needed.
+- README gives enough setup context for a reader to start using the paper agent.
+- Figure/table reproduction instructions cover the figures/tables the publication claims are reproducible.
+- Data requirements are clear: what is included, what must be downloaded, what is too large or access-controlled, and what is optional.
+- Heavy commands are labeled with expected runtime/hardware or marked as manual/heavy.
+- Skills, if present, have descriptions and steps sufficient for an agent to run them.
 
 **Ground truth hierarchy check:**
 - AGENTS.md identity section must explicitly state the paper is the ground truth

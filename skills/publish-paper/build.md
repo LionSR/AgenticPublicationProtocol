@@ -1,61 +1,45 @@
-# Phase 3 — Build
+# Phase 3 — Build Staging
 
-## 3.1 Create the publication repo
+## 3.1 Create or revise `publication-staging/`
 
-Offer the researcher a structured choice:
-
-- **Create on GitHub now** (requires `gh` CLI).
-- **Create locally first** (push to GitHub later).
-
-First check if `gh` is available and authenticated:
+Use the staging plan from [`gather.md`](gather.md). The output of this phase is not a public repo; it is a clean candidate release tree at:
 
 ```bash
-gh auth status
+publication-staging/
 ```
 
-If `gh` is not installed or not authenticated, tell the researcher and offer alternatives:
+For a new publication, create `publication-staging/` from scratch. For a revision, start from the previous public release or the existing `publication-staging/`, whichever is cleaner, then revise it. If replacing an existing staging tree, preserve or summarize anything the researcher may need before removing generated staging files.
 
-- Install: https://cli.github.com
-- Authenticate: `gh auth login`
-- Or skip `gh` and create the repo manually on GitHub later.
-
-**If `gh` is available and the researcher wants GitHub immediately:**
-
-```bash
-gh repo create <repo-name> --public --clone
-cd <repo-name>
-```
-
-**Otherwise**, create locally first:
-
-```bash
-mkdir <repo-name> && cd <repo-name> && git init
-```
-
-The researcher can push to GitHub later in phase 6.
+Do not create a GitHub repository in this phase. Public repo creation happens only in [`release.md`](release.md) after the staging tree has passed validation and paper-agent testing.
 
 ## 3.2 Copy and organize selected files
 
-Show the researcher the list of files you're about to copy and the target structure. Confirm before copying.
+Show the researcher the list of files you're about to copy and the target structure under `publication-staging/`. Confirm before copying.
 
-Create the target directories first, then copy. Example — adapt to what's actually being published:
+Create target directories first, then copy. Example — adapt to what's actually being published:
 
 ```bash
-mkdir -p paper/figures paper/build code/src code/scripts data environment supplementary
-cp ../working-repo/paper/main.tex paper/
-cp ../working-repo/paper/*.bib paper/
-cp ../working-repo/figures/*.pdf paper/figures/
-cp -r ../working-repo/src/ code/src/
-cp ../working-repo/scripts/generate_*.py code/scripts/
-cp ../working-repo/data/results.csv data/
-cp ../working-repo/requirements.txt environment/
+mkdir -p publication-staging/paper/figures \
+         publication-staging/paper/build \
+         publication-staging/code/src \
+         publication-staging/code/scripts \
+         publication-staging/data \
+         publication-staging/environment \
+         publication-staging/supplementary
+cp paper/main.tex publication-staging/paper/
+cp paper/*.bib publication-staging/paper/
+cp figures/*.pdf publication-staging/paper/figures/
+cp -r src/ publication-staging/code/src/
+cp scripts/generate_*.py publication-staging/code/scripts/
+cp data/results.csv publication-staging/data/
+cp requirements.txt publication-staging/environment/
 ```
 
 Use the file list from phase 2 — copy only what the researcher approved. Organize into the directory layout defined in [PROTOCOL.md § Repository layout](../../PROTOCOL.md#repository-layout). Not every directory is required — adapt to what is actually being published. See [`paper-types.md`](paper-types.md) for format-specific minimums.
 
-**Single source of truth.** Each file lives in exactly one place. No duplicates, no ambiguity about which version is current.
+**Single source of truth.** Each public file lives in exactly one place inside `publication-staging/`. No duplicates, no ambiguity about which version is current.
 
-**Update all internal references** — imports, file paths in scripts, `\includegraphics` paths in LaTeX, data paths in notebooks. These will differ from the working repo's paths.
+**Self-contained staging.** A reader agent must be able to enter `publication-staging/` and use it without relying on the private parent repo. Update all internal references — imports, file paths in scripts, `\includegraphics` paths in LaTeX, notebook paths, data paths, and skill instructions — so they are relative to the staging root.
 
 **Handle large files:**
 
@@ -67,37 +51,40 @@ Use the file list from phase 2 — copy only what the researcher approved. Organ
 - Test accessibility: `curl -sIL <url>` (follow redirects), or platform commands (`huggingface-cli download --dry-run`, etc.).
 - Report results to the researcher: "Link X returned 200 OK" or "Link Y returned 404 — is this still the right URL?"
 - Ask the researcher to confirm each link works (some require authentication the agent doesn't have).
-- Record verified/flagged status in `supplementary/checklist.md`.
+- Record verified/flagged status in `publication-staging/supplementary/checklist.md`.
 
-**Create a `.gitignore`** tailored to the repo — build artifacts, generated files, sensitive files, OS files.
+**Create a staging `.gitignore`** tailored to the candidate release tree — build artifacts, generated files, sensitive files, OS files.
 
 **Copy supplementary materials:**
 
-- If research context was extracted in phase 2, copy it into `supplementary/` now.
-- For `supplementary/authors-note.md`: ask the researcher what message they want to leave for readers — what should someone know that isn't in the paper? Draft from their answer and the phase 2 interview, then show them for revision. This is their voice, not the agent's.
-- Copy any approved slides, talks, posters into `supplementary/materials/`.
-- Copy [`template/publication-checklist.md`](../../template/publication-checklist.md) to `supplementary/checklist.md` and adapt it by removing sections that do not apply.
+- If research context was extracted in phase 2, copy the approved output into `publication-staging/supplementary/` now.
+- For `publication-staging/supplementary/authors-note.md`: ask the researcher what message they want to leave for readers — what should someone know that isn't in the paper? Draft from their answer and the phase 2 interview, then show them for revision. This is their voice, not the agent's.
+- Copy any approved slides, talks, posters into `publication-staging/supplementary/materials/`.
+- Copy [`template/publication-checklist.md`](../../template/publication-checklist.md) to `publication-staging/supplementary/checklist.md` and adapt it by removing sections that do not apply.
 
-**Create skills.** If the researcher defined skills in phase 2, create `skills/<name>/SKILL.md` for each, with `name` and `description` in frontmatter and step-by-step instructions in the body.
+**Create skills.** If the researcher defined skills in phase 2, create `publication-staging/skills/<name>/SKILL.md` for each, with `name` and `description` in frontmatter and step-by-step instructions in the body.
 
 Tell the researcher what was copied and how it is organized. Flag anything that needed special handling (large files, updated paths, broken data links).
 
 ### Structure validation
 
-Invoke `/validate-publication --stage structure` — checks file paths, folder structure, sensitive files, data links. Fix any errors (search for `REVIEW: error` markers — `<!-- REVIEW:` in Markdown, `# REVIEW:` in code). Show warnings to the researcher.
+Invoke `/validate-publication --stage structure` with `publication-staging/` as the effective repository root. Review the validation report, fix any errors, and summarize warnings or manual verification items for the researcher.
 
-## 3.3 Verify the code works
+## 3.3 Verify the code works from staging root
 
-Tell the researcher you're testing that everything runs with the new paths.
+Tell the researcher you're testing that everything runs with the new staging-root paths.
+
+Run commands from inside `publication-staging/` unless a tool truly requires a parent-repo command.
 
 - **Paper compilation.** Run the build command and check it succeeds (if the format compiles).
 - **Figure generation.** Run each figure script and verify it produces output.
-- **Tests.** If the repo has tests, run them.
+- **Tests.** If the staging tree has tests, run them.
 - **Notebooks.** Execute in order and check for errors.
-- **Imports.** Verify import paths resolve with the new structure.
+- **Imports.** Verify import paths resolve with the staged structure.
+- **Parent dependency check.** Search for references to parent-repo paths such as `../`, absolute private paths, or unpublished directories. Fix or document any legitimate exception.
 
 Fix anything that broke from the copy/reorganization. Report to the researcher: what passed, what needed fixing, what you changed.
 
 ## Handoff
 
-Summarise what the publication repo now contains. Next: [`draft.md`](draft.md).
+Summarise what `publication-staging/` now contains. Next: [`draft.md`](draft.md).

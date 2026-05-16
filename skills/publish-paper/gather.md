@@ -1,15 +1,20 @@
-# Phases 1–2 — Understand and Discuss
+# Phases 1-2 — Understand and Discuss
+
+These phases are mode-neutral. Gather the same publication facts whether the final outcome will be a real public release or a developer-sandbox test result. Do not create compliance records or public-release meaning here.
 
 ## Phase 1 — Understand
 
-### 1.1 Check for previous versions
+### 1.1 Check for previous versions or staging
 
-First, check the **working repo** for a `.publications.md` file — `release.md` creates this after each release and tracks all publication repos from this working repo.
+First, check the **working repo** for existing publication state:
+
+- `.publications.md` — `release.md` creates this after real public releases and tracks public publication repos from this working repo.
+- `publication-staging/` — a clean candidate release tree from an in-progress or previous prepare/validate run.
 
 **If `.publications.md` exists:**
 
-- Read it to find the previous publication repo URL, version, and date.
-- Clone or locate that publication repo.
+- Read it to find the previous public publication repo URL, version, date, and recorded commit/tree hash if present.
+- Clone or locate that public publication repo.
 - Read its `AGENTS.md`, `README.md`, `supplementary/`, and `skills/` thoroughly.
 - Most content already exists and just needs updating.
 - The researcher's interview (phase 2) should focus on **what changed** — "What's new or different in this version?"
@@ -17,7 +22,14 @@ First, check the **working repo** for a `.publications.md` file — `release.md`
 - In phase 4, start from the previous `AGENTS.md` and modify it, rather than drafting from scratch.
 - When creating the new version, update the `version` field in `AGENTS.md` frontmatter and tag a new release (e.g. `v2.0.0`).
 
-**If `.publications.md` does not exist**, ask the researcher: "Is this the first version, or is there a previous publication repo?" If a previous version exists, get the repo URL and follow the same process.
+**If `publication-staging/` exists:**
+
+- Inspect it as a candidate release tree, not as the final public publication.
+- Check whether it already has `AGENTS.md`, `README.md`, `supplementary/checklist.md`, and organized paper/code/data files.
+- Ask whether to revise the existing staging tree or create a fresh one. If the answer is unclear, prefer revising the existing tree when it looks coherent and creating a fresh one when it looks partial, stale, or contaminated by private files.
+- Treat all validation and path assumptions as relative to `publication-staging/`.
+
+**If neither `.publications.md` nor a reliable `publication-staging/` exists**, ask the researcher: "Is this the first version, or is there a previous public publication repo?" If a previous version exists, get the repo URL and follow the same process.
 
 This saves significant time and avoids losing good content that was already reviewed and approved.
 
@@ -64,10 +76,10 @@ Ask **1–3 questions per round**, wait for answers, then move to the next round
 - "What's the main experiment and how do you run it?"
 - If anything looked fragile or slow, ask about it specifically.
 
-**Round 3 — What to publish.**
+**Round 3 — What to stage for publication.**
 
 - Present the file list with a structured choice for each: include / exclude / ask me later.
-- "What should the publication repo be called?"
+- "What should the eventual public publication repo be called?" This name is used as release metadata later; phase 3 still builds `publication-staging/`.
 
 **Round 4 — The reader's perspective.**
 
@@ -98,7 +110,7 @@ Ask the researcher if they want to include research context from their conversat
 
 This context is valuable for writing `AGENTS.md` in phase 4, because the agent can answer "why did you do X?" from real reasoning rather than guessing.
 
-If extracting from sessions, run `/extract-context` in the **working repo** (that's where the sessions are). The output will be copied into the publication repo later in phase 3. `/extract-context` runs its own confidentiality screening; phase 4 checks again when incorporating context into `AGENTS.md`.
+If extracting from sessions, run `/extract-context` in the **working repo** (that's where the sessions are). The approved output will be copied into `publication-staging/` later in phase 3. `/extract-context` runs its own confidentiality screening; phase 4 checks again when incorporating context into `AGENTS.md`.
 
 ## Handoff
 
