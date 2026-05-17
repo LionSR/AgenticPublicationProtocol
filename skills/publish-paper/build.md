@@ -88,15 +88,21 @@ The spec requires a `LICENSE` file at the repo root with no extension. Ask the r
 Fetch the canonical text rather than paraphrasing. Fetch into a temporary file first, show it to the researcher, and only move it into place as `LICENSE` after explicit confirmation. Try GitHub's licenses API first; fall back to choosealicense.com raw for licenses the API does not carry, notably CC licenses:
 
 ```bash
+rm -f LICENSE.tmp LICENSE.api.json
+
 # Primary: GitHub licenses API
-curl -fsSL https://api.github.com/licenses/<spdx> | jq -r '.body' > LICENSE.tmp
+if curl -fsSL https://api.github.com/licenses/<spdx> -o LICENSE.api.json; then
+  jq -r '.body // empty' LICENSE.api.json > LICENSE.tmp
+fi
 
 # Fallback (CC-BY-4.0, CC-BY-SA-4.0, etc.): strip the YAML frontmatter after the second "---"
-curl -fsSL https://raw.githubusercontent.com/github/choosealicense.com/gh-pages/_licenses/<spdx>.txt \
-  | awk 'f;/^---$/{c++;if(c==2)f=1}' > LICENSE.tmp
+if [ ! -s LICENSE.tmp ]; then
+  curl -fsSL https://raw.githubusercontent.com/github/choosealicense.com/gh-pages/_licenses/<spdx>.txt \
+    | awk 'f;/^---$/{c++;if(c==2)f=1}' > LICENSE.tmp
+fi
 
 # Sanity-check the fetch succeeded before showing the researcher
-[ -s LICENSE.tmp ] || { echo "LICENSE fetch failed"; exit 1; }
+[ -s LICENSE.tmp ] || { echo "LICENSE fetch failed"; rm -f LICENSE.api.json; exit 1; }
 ```
 
 SPDX identifiers for the menu: `mit`, `apache-2.0`, `cc-by-4.0`, `bsd-3-clause`.
@@ -107,6 +113,7 @@ Show the populated `LICENSE.tmp` to the researcher. Only after explicit confirma
 
 ```bash
 mv LICENSE.tmp publication-staging/LICENSE
+rm -f LICENSE.api.json
 ```
 
 **Multi-component licensing.** Ask whether paper, code, and data are all under the same license. If not, for example paper under CC-BY-4.0 and code under MIT, the single `LICENSE` file must explicitly call this out per the spec. The skill does not auto-assemble multi-section LICENSE files — prompt the researcher to author the full text themselves and write it verbatim.

@@ -226,7 +226,8 @@ For a **first release** (`<tag>`, typically `v1.0.0`), summarize the publication
 For a **subsequent release**, base the notes on what actually changed:
 
 - Read `.publications.md` in the working repo to find the previous publication's repo URL and tag.
-- The previous tag lives in a different repo (the previous publication repo), not in this new one. If you cloned the previous publication earlier in phase 1 you can diff against it directly (`cd <prev-publication-clone> && git log <prev-tag>..main --oneline`, inspect changed files). Otherwise, shallow-clone it for comparison (`git clone --depth=50 <prev-repo-url> /tmp/prev-pub && git -C /tmp/prev-pub log <prev-tag>..main --oneline`) or skip the diff and rely on the researcher's summary. Do NOT run `git log <prev-tag>..HEAD` in the new publication repo — that tag does not exist here.
+- If this is an update to the same public publication repo, compare the previous tag to the new committed tree from inside that public repo working copy: `git log <prev-tag>..HEAD --oneline`, then inspect the changed files.
+- If this release is being made in a new public repo while `.publications.md` points to an older publication repo, shallow-clone the old repo for historical context (`git clone --depth=50 <prev-repo-url> /tmp/prev-pub`) and inspect its previous tag. Do not run `git log <prev-tag>..HEAD` in a repo that does not contain `<prev-tag>`.
 - Ask the researcher, in their own words: "What changed in this version that a reader should know about?" Cover: results that were added/revised, figures that were redrawn, code that was refactored in ways readers will notice, data updates.
 
 Draft the notes and show them to the researcher for revision. Do not auto-generate boilerplate like "Bug fixes and improvements." After approval, write them to a file path that includes the actual tag so the later `gh release create` command can read them:
