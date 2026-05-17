@@ -1,11 +1,11 @@
 ---
 name: load-arxiv-paper
-description: Load a paper directly from arXiv by ID or URL. Fetches the PDF, extracts metadata, and sets up a local paper directory. Optionally searches for associated code repos, author blog posts, and OpenReview rebuttals when the user explicitly asks.
+description: Load a paper directly from arXiv by ID or URL. Fetches metadata, prefers arXiv LaTeX/source when available, and falls back to PDF only when source is unavailable. Optionally searches for associated code repos, author blog posts, and OpenReview rebuttals when the user explicitly asks.
 ---
 
 # Load Paper from arXiv
 
-Load an arXiv paper into your project by its ID or URL. Fetches the PDF and metadata directly from arXiv, sets up a local directory, and generates a starter AGENTS.md — useful for bootstrapping a publication or pulling in a paper for reference.
+Load an arXiv paper into your project by its ID or URL. Fetch metadata directly from arXiv, load the arXiv source package when available, fall back to PDF only when source is unavailable or unusable, and generate a starter AGENTS.md. This is useful for bootstrapping a publication or pulling in a paper for reference.
 
 ## Triggering
 
@@ -26,14 +26,14 @@ Accept any of these formats and extract the arXiv ID:
 
 Normalize to the bare ID (e.g. `2301.07041`). If a version suffix is given (e.g. `v2`), preserve it.
 
-### 2. Fetch metadata and download PDF (in parallel)
+### 2. Fetch metadata and source first
 
-Run both requests concurrently — they are independent:
+Run metadata and source requests concurrently. Do not download the PDF in the default path:
 
 ```bash
-mkdir -p papers/arxiv-ARXIV_ID
+mkdir -p papers/arxiv-ARXIV_ID/paper
 curl -s "https://export.arxiv.org/api/query?id_list=ARXIV_ID" -o /tmp/arxiv_response.xml &
-curl -L "https://arxiv.org/pdf/ARXIV_ID" -o papers/arxiv-ARXIV_ID/paper.pdf &
+curl -L "https://arxiv.org/e-print/ARXIV_ID" -o /tmp/arxiv-ARXIV_ID-source &
 wait
 ```
 
@@ -47,7 +47,20 @@ wait
 
 If the API returns no results or an error, inform the user and ask them to verify the ID.
 
-**For the PDF**, verify the download succeeded (file exists and is >0 bytes). If it failed, retry once, then report the error.
+Inspect `/tmp/arxiv-ARXIV_ID-source`:
+
+- Extract tar archives into `papers/arxiv-ARXIV_ID/paper/`.
+- Decompress a gzip-compressed single TeX file to `papers/arxiv-ARXIV_ID/paper/main.tex`.
+- Copy an already-plain TeX file to `papers/arxiv-ARXIV_ID/paper/main.tex`.
+- Verify that `papers/arxiv-ARXIV_ID/paper/` contains at least one `*.tex` file. If several candidates exist, identify the likely main file by looking for `\documentclass`; if ambiguous, note that in `AGENTS.md`.
+
+If source is unavailable or unusable, then download the PDF:
+
+```bash
+curl -L "https://arxiv.org/pdf/ARXIV_ID" -o papers/arxiv-ARXIV_ID/paper/paper.pdf
+```
+
+Verify `paper/paper.pdf` exists and is >0 bytes, retry once if needed, and report that this import used the PDF fallback. Do not create `paper.pdf` when usable source was loaded.
 
 ### 3. Generate a starter AGENTS.md
 
@@ -55,10 +68,15 @@ Create `papers/arxiv-ARXIV_ID/AGENTS.md` following the structure defined in [PRO
 
 This creates an APP-structured local import, not a verified APP publication. It has no public tagged release, no validation manifest, and no `app_publication_id`.
 
+Set `paper_format` according to the imported artifact:
+
+- `latex` when the arXiv source package produced TeX files.
+- `pdf` only when source import failed and the workflow fell back to PDF.
+
 Since this is an import (not an author publication), fill in what the metadata provides and mark the rest as placeholders:
 - **Paper Summary**: Use the arXiv abstract (note it's not an author-written agent summary)
 - **Key Results**: Leave as placeholder — the abstract doesn't enumerate contributions clearly enough
-- **Repository Structure**: List `paper.pdf` as the ground truth document
+- **Repository Structure**: List `paper/` and the likely main TeX file as the ground truth document when source was loaded. List `paper/paper.pdf` only for PDF fallback imports.
 - **Citation**: Generate a BibTeX entry from the metadata
 - Other required sections: populate with sensible defaults per the protocol
 
@@ -69,7 +87,8 @@ Present:
 - Abstract (first 3-4 sentences)
 - arXiv categories
 - Where files were saved
-- That this is a PDF-only import — no code, no structured repo. If they want full APP capabilities, they'll need to either find or create a publication repo.
+- Whether LaTeX source was loaded or the workflow had to fall back to PDF
+- That this is an arXiv import — no code or structured publication repo is included unless associated resources are found separately. If they want full APP capabilities, they'll need to find or create a publication repo.
 
 ### 5. Find associated resources (ONLY when explicitly asked)
 
@@ -83,7 +102,7 @@ Use a tiered approach — run the first tier in parallel, fall back only if need
 
 **Tier 1 (run in parallel):**
 1. **Papers with Code**: Fetch `https://paperswithcode.com/api/v1/papers/?arxiv_id=ARXIV_ID` — most reliable aggregated source
-2. **Links in the PDF**: Read the already-downloaded `papers/arxiv-ARXIV_ID/paper.pdf` and look for GitHub/GitLab URLs — catches repos not yet indexed
+2. **Links in the imported paper**: Search the downloaded LaTeX source under `papers/arxiv-ARXIV_ID/paper/` for GitHub/GitLab URLs. If this import fell back to PDF, read `papers/arxiv-ARXIV_ID/paper/paper.pdf` instead — catches repos not yet indexed
 
 **Tier 2 (only if Tier 1 finds nothing, run in parallel):**
 3. **GitHub search**: Search GitHub for the arXiv ID (`site:github.com ARXIV_ID`)
