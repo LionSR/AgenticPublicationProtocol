@@ -71,7 +71,7 @@ These apply across every phase. Keep them in mind as you read each phase file.
 
 - **Purpose.** Create or revise `publication-staging/`. Copy and organize approved files. Run structure validation. Verify the code runs with staging-root paths.
 - **Assumes.** Staging plan from `gather.md`.
-- **Produces.** A self-contained `publication-staging/` tree with files in the layout defined by [`PROTOCOL.md` § Repository layout](../../PROTOCOL.md#repository-layout); `.gitignore` in place; approved supplementary materials copied; `code/figure-reproduction/` created for generated figures/tables when applicable; code verified to run from staging root. Keep the phase checklist in chat/internal notes, not inside `publication-staging/`.
+- **Produces.** A self-contained `publication-staging/` tree with files in the layout defined by [`PROTOCOL.md` § Repository layout](../../PROTOCOL.md#repository-layout); `.gitignore` in place; `LICENSE` written; `data/README.md` populated whenever the publication uses any dataset, local or external; approved supplementary materials copied; `code/figure-reproduction/` created for generated figures/tables when applicable; code verified to run from staging root. Keep the phase checklist in chat/internal notes, not inside `publication-staging/`.
 - **Sub-skills called.** `/validate-publication --stage structure`.
 - **Interaction load.** Light — confirmation on the file list before copying, then mostly automated.
 

@@ -90,7 +90,9 @@ Determine the mode before doing anything irreversible.
 
 Before doing anything in this step, present a concrete summary. The confirmation must be specific, not a generic "should I proceed?"
 
-Fill in the actual values and show:
+Before showing the summary, choose the intended `<tag>` with the researcher (e.g. `v1.0.0` for a first release, `v2.0.0` for a subsequent one). Reuse that exact tag throughout phase 6.
+
+Fill in the actual values, including `<tag>` and the matching AGENTS.md `version`, and show:
 
 ```text
 PUBLICATION SUMMARY — please review before I publish:
@@ -98,8 +100,8 @@ PUBLICATION SUMMARY — please review before I publish:
   Source tree:   publication-staging/
   Repo name:     <repo-name>
   Visibility:    PUBLIC — anyone on the internet can see this
-  Version:       v1.0.0
-  Tag:           v1.0.0
+  Version:       <version>  (e.g. 1.0.0 for a first release)
+  Tag:           <tag>      (e.g. v1.0.0; reused throughout phase 6)
 
   Files included (<N> files):
     paper/          — <paper source format>, figures, bibliography
@@ -133,9 +135,9 @@ PUBLICATION SUMMARY — please review before I publish:
     2. Commit all files to the public publication repo
     3. Compute commit/tree/report hashes
     4. Create APP_PUBLICATION.json with app_publication_id
-    5. Tag as v1.0.0
+    5. Tag as <tag>
     6. Push to GitHub as a PUBLIC repository
-    7. Create a GitHub release (v1.0.0) with APP_PUBLICATION.json attached
+    7. Create a GitHub release (<tag>) with release notes and APP_PUBLICATION.json attached
     8. Record this release in the working repo (.publications.md) with URL, tag, commit/tree hash, and app_publication_id
 ```
 
@@ -155,7 +157,7 @@ git add -A
 git commit -m "Initial APP publication"
 ```
 
-For a revision, update the existing public repo working copy from `publication-staging/`, commit, and tag the new version.
+For a revision, update the existing public repo working copy from `publication-staging/`, commit, and tag the new version after APP_PUBLICATION.json is generated.
 
 After committing locally, compute the immutable release facts:
 
@@ -174,7 +176,7 @@ Create a release manifest payload that excludes `app_publication_id`, using the 
   "manifest_version": "1",
   "publication_type": "app-publication",
   "repo_url": "https://github.com/owner/repo",
-  "tag": "v1.0.0",
+  "tag": "<tag>",
   "commit": "<COMMIT_SHA>",
   "tree": "<TREE_SHA>",
   "validation": {
@@ -208,14 +210,33 @@ The final `APP_PUBLICATION.json` should follow the manifest schema in [`PROTOCOL
 Now create the annotated tag. Include the APP publication ID in the tag message:
 
 ```bash
-git tag -a v1.0.0 -m "APP publication v1.0.0
+git tag -a <tag> -m "APP publication <tag>
 
 app_publication_id: ${APP_ID}
 commit: ${COMMIT_SHA}
 tree: ${TREE_SHA}"
 ```
 
-Tell the researcher: "Everything is committed and tagged locally in the public publication repo, and APP_PUBLICATION.json has been generated. Nothing has been pushed yet."
+Tell the researcher: "Everything is committed and tagged as `<tag>` locally in the public publication repo, and APP_PUBLICATION.json has been generated. Nothing has been pushed yet."
+
+Draft GitHub release notes before creating the release. Release notes are where edit/version history lives, and the only place readers see what changed between versions.
+
+For a **first release** (`<tag>`, typically `v1.0.0`), summarize the publication itself: paper title, authors, a one-line statement of what the agent can do, and links (arXiv/DOI/PDF) if available.
+
+For a **subsequent release**, base the notes on what actually changed:
+
+- Read `.publications.md` in the working repo to find the previous publication's repo URL and tag.
+- If this is an update to the same public publication repo, compare the previous tag to the new committed tree from inside that public repo working copy: `git log <prev-tag>..HEAD --oneline`, then inspect the changed files.
+- If this release is being made in a new public repo while `.publications.md` points to an older publication repo, shallow-clone the old repo for historical context (`git clone --depth=50 <prev-repo-url> /tmp/prev-pub`) and inspect its previous tag. Do not run `git log <prev-tag>..HEAD` in a repo that does not contain `<prev-tag>`.
+- Ask the researcher, in their own words: "What changed in this version that a reader should know about?" Cover: results that were added/revised, figures that were redrawn, code that was refactored in ways readers will notice, data updates.
+
+Draft the notes and show them to the researcher for revision. Do not auto-generate boilerplate like "Bug fixes and improvements." After approval, write them to a file path that includes the actual tag so the later `gh release create` command can read them:
+
+```bash
+cat > /tmp/release-notes-<tag>.md <<'NOTES'
+<the drafted notes>
+NOTES
+```
 
 #### 6A.2 Remote publication
 
@@ -228,14 +249,12 @@ gh repo create <repo-name> --public --source . --remote origin --push
 git push origin --tags
 ```
 
-Then ask: "Repo is live. Shall I also create a GitHub release tagged v1.0.0 and attach APP_PUBLICATION.json?"
+Then ask: "Repo is live. Shall I also create a GitHub release tagged <tag> and attach APP_PUBLICATION.json?" (where `<tag>` is the tag applied above, e.g. `v1.0.0` for the first release or `v2.0.0` for a subsequent one).
 
 ```bash
-gh release create v1.0.0 \
-  --title "v1.0.0" \
-  --notes "APP paper-agent publication
-
-app_publication_id: ${APP_ID}" \
+gh release create <tag> \
+  --title "<tag>" \
+  --notes-file /tmp/release-notes-<tag>.md \
   APP_PUBLICATION.json
 ```
 
@@ -245,26 +264,26 @@ If the repo is already on GitHub, ask: "Ready to push to GitHub? This makes ever
 git push origin main --tags
 ```
 
-Then ask: "Push complete. Shall I also create a GitHub release tagged v1.0.0 and attach APP_PUBLICATION.json?"
+Then ask: "Push complete. Shall I also create a GitHub release tagged <tag> and attach APP_PUBLICATION.json?"
 
 ```bash
-gh release create v1.0.0 \
-  --title "v1.0.0" \
-  --notes "APP paper-agent publication
-
-app_publication_id: ${APP_ID}" \
+gh release create <tag> \
+  --title "<tag>" \
+  --notes-file /tmp/release-notes-<tag>.md \
   APP_PUBLICATION.json
 ```
 
 If `gh` is not available, tell the researcher what to run manually:
 
 - Push: `git remote add origin <url> && git push -u origin main --tags`
-- Create the release on GitHub's web UI: Releases -> Create a new release -> tag `v1.0.0`; attach `APP_PUBLICATION.json` as a release asset.
+- Create the release on GitHub's web UI: Releases → Create a new release → tag `<tag>` (the value chosen above; e.g. `v1.0.0`).
+- Paste the release notes from `/tmp/release-notes-<tag>.md` into the release description field so the drafted notes aren't lost.
+- Attach `APP_PUBLICATION.json` as a release asset.
 
 After the release exists, verify the release asset is downloadable and matches the local manifest:
 
 ```bash
-gh release download v1.0.0 --pattern APP_PUBLICATION.json --dir /tmp/app-verify
+gh release download <tag> --pattern APP_PUBLICATION.json --dir /tmp/app-verify
 diff APP_PUBLICATION.json /tmp/app-verify/APP_PUBLICATION.json
 ```
 
@@ -292,13 +311,13 @@ Repos created from this working repo via the Agentic Publication Protocol.
 
 | Repo | Version | Date | Commit/Tree | APP ID | Notes |
 |------|---------|------|-------------|--------|-------|
-| [<repo-name>](<repo-url>) | v1.0.0 | YYYY-MM-DD | `<commit>` / `<tree>` | `app-v1:sha256:<hash>` | Initial publication |
+| [<repo-name>](<repo-url>) | <tag> | YYYY-MM-DD | `<commit>` / `<tree>` | `app-v1:sha256:<hash>` | Initial publication |
 ```
 
 If `.publications.md` already exists, append a new row:
 
 ```markdown
-| [<repo-name>](<repo-url>) | v2.0.0 | YYYY-MM-DD | `<commit>` / `<tree>` | `app-v1:sha256:<hash>` | Updated results, new figures |
+| [<repo-name>](<repo-url>) | <tag> | YYYY-MM-DD | `<commit>` / `<tree>` | `app-v1:sha256:<hash>` | Updated results, new figures |
 ```
 
 Commit in the working repo:
@@ -306,7 +325,7 @@ Commit in the working repo:
 ```bash
 cd <working-repo>
 git add .publications.md
-git commit -m "Record APP publication: <repo-name> v1.0.0"
+git commit -m "Record APP publication: <repo-name> <tag>"
 ```
 
 Report to the researcher: the publication URL, the tag, the release page, the commit/tree hash, and the `app_publication_id`.

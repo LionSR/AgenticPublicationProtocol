@@ -39,6 +39,7 @@ Read the publication repo or staging tree to understand what's being validated:
 - `README.md`
 - `supplementary/` — know-how, authors-note, sessions, materials
 - `skills/` — any author-published skills
+- `data/README.md` — dataset provenance, access, and download instructions when the publication uses any dataset, local or external
 - `supplementary/validation-report.md` — prior validation report, if this is a final/revalidation pass
 - `APP_PUBLICATION.json` release asset — only when auditing a public tagged release, not when validating `publication-staging/`
 
@@ -69,6 +70,8 @@ Only run at stages: `agents-md`, `full`.
 - Check that commands in the figure/table reproduction sections are syntactically valid.
 - For papers with generated figures/tables, verify `code/figure-reproduction/README.md` exists, is referenced from `AGENTS.md`, and is compatible with README.
 - Verify every paper figure/table is listed in `code/figure-reproduction/README.md`; every listed script exists; every `reproduced` item has run evidence or a generated output path; every blocked/manual item has a concrete reason.
+- Verify `data/README.md` exists whenever the publication uses any dataset; verify every dataset documented there resolves, with local files present or external links reachable via `curl -sIL`.
+- Check that each figure/table reproduction entry maps to a distinct script when feasible; flag duplicate scripts as warnings unless the researcher explicitly documents why one script produces multiple figures or tables.
 - When validating `publication-staging/`, verify commands and paths work with staging as the current working directory, and flag references to private parent-repo files.
 - Test external data links with `curl -sIL <url>` when appropriate; flag non-2xx responses or mark authentication-limited links as needing manual verification.
 - Check that `supplementary/` references point to real files.
@@ -102,6 +105,7 @@ Cross-check information across files:
 - Computational requirements vs actual code — for example, do not claim "runs on any laptop" if the code requires CUDA.
 - Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.
 - Required APP files exist for the current validation stage.
+- `data/README.md` exists whenever the publication uses any dataset, local or external.
 - Setup, data access, and reproduction instructions are complete enough for a reader agent to know what can be run, what data is required, and what requires manual/human steps.
 
 This is a completeness/usability check, not a prose-quality review. Do not flag wording only because it sounds generic; flag missing information only when it blocks APP use.
