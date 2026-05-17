@@ -90,7 +90,9 @@ Determine the mode before doing anything irreversible.
 
 Before doing anything in this step, present a concrete summary. The confirmation must be specific, not a generic "should I proceed?"
 
-Fill in the actual values and show:
+Before showing the summary, choose the intended `<tag>` with the researcher (e.g. `v1.0.0` for a first release, `v2.0.0` for a subsequent one). Reuse that exact tag throughout phase 6.
+
+Fill in the actual values, including `<tag>` and the matching AGENTS.md `version`, and show:
 
 ```text
 PUBLICATION SUMMARY — please review before I publish:
@@ -146,8 +148,6 @@ Do not proceed without unambiguous confirmation.
 #### 6A.1 Create or update the public repo from staging
 
 Create a separate public publication repo or working directory whose contents equal the validated `publication-staging/` tree. Use a structured copy tool that preserves file contents and excludes parent-repo-only metadata. For example:
-
-After confirmation, pick `<tag>` now (e.g. `v1.0.0` for a first release, `v2.0.0` for a subsequent one) and reuse it everywhere below.
 
 ```bash
 rsync -a --delete publication-staging/ ../<repo-name>/
