@@ -1,11 +1,11 @@
 ---
 name: load-arxiv-paper
-description: Load a paper directly from arXiv by ID or URL. Fetches metadata, prefers arXiv source when available, falls back to PDF only when needed, and downloads associated public GitHub code when found. Author blog posts and OpenReview material remain optional extra searches.
+description: Load a paper directly from arXiv by ID or URL. Fetches metadata, prefers arXiv source when available, falls back to PDF only when needed, searches for associated public/open-source code by default, and downloads credible public GitHub code when found. Author blog posts and OpenReview material remain optional extra searches.
 ---
 
 # Load Paper from arXiv
 
-Load an arXiv paper into your project by its ID or URL. Fetch metadata directly from arXiv, load the arXiv source package when available, fall back to PDF only when source is unavailable or unusable, download associated public GitHub code when found, and generate a protocol-shaped local import. This is useful for bootstrapping a publication or pulling in a paper for reference.
+Load an arXiv paper into your project by its ID or URL. Fetch metadata directly from arXiv, load the arXiv source package when available, fall back to PDF only when source is unavailable or unusable, search for associated public/open-source code by default, download credible public GitHub code when found, and generate a protocol-shaped local import. This is useful for bootstrapping a publication or pulling in a paper for reference.
 
 ## Triggering
 
@@ -62,9 +62,9 @@ curl -L "https://arxiv.org/pdf/ARXIV_ID" -o papers/arxiv-ARXIV_ID/paper/paper.pd
 
 Verify `paper/paper.pdf` exists and is >0 bytes, retry once if needed, and report that this import used the PDF fallback. Do not create `paper.pdf` when usable source was loaded.
 
-### 3. Find and download associated code
+### 3. Find and download associated public code
 
-Code discovery is part of the default arXiv-loading workflow. Do not wait for a separate user request before checking for code.
+Code discovery is part of the default arXiv-loading workflow. Do not wait for a separate user request before checking for code. Treat "load this arXiv paper" as also meaning "look for the paper's associated public/open-source implementation".
 
 Create:
 
@@ -75,20 +75,20 @@ mkdir -p papers/arxiv-ARXIV_ID/supplementary
 
 Run the first two checks in parallel:
 
-1. Search the imported paper source for GitHub URLs. If this import fell back to PDF, search the PDF text instead.
+1. Search the imported paper source for public code URLs. If this import fell back to PDF, search the PDF text instead. Include GitHub, GitLab, Bitbucket, Codeberg, Hugging Face, project pages, and URLs near words such as "code", "implementation", "software", "repository", "artifact", and "reproduce".
 2. Fetch `https://paperswithcode.com/api/v1/papers/?arxiv_id=ARXIV_ID`.
 
-If neither gives a credible repository, search GitHub for the arXiv ID and exact title. You may also fetch `https://api.semanticscholar.org/graph/v1/paper/ArXiv:ARXIV_ID?fields=externalIds`.
+If neither gives a credible repository, search GitHub for the arXiv ID, exact title, and first author plus title keywords. Also search the web for the exact title plus `code`, `github`, `gitlab`, `implementation`, and `artifact`. You may also fetch `https://api.semanticscholar.org/graph/v1/paper/ArXiv:ARXIV_ID?fields=externalIds`.
 
 For each candidate repository:
 
-- Prefer repositories explicitly named in the paper source, PDF, or arXiv metadata.
+- Prefer repositories explicitly named in the paper source, PDF, arXiv metadata, project page, or Papers with Code record.
 - Resolve GitHub redirects and renamed repositories.
 - Check whether the repository is public and reachable.
 - Record the evidence linking it to the paper.
 - Record the canonical URL, clone URL, default branch, commit SHA, pushed date, approximate size, language summary, license field, and whether `AGENTS.md` exists.
 
-Download credible public GitHub repositories only. If GitHub reports a repository as larger than 100 MB, record it but do not download it. If a credible non-GitHub repository is found, record it but do not download it in this default workflow.
+Download credible public GitHub repositories only. If GitHub reports a repository as larger than 100 MB, record it but do not download it. If a credible non-GitHub public repository or project page is found, record it but do not download it in this default workflow unless there is an obvious small archive download with stable provenance.
 
 ```bash
 curl -L "https://api.github.com/repos/OWNER/REPO/tarball/COMMIT_SHA" \
@@ -115,11 +115,11 @@ The provenance file must list:
 
 - repositories found and evidence linking each to the paper;
 - canonical URL, commit SHA, archive path, and extracted path when downloaded;
-- repositories skipped because they are non-GitHub, too large, private, or unreachable;
+- repositories skipped because they are non-GitHub, too large, private, unreachable, or not clearly linked to the paper;
 - download or extraction failures;
 - whether each downloaded repository appears agent-readable, APP-structured, or neither.
 
-Do not classify a downloaded code repository as a verified APP publication unless a matching public tagged release manifest is actually verified. A normal GitHub repository with paper code is only associated code.
+Do not classify a downloaded code repository as a verified APP publication unless a matching public tagged release manifest is actually verified. A normal public repository with paper code is only associated code. If no license is discoverable, call it "publicly visible code" rather than "open-source code".
 
 ### 4. Generate a protocol-shaped local import
 
@@ -173,8 +173,8 @@ Present:
 - arXiv categories
 - Where files were saved
 - Whether LaTeX source was loaded or the workflow had to fall back to PDF
-- Associated public code repositories found, downloaded, and extracted, including local paths and commit SHAs.
-- Any code repositories searched for but not found, not reachable, too large, or not downloaded.
+- Associated public/open-source code repositories found, downloaded, and extracted, including local paths and commit SHAs.
+- Any code repositories searched for but not found, not clearly linked, not reachable, too large, or not downloaded.
 - That this is a local arXiv import, not an author-approved or verified APP publication. Downloaded code improves the local import, but it does not by itself create APP verification.
 
 ### 6. Find non-code associated resources (ONLY when explicitly asked)

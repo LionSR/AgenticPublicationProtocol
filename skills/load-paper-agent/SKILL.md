@@ -44,7 +44,7 @@ git clone --branch v1.0.0 <url> papers/<repo-name>
 
 If the user does not specify a version and the default branch is not exactly at a release tag, the repo can still be explored, but it cannot be verified as an APP publication from that checkout. For APP verification, prefer checking out an explicit release tag. If GitHub release metadata is available, identify the latest release tag and offer to check it out before verification.
 
-If the user gives an arXiv ID instead of a GitHub URL, prefer using the `/load-arxiv-paper` skill — it fetches arXiv metadata and source/PDF, searches for associated public GitHub code, and downloads that code when found. If that skill is not available, fall back to searching for the corresponding repo (check the paper's PDF for a GitHub link, or search GitHub for the arXiv ID).
+If the user gives an arXiv ID instead of a GitHub URL, prefer using the `/load-arxiv-paper` skill — it fetches arXiv metadata and source/PDF, searches for associated public/open-source code by default, and downloads credible public GitHub code when found. If that skill is not available, fall back to searching for the corresponding repo (check the paper's PDF for public code links, then search GitHub and the web for the arXiv ID, title, and first author plus `code` or `implementation`).
 
 If the clone fails (private repo, wrong URL), inform the user and ask for the correct URL or access.
 
