@@ -23,7 +23,7 @@ The goal of APP is to transform the format of academic publication. Rather than 
 - **Versioned Publication.**  
   A published APP **MUST** correspond to a tagged GitHub release, which defines an immutable snapshot of the work. The main branch **MAY** continue to evolve, but agents and users **SHOULD** default to interacting with a specific release to ensure consistency and reproducibility.
 
-- **Agent Skills** (optional but recommended).  
+- **Agent Skills** (optional but recommended).
   Authors **SHOULD** provide reusable “skills” defined according to the Agent Skills Protocol (https://agentskills.io). These skills encapsulate procedures, workflows, or domain-specific expertise that go beyond what is explicitly described in the manuscript. While not mandatory, providing skills is strongly recommended, as they enable the agent to perform meaningful tasks such as reproducing experiments, analyzing outputs, and adapting explanations to different audiences.
 
 
