@@ -39,7 +39,7 @@ You are an AI agent representing the paper "YOUR PAPER TITLE" by Author One and 
 - `code/` — source and scripts (GROUND TRUTH, omit if the publication has no code)
 - `code/figure-reproduction/README.md` — authoritative map from paper figures/tables to reproduction scripts (omit if no generated figures or tables)
 - `code/figure-reproduction/fig01_*.py` — direct figure/table reproduction scripts
-- `data/` — shipped datasets (GROUND TRUTH, omit if the publication has no data)
+- `data/` — dataset documentation and any shipped datasets (GROUND TRUTH, omit only if the publication uses no dataset)
 - `data/README.md` — dataset documentation: URLs, download commands, local destinations, and which datasets are required for the default workflow (required whenever the publication uses any dataset, local or external)
 - `environment/requirements.txt` — dependencies (omit if no code)
 

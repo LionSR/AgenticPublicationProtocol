@@ -37,7 +37,7 @@ cp data/results.csv publication-staging/data/
 cp requirements.txt publication-staging/environment/
 ```
 
-Do not create an empty `LICENSE` placeholder at this point — wait until step 3.2a writes the real text.
+Do not create an empty `LICENSE` placeholder at this point — wait until step 3.3 writes the real text.
 If the publication uses any dataset, local or external, `publication-staging/data/README.md` must also exist — authored below with the researcher.
 
 Use the file list from phase 2 — copy only what the researcher approved. Organize into the directory layout defined in [PROTOCOL.md § Repository layout](../../PROTOCOL.md#repository-layout). Not every directory is required — adapt to what is actually being published. See [`paper-types.md`](paper-types.md) for format-specific minimums.

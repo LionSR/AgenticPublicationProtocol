@@ -109,8 +109,6 @@ Four files ship in `template/` at the repo root. Phase files copy or adapt them 
 | [`template/README.md`](../../template/README.md) | `draft.md` (phase 4 paper-agent docs) | `publication-staging/README.md`, populated from phases 1-2 and the finalized `AGENTS.md`. |
 | [`template/publications.md`](../../template/publications.md) | `release.md` (phase 6, real mode only) | `<working-repo>/.publications.md` — a table of this working repo's public APP releases. |
 
-The publication checklist lives beside this skill at [`publication-checklist.md`](publication-checklist.md). It is a skill-internal QA tracker — walked with the researcher during phases 3 and 5 but never copied into the publication repo.
-
 ## Sub-skills
 
 Separate skills that phase files invoke. Read the linked SKILL.md if the phase-file summary is not enough.
