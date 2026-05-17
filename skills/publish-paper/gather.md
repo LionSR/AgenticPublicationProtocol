@@ -25,7 +25,7 @@ First, check the **working repo** for existing publication state:
 **If `publication-staging/` exists:**
 
 - Inspect it as a candidate release tree, not as the final public publication.
-- Check whether it already has `AGENTS.md`, `README.md`, `supplementary/checklist.md`, and organized paper/code/data files.
+- Check whether it already has `AGENTS.md`, `README.md`, `supplementary/validation-report.md`, and organized paper/code/data files.
 - Ask whether to revise the existing staging tree or create a fresh one. If the answer is unclear, prefer revising the existing tree when it looks coherent and creating a fresh one when it looks partial, stale, or contaminated by private files.
 - Treat all validation and path assumptions as relative to `publication-staging/`.
 

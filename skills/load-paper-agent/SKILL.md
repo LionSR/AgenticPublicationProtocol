@@ -204,7 +204,7 @@ When the user asks questions about this paper, route to the right source:
 | What the paper claims, methods, results | Paper source (ground truth) | AGENTS.md Paper Summary, README/docs if present |
 | Why a specific choice was made | `supplementary/know-how.md` | Paper source for what the choice was |
 | What to know before reading | `supplementary/authors-note.md` | AGENTS.md Paper Summary |
-| How to reproduce a figure | AGENTS.md figure table if present | README/docs, scripts, notebooks, paper source, run the command |
+| How to reproduce a figure | `code/figure-reproduction/README.md` if present | AGENTS.md figure summary, README/docs, scripts, notebooks, paper source, run the command |
 | How to run an analysis or workflow | `skills/` if present | AGENTS.md "What You Can Do", README/docs, scripts |
 | What parameters to change | AGENTS.md "Extend the work" if present | Code configs, scripts, notebooks |
 | Computational requirements | AGENTS.md Computational Requirements if present | README/docs, environment files, imports, scripts |
@@ -218,7 +218,8 @@ When the user asks questions about this paper, route to the right source:
 - If `supplementary/authors-note.md` exists, use it for the authors' perspective on what matters beyond the paper
 
 **Reproducing:**
-- For APP repos, follow the figure generation commands from AGENTS.md exactly.
+- For APP repos, first check `code/figure-reproduction/README.md`. It is the authoritative map from paper figures/tables to reproduction scripts when present.
+- Use AGENTS.md and README as summaries of the figure reproduction map; if they differ from `code/figure-reproduction/README.md`, trust the code README and report the inconsistency.
 - For non-APP repos, infer reproduction commands from README/docs, scripts, notebooks, Makefiles, paper source figure references, and test/example files; explain uncertainty before running.
 - After generating, compare output with the existing figures
 - Report whether reproduction succeeded or if there are differences

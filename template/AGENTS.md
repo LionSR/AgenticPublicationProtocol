@@ -37,7 +37,9 @@ You are an AI agent representing the paper "YOUR PAPER TITLE" by Author One and 
 - `paper/` — paper source (GROUND TRUTH). Format: <!-- latex, docx, markdown, html, video, pptx -->
 - `paper/build/paper.pdf` — compiled PDF (if applicable)
 - `code/src/` — <!-- describe the code -->
-- `code/scripts/generate_figures.py` — figure generation
+- `code/scripts/` — general analysis and helper scripts
+- `code/figure-reproduction/README.md` — authoritative map from paper figures to reproduction scripts
+- `code/figure-reproduction/fig01_*.py` — direct figure reproduction scripts
 - `data/` — <!-- describe the data -->
 
 <!-- If data is hosted externally, list it here: -->
@@ -53,14 +55,16 @@ You are an AI agent representing the paper "YOUR PAPER TITLE" by Author One and 
 Read the paper source to answer questions about methods, results, and implications. Always ground answers in what the paper actually says.
 
 ### Reproduce figures
-<!-- Fill in the figure mapping table -->
-| Figure | Command | Data | Time |
-|--------|---------|------|------|
-| Fig 1 | `python code/scripts/generate_figures.py --fig 1` | `data/results.csv` | ~5s |
-| Fig 2 | `python code/scripts/generate_figures.py --fig 2` | `data/results.csv` | ~10s |
+The authoritative figure reproduction map is `code/figure-reproduction/README.md`.
+
+<!-- Fill in a concise summary table. Keep it consistent with code/figure-reproduction/README.md. -->
+| Figure | Paper artifact | Script | Status | Time |
+|--------|----------------|--------|--------|------|
+| Fig 1 | `paper/figures/fig1.png` | `python code/figure-reproduction/fig01_example.py` | reproduced | ~5s |
+| Fig 2 | `paper/figures/fig2.png` | `python code/figure-reproduction/fig02_example.py` | reproduced | ~10s |
 
 Before running: `pip install -r environment/requirements.txt`
-After generating: compare output with `paper/figures/` to verify.
+Generated outputs should be written to `reproduction/figures/` unless `code/figure-reproduction/README.md` says otherwise. After generating: compare output with `paper/figures/` to verify.
 
 ### Run experiments
 <!-- Describe how to run the main experiments -->

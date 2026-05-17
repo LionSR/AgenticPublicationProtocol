@@ -15,8 +15,9 @@ Use [`template/AGENTS.md`](../../template/AGENTS.md) as a starting skeleton.
 **AGENTS.md guidance — things easy to get wrong:**
 
 - **Paper Summary.** Before drafting, ask the researcher: "What's the core message you want someone to take away from this paper?" Their answer sets the direction — do not draft from your own reading first. Use the researcher's own words from phase 2 and any extracted context as the foundation. This section is what the agent will rely on most; make it substantive, not generic.
-- **Repository Structure.** Don't just list files — explain what each does and how they connect. Mark the canonical paper file as `(GROUND TRUTH)`. Group by function: paper source, figure generation, experiments, data, config. Use paths relative to the staging root. For external data (Hugging Face, Zenodo, Figshare, ...), include what the dataset is, its size, URL, the exact download command, local destination, and whether it is required for basic figures or only for full reproduction.
-- **What You Can Do.** Real, copy-pasteable commands — no placeholders. The figure-reproduction table must cover every figure in the paper. For "Run experiments" and "Extend the work," the goal is that a reader can answer "what if I change X?" by running something concrete.
+- **Repository Structure.** Don't just list files — explain what each does and how they connect. Mark the canonical paper file as `(GROUND TRUTH)`. Group by function: paper source, figure reproduction, experiments, data, config. Include `code/figure-reproduction/README.md` as the authoritative figure/table reproduction map when the paper has generated figures/tables. Use paths relative to the staging root. For external data (Hugging Face, Zenodo, Figshare, ...), include what the dataset is, its size, URL, the exact download command, local destination, and whether it is required for basic figures or only for full reproduction.
+- **What You Can Do.** Real, copy-pasteable commands — no placeholders. The figure-reproduction section must point to `code/figure-reproduction/README.md` and summarize every figure/table status. For "Run experiments" and "Extend the work," the goal is that a reader can answer "what if I change X?" by running something concrete.
+- **Figure Reproduction.** If `code/figure-reproduction/README.md` exists, `AGENTS.md` must include a "Figure Reproduction" or "Reproduce figures" section that names it as authoritative. The summary table in `AGENTS.md` must include at least: figure/table, paper artifact, script, status, and runtime/requirements. Do not hide blocked figures; summarize the blocker and refer to the README map for details. If a figure mapping required researcher clarification, summarize the confirmed mapping rather than the agent's earlier guess.
 - **Computational Requirements.** Classify every task (figure generation, individual experiments, full reproduction) by time, hardware, and memory. Note the platform tested on (OS, language version). The agent MUST warn before running anything heavy.
 - **Identity.** Keep the spokesperson framing — the agent represents *these authors' work*, not a generic assistant. Domain voice matters: a math paper's agent reasons like a mathematician; an experimental paper's agent thinks like an experimentalist.
 
@@ -25,7 +26,8 @@ Also create `publication-staging/CLAUDE.md` — one line: `@AGENTS.md`. You can 
 **Self-check before showing the researcher:**
 
 - Verify every file path in Repository Structure exists inside `publication-staging/`.
-- Run every command in the figure generation table.
+- Verify `code/figure-reproduction/README.md` exists for papers with generated figures/tables and is referenced from `AGENTS.md`.
+- Run every `code/figure-reproduction/` command marked `reproduced`; confirm generated outputs exist.
 - Confirm computational requirements are accurate.
 
 Fix any mechanical issues found.
@@ -54,7 +56,7 @@ Revise `AGENTS.md` based on their feedback. Go back and forth until the research
 
 ## 4.3 Create `README.md`
 
-Copy [`template/README.md`](../../template/README.md) to `publication-staging/README.md` and fill in each placeholder using information from phases 1-2 and the finalized `AGENTS.md`. The figure table uses the same schema as the `AGENTS.md` "Reproduce figures" table — `Figure | Command | Data | Time` — so the two tables stay checkable against each other.
+Copy [`template/README.md`](../../template/README.md) to `publication-staging/README.md` and fill in each placeholder using information from phases 1-2 and the finalized `AGENTS.md`. The figure table should point to `code/figure-reproduction/README.md` and use the same status/script information as the `AGENTS.md` figure-reproduction summary, so the files stay checkable against each other.
 
 The publication `README.md` is for readers who want to use the paper agent; it is not a copy of the working repo's README.
 

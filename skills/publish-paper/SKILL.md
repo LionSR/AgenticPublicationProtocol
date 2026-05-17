@@ -31,7 +31,8 @@ PUBLICATION ROADMAP
   Phase 6 — Final outcome     [ ]  Publish publicly, or record dev-sandbox result
 
   This is a deliberate process — it can span multiple sessions.
-  I'll update this checklist as we go.
+  I'll keep this phase checklist updated in chat as we go. It is an internal
+  process tracker, not a file to include in the publication.
 ```
 
 For phase-to-phase transitions after the start, a brief status line is enough: "Phase 3 complete. Moving to Phase 4 — Paper-agent docs."
@@ -50,7 +51,7 @@ These apply across every phase. Keep them in mind as you read each phase file.
 - APP compliance records attach only to public versions and their repo URL, tag, commit/tree hash, and `app_publication_id`.
 - Dev-sandbox runs have no publication meaning and must not create APP compliance records.
 
-**Pace.** Never treat a partial answer as a complete one. If you asked three questions and the researcher answered one, follow up on the unanswered ones before moving on — they may have missed them, not declined them. When showing the researcher something for feedback (a draft, a file list, a checklist), wait for them to engage substantively. A one-word acknowledgement ("ok", "sure", "fine") after presenting five things to review is not confirmation — ask which specific items they've looked at. The researcher's attention is finite; work with that, not against it.
+**Pace.** Never treat a partial answer as a complete one. If you asked three questions and the researcher answered one, follow up on the unanswered ones before moving on — they may have missed them, not declined them. When showing the researcher something for feedback (a draft, file list, or multi-item status summary), wait for them to engage substantively. A one-word acknowledgement ("ok", "sure", "fine") after presenting five things to review is not confirmation — ask which specific items they've looked at. The researcher's attention is finite; work with that, not against it.
 
 **Author's voice.** The supplementary materials (`authors-note.md`, `know-how.md`), the `AGENTS.md` paper summary, and any content that speaks for the researcher must reflect what *they* want to convey — not what the agent thinks is important. Before drafting, ask the researcher what they want the document to say and who the intended audience is. Draft from their intent, then iterate. Never generate these documents first and ask for approval after — that inverts the authorship.
 
@@ -70,9 +71,8 @@ These apply across every phase. Keep them in mind as you read each phase file.
 
 - **Purpose.** Create or revise `publication-staging/`. Copy and organize approved files. Run structure validation. Verify the code runs with staging-root paths.
 - **Assumes.** Staging plan from `gather.md`.
-- **Produces.** A self-contained `publication-staging/` tree with files in the layout defined by [`PROTOCOL.md` § Repository layout](../../PROTOCOL.md#repository-layout); `.gitignore` in place; supplementary materials copied including `supplementary/checklist.md`; code verified to run from staging root.
+- **Produces.** A self-contained `publication-staging/` tree with files in the layout defined by [`PROTOCOL.md` § Repository layout](../../PROTOCOL.md#repository-layout); `.gitignore` in place; approved supplementary materials copied; `code/figure-reproduction/` created for generated figures/tables when applicable; code verified to run from staging root. Keep the phase checklist in chat/internal notes, not inside `publication-staging/`.
 - **Sub-skills called.** `/validate-publication --stage structure`.
-- **Templates used.** [`template/publication-checklist.md`](../../template/publication-checklist.md).
 - **Interaction load.** Light — confirmation on the file list before copying, then mostly automated.
 
 ### [`draft.md`](draft.md) — Phase 4: Paper-agent docs
@@ -100,14 +100,13 @@ Not a workflow step. Format-specific guidance for theory-only, computational, ex
 
 ## Templates
 
-Five files ship in `template/` at the repo root. Phase files copy or adapt them at the right moment — do not re-author these artifacts; start from the template.
+Four files ship in `template/` at the repo root. Phase files copy or adapt them at the right moment — do not re-author these artifacts; start from the template.
 
 | Template | Adapted by | Lands as |
 |----------|------------|----------|
 | [`template/AGENTS.md`](../../template/AGENTS.md) | `draft.md` (phase 4 paper-agent docs) | `publication-staging/AGENTS.md`, populated and researcher-approved. |
 | [`template/CLAUDE.md`](../../template/CLAUDE.md) | `draft.md` (phase 4 paper-agent docs) | `publication-staging/CLAUDE.md` — one line: `@AGENTS.md`. |
 | [`template/README.md`](../../template/README.md) | `draft.md` (phase 4 paper-agent docs) | `publication-staging/README.md`, populated from phases 1-2 and the finalized `AGENTS.md`. |
-| [`template/publication-checklist.md`](../../template/publication-checklist.md) | `build.md` (phase 3) | `publication-staging/supplementary/checklist.md`, adapted (irrelevant sections removed). |
 | [`template/publications.md`](../../template/publications.md) | `release.md` (phase 6, real mode only) | `<working-repo>/.publications.md` — a table of this working repo's public APP releases. |
 
 ## Sub-skills

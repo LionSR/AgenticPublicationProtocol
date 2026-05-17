@@ -4,7 +4,7 @@ The paper can be in any format — LaTeX, DOCX, Markdown, HTML, video, PPTX, PDF
 
 ## Theory-only paper (no code)
 
-- Minimal staging layout: `paper/`, `supplementary/checklist.md`, plus the always-required root files `AGENTS.md`, `README.md`, and `LICENSE`. `code/`, `data/`, `environment/` can all be absent.
+- Minimal staging layout: `paper/`, plus the always-required root files `AGENTS.md`, `README.md`, and `LICENSE`. `code/`, `data/`, `environment/`, and `supplementary/` can all be absent unless the paper needs them.
 - Focus the agent on: explaining the theorems, the proof strategy, the assumptions.
 - The agent's value is discussing the ideas and connecting them to related work.
 - The phase 4 figure-reproduction table may be empty or absent; flag this in `publication-staging/AGENTS.md` rather than leaving a stub table.
@@ -12,6 +12,7 @@ The paper can be in any format — LaTeX, DOCX, Markdown, HTML, video, PPTX, PDF
 ## Computational paper
 
 - Full Repository Structure, figure table, experiment commands.
+- Create `code/figure-reproduction/README.md` and one direct script per generated paper figure/table wherever possible.
 - Extra care on environment specification — computational papers are the hardest to reproduce.
 - Document cluster/GPU requirements clearly in `AGENTS.md` Computational Requirements.
 - In phase 3.3, actually run the main experiments at least once on a clean checkout.

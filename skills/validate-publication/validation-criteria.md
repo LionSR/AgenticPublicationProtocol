@@ -20,6 +20,7 @@ The paper is the ground truth. Everything else is secondary.
 - An implication about generality that the paper's experiments don't support
 - Causal claims where the paper only shows correlation
 - A figure/table reproduction claim that is not supported by runnable code or documented manual steps
+- A figure/table marked `reproduced` in `code/figure-reproduction/README.md` when its script is absent, fails, or has no generated output/evidence
 
 **What's OK:**
 - Paraphrasing the paper in simpler terms (as long as the meaning is preserved)
@@ -41,28 +42,41 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 - Supplementary materials outside `supplementary/` (e.g., `know-how.md` at root).
 - Severity: `warning` for misplaced files (the repo works but the structure is inconsistent).
 
-**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout and the checklist; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`; the researcher adds `LICENSE` at some point before release. Validate accordingly so `--stage structure` does not block on files that phase 4 hasn't created yet.
+**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`; final validation produces `supplementary/validation-report.md`; the researcher adds `LICENSE` at some point before release. Validate accordingly so `--stage structure` does not block on files that phase 4 or phase 5 haven't created yet.
 
 | Required file | `structure` | `agents-md` | `full` |
 |---------------|-------------|-------------|--------|
 | `paper/` with at least one document | error if missing | error if missing | error if missing |
-| `supplementary/checklist.md` | error if missing | error if missing | error if missing |
 | `.gitignore` at root | warning if missing | warning if missing | warning if missing |
 | `AGENTS.md` at root | — | error if missing | error if missing |
 | `CLAUDE.md` at root (`@AGENTS.md`) | — | warning if missing | warning if missing |
 | `README.md` at root | — | error if missing | error if missing |
+| `code/figure-reproduction/README.md` for papers with generated figures/tables | warning if missing | error if missing | error if missing |
+| `supplementary/validation-report.md` | — | — | warning if missing during final `/publish-paper` validation; not required for standalone pre-report audits |
 | `LICENSE` at root | — | — | error if missing |
 
 **File paths:**
 - Every path in AGENTS.md Repository Structure must resolve to a real file or directory
 - Every path in README must resolve
 - Every path in `supplementary/` references must resolve
+- Every script and output path in `code/figure-reproduction/README.md` must resolve, except outputs for blocked/manual items
 - Relative paths should be relative to the repo root, or to `publication-staging/` when validating a staged candidate release
 
 **Commands:**
-- Figure generation commands should be syntactically valid (parseable by the shell)
+- Figure reproduction commands in `code/figure-reproduction/README.md` should be syntactically valid (parseable by the shell)
 - Install commands should reference real package files (e.g., `environment/requirements.txt` exists)
-- Don't run heavy commands — just check they parse and reference real files
+- Don't run heavy commands unless explicitly approved — check they parse and reference real files, and require heavy commands to be marked as such
+
+**Figure/table reproduction:**
+- `code/figure-reproduction/README.md` is authoritative when present.
+- Every paper figure/table should appear in that README.
+- Each item should include: paper artifact, script, inputs, generated output, status, and notes.
+- Status should be one of: `reproduced`, `runs-but-differs`, `blocked-missing-data`, `blocked-heavy-compute`, `blocked-broken-code`, `manual-only`.
+- A `reproduced` item must have an existing script and either a generated output path or recorded run evidence.
+- A blocked/manual item must document the attempted source scripts/notebooks, attempted command if any, and concrete blocker.
+- If the figure-to-code mapping was ambiguous, the figure map should record the researcher clarification or state that clarification is still needed.
+- `AGENTS.md` must reference `code/figure-reproduction/README.md` and summarize the figure/table statuses.
+- README should either link to the same map or duplicate a compatible summary.
 
 **External links:**
 - Test with `curl -sIL <url>` — flag non-2xx responses
@@ -96,7 +110,7 @@ Extends `../extract-chat-context/confidentiality-checklist.md` to cover the enti
 | Paper title | Frontmatter + identity | Heading | Exact |
 | Authors | Frontmatter | Under heading | Exact |
 | Paper summary | Paper Summary section | 1-2 sentence summary | Compatible (README is shorter) |
-| Figure table | "Reproduce figures" | "Figures" section | Exact commands and paths |
+| Figure reproduction | "Reproduce figures" section | "Figures" section | Compatible summary; both point to `code/figure-reproduction/README.md` when present |
 | Citation | Citation section | Citation section | Identical BibTeX |
 | Computational reqs | Computational Requirements | Setup section | Compatible |
 

@@ -9,7 +9,7 @@ Phase 5 is shared by real publication mode and developer-sandbox mode. Phase 6 i
 
 ### 5.1 Full validation from staging root
 
-Invoke `/validate-publication --stage full` with `publication-staging/` as the effective repository root — APP structure, privacy, paths, clear factual consistency, README↔AGENTS.md cross-checks, checklist status, and reader-agent usability. Fix any errors before showing the validation report to the researcher.
+Invoke `/validate-publication --stage full` with `publication-staging/` as the effective repository root — APP structure, privacy, paths, clear factual consistency, README↔AGENTS.md cross-checks, validation status, and reader-agent usability. Fix any errors before showing the validation report to the researcher.
 
 Save the final validation report as `publication-staging/supplementary/validation-report.md`. The real publication manifest will include the SHA-256 hash of this report. If validation fails, do not proceed to release.
 
@@ -20,6 +20,7 @@ Also check that `publication-staging/` has no dependency on the private parent r
 - no references to unpublished notes, drafts, or private remotes;
 - no symlinks that escape staging;
 - no generated artifacts that are required but ignored or missing.
+- `code/figure-reproduction/README.md` exists for papers with generated figures/tables, lists every paper figure/table, and matches `AGENTS.md`/README figure-reproduction summaries.
 
 ### 5.2 Test/load the paper agent from staging root
 
@@ -41,15 +42,25 @@ Present the final staged state **one piece at a time**, not as a single wall of 
 2. **`AGENTS.md` and `README.md`.** Briefly confirm they still read correctly after all revisions — this is a staleness check, not a full re-review (that was phase 4).
 3. **Supplementary materials.** List what's in `publication-staging/supplementary/`. Ask: "Are you comfortable with all of this being public?" In dev-sandbox mode, phrase this as "safe for this sandbox test" if the fixture is not intended for publication.
 4. **Validation results.** Show any remaining warnings from the validation sweep. Walk through each one — don't just list them.
-5. **Paper-agent test.** Summarise what the local staging-root test showed.
+5. **Figure reproduction.** Summarise counts from `code/figure-reproduction/README.md`: total figures/tables, direct scripts, reproduced, runs-but-differs, blocked, and manual-only. Walk through any non-`reproduced` items.
+6. **Paper-agent test.** Summarise what the local staging-root test showed.
 
 Wait for the researcher to engage with each item. If they say "all good" without engaging, ask about one specific thing — e.g. "I want to double-check: the supplementary materials include [X]. Are you sure that should be in the staged release tree?"
 
-### 5.4 Walk the checklist
+### 5.4 Confirm process completion and author approval
 
-Walk through `publication-staging/supplementary/checklist.md` with the researcher as the final quality gate. Go through each item and mark them off. Flag any unchecked items — the researcher decides whether to resolve or mark N/A before proceeding.
+Use your internal phase checklist to confirm phases 1-5 are complete:
 
-Do not proceed until the researcher has explicitly confirmed they reviewed the staged files, `AGENTS.md`, and the supplementary materials.
+- Phase 1 — Understand: canonical paper and prior-version state identified.
+- Phase 2 — Discuss: key results, include/exclude decisions, supplementary materials, and repo name confirmed.
+- Phase 3 — Build staging: approved files copied, paths updated, structure validation run.
+- Phase 3 figure reproduction: `code/figure-reproduction/README.md` created when applicable, direct scripts attempted for every figure/table, and statuses documented.
+- Phase 4 — Paper-agent docs: `AGENTS.md`, `CLAUDE.md`, and `README.md` drafted and researcher-reviewed.
+- Phase 5 — Final review: full validation report saved, local paper-agent test performed, remaining warnings/manual limitations reviewed.
+
+Do not write this process checklist into `publication-staging/`. It is an internal workflow control, not publication content.
+
+Do not proceed until the researcher has explicitly confirmed they reviewed the staged files, `AGENTS.md`, supplementary materials, validation results, and paper-agent test summary.
 
 Record the human approval statement for real publication mode. At minimum capture:
 
@@ -95,7 +106,7 @@ PUBLICATION SUMMARY — please review before I publish:
     code/           — <brief description>
     data/           — <brief description>
     environment/    — <dependencies file>
-    supplementary/  — <list which files: know-how, authors-note, sessions, checklist>
+    supplementary/  — <list which files: know-how, authors-note, sessions, validation-report, materials>
     skills/         — <list skill names, or "none">
     AGENTS.md       — paper agent instructions
     README.md       — public README
@@ -106,8 +117,8 @@ PUBLICATION SUMMARY — please review before I publish:
   External data links:
     <list any URLs that will be referenced, or "none">
 
-  Checklist status:
-    <N>/<M> items checked — <list any unchecked items>
+  Process status:
+    Phases 1-5 complete — <list any warnings or manual limitations>
 
   Staging validation:
     <validation status, local paper-agent test status, tree hash/checksum if available>

@@ -16,10 +16,12 @@ This paper is published with an AI agent ([Agentic Publication Protocol](https:/
 
 ## Figures
 
-| Figure | Command | Data | Time |
-|--------|---------|------|------|
-| Fig 1 (description) | `python code/scripts/fig1.py` | `data/results.csv` | ~5s |
-| Fig 2 (description) | `python code/scripts/fig2.py` | `data/sim_output.h5` | ~10s |
+Authoritative figure reproduction map: `code/figure-reproduction/README.md`.
+
+| Figure | Paper artifact | Script | Status | Time |
+|--------|----------------|--------|--------|------|
+| Fig 1 (description) | `paper/figures/fig1.png` | `python code/figure-reproduction/fig01_example.py` | reproduced | ~5s |
+| Fig 2 (description) | `paper/figures/fig2.png` | `python code/figure-reproduction/fig02_example.py` | reproduced | ~10s |
 
 ## Reproducing results
 
@@ -29,7 +31,7 @@ This paper is published with an AI agent ([Agentic Publication Protocol](https:/
 
 ### Run figures
 
-[commands]
+[Use the commands in `code/figure-reproduction/README.md`. Generated outputs are written to `reproduction/figures/` unless the figure map says otherwise.]
 
 ### Full experiment
 

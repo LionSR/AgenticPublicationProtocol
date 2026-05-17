@@ -26,7 +26,7 @@ Invoke with `--stage <name>` to validate specific artifacts. Omit for a full val
 |-------|------|----------------|
 | `structure` | After organizing files (phase 3) | Folder structure, file paths, sensitive files, data links, `.gitignore` |
 | `agents-md` | After creating AGENTS.md (phase 4) | APP metadata, ground-truth hierarchy, paths, commands, clear factual consistency |
-| `full` | Final review (phase 5) or standalone | All of the above + README consistency, confidentiality sweep, checklist, local reader-agent usability, and release manifest verification when validating a public tagged release |
+| `full` | Final review (phase 5) or standalone | All of the above + README consistency, confidentiality sweep, validation report consistency, local reader-agent usability, and release manifest verification when validating a public tagged release |
 
 ## Process
 
@@ -39,7 +39,7 @@ Read the publication repo or staging tree to understand what's being validated:
 - `README.md`
 - `supplementary/` — know-how, authors-note, sessions, materials
 - `skills/` — any author-published skills
-- `supplementary/checklist.md` — the publication checklist (if it exists)
+- `supplementary/validation-report.md` — prior validation report, if this is a final/revalidation pass
 - `APP_PUBLICATION.json` release asset — only when auditing a public tagged release, not when validating `publication-staging/`
 
 ### 2. Run APP validation checks
@@ -67,6 +67,8 @@ Only run at stages: `agents-md`, `full`.
 - Verify every file path in `AGENTS.md` Repository Structure exists in the repo.
 - Verify every file path in README exists.
 - Check that commands in the figure/table reproduction sections are syntactically valid.
+- For papers with generated figures/tables, verify `code/figure-reproduction/README.md` exists, is referenced from `AGENTS.md`, and is compatible with README.
+- Verify every paper figure/table is listed in `code/figure-reproduction/README.md`; every listed script exists; every `reproduced` item has run evidence or a generated output path; every blocked/manual item has a concrete reason.
 - When validating `publication-staging/`, verify commands and paths work with staging as the current working directory, and flag references to private parent-repo files.
 - Test external data links with `curl -sIL <url>` when appropriate; flag non-2xx responses or mark authentication-limited links as needing manual verification.
 - Check that `supplementary/` references point to real files.
@@ -95,6 +97,7 @@ Cross-check information across files:
 
 - `AGENTS.md` paper summary vs README description — should be compatible.
 - Figure/table reproduction information in `AGENTS.md` vs README — commands and paths should match.
+- Figure/table reproduction information in `AGENTS.md` and README vs `code/figure-reproduction/README.md` — the code README is authoritative.
 - Citation in `AGENTS.md` vs README — should be identical when both exist.
 - Computational requirements vs actual code — for example, do not claim "runs on any laptop" if the code requires CUDA.
 - Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.
