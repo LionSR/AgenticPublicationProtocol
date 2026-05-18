@@ -116,6 +116,13 @@ Separate skills that phase files invoke. Read the linked SKILL.md if the phase-f
 - [`/extract-chat-context`](../extract-chat-context/SKILL.md) — pull publication-safe research context from local Claude Code / Codex chat/session history for supplementary materials (called in phase 2).
 - [`/validate-publication`](../validate-publication/SKILL.md) — automated quality checks at each phase's checkpoint (`--stage structure`, `--stage agents-md`, `--stage full`) with `publication-staging/` as root during `/publish-paper`.
 
+## Optional companion skills
+
+These skills are useful alongside `/publish-paper`, but they are not required for APP compliance and should not be treated as core publication phases.
+
+- [`/create-paper-page`](../create-paper-page/SKILL.md) — after a real public release succeeds, optionally offer to create a GitHub Pages project page for the published paper.
+- [`/load-paper-agent`](../load-paper-agent/SKILL.md) — reader/import utility for loading an existing paper repo, local candidate, or arXiv paper; `/publish-paper` tests `publication-staging/` directly instead of depending on this loader.
+
 ## Resuming a session
 
 If the researcher has already begun, detect filesystem state and jump to the matching phase file:

@@ -363,6 +363,8 @@ git commit -m "Record APP publication: <repo-name> <tag>"
 
 Report to the researcher: the publication URL, the tag, the release page, the commit/tree hash, and the `app_publication_id`.
 
+Optionally offer to run [`/create-paper-page`](../create-paper-page/SKILL.md) to add a GitHub Pages project page for the published paper. This is a convenience add-on, not an APP compliance requirement. Do not block the publication record or manifest on whether a project page exists.
+
 ### 6B. Developer sandbox mode
 
 Dev-sandbox mode is an implementation-testing workflow, not a publication workflow. It uses the same prepare and validate standards up through phase 5, then substitutes a sandbox outcome for public release.
