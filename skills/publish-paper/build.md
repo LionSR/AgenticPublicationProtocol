@@ -160,6 +160,20 @@ Use these statuses:
 
 Do not use temporary final statuses such as `not-yet-run`, `todo`, or `unknown`. Before phase 5 every figure/table must have one of the statuses above, with evidence or a concrete blocker.
 
+### Dependency installation policy
+
+Before marking a figure/table or validation command `blocked-dependency`, make a reasonable attempt to satisfy missing dependencies when it is safe and authorized in the host environment.
+
+Safe install attempts include project-local or environment-scoped installs from explicit dependency files, such as `pip install -r requirements.txt`, `uv sync`, `npm install`, `julia --project -e 'using Pkg; Pkg.instantiate()'`, `Rscript` package restore commands, TeX package managers, or conda/mamba environment creation when those tools are already available. Prefer installs that are reproducible, logged, and scoped to the staged project or a disposable environment.
+
+Ask the researcher before installing or cloning anything when:
+
+- the platform requires approval or the current agent lacks authorization;
+- the install would modify global system state, consume substantial disk/network/compute, require credentials, accept a license, or run untrusted external code;
+- the dependency is proprietary, commercial, platform-specific, unusually large, or likely to affect the user's machine beyond the current project.
+
+If authorization is already available and the install is low-risk, try it and record the command and result. If authorization is absent, unclear, denied, or the dependency cannot be safely installed, ask for permission or record the precise blocker. A `blocked-dependency` entry must say whether a safe install was attempted, skipped for authorization/safety reasons, or impossible because of licensing/platform constraints.
+
 For each paper figure/table:
 
 1. Inspect the paper source, existing scripts, notebooks, saved outputs, and paper figure files.
