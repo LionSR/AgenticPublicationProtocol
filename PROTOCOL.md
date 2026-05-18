@@ -106,6 +106,16 @@ paper_format: "latex"          # latex, docx, markdown, html, video, pptx, pdf
 version: "1.0.0"               # matches the git tag, without the leading v
 domain: "your-field"
 tags: ["keyword1", "keyword2"]
+recommended_external_skills:
+  - id: "org.example/proofread-paper"     # optional; reverse-DNS or org/name namespace
+    version: "1.2.0"                      # optional; exact release/tag preferred
+    source: "https://github.com/example/app-skills/tree/v1.2.0/proofread-paper"
+    purpose: "Proofread manuscript prose before APP staging."
+app_extensions:
+  - id: "org.example/field-publishing"
+    version: "0.1.0"
+    source: "https://github.com/example/app-extensions/tree/v0.1.0/field-publishing"
+    required: false
 ---
 ```
 
@@ -120,6 +130,8 @@ tags: ["keyword1", "keyword2"]
 | `version` | yes | Publication version. Matches the git tag, without the leading `v` (tag `v1.0.0` → `"1.0.0"`). |
 | `domain` | yes | Short field tag (e.g. `condensed-matter`, `nlp`, `combinatorics`). |
 | `tags` | no | Free-form keyword list. |
+| `recommended_external_skills` | no | External Agent Skills that may help readers, authors, or agents work with the publication. These are recommendations only and are not author-approved ground truth unless bundled into the release and explicitly identified as such. |
+| `app_extensions` | no | Optional APP-related extensions supported or recommended by this publication. Extensions **MUST** be optional unless `required: true` is explicitly set; if required, the publication **MUST** describe fallback behavior or the reason no fallback is possible. |
 
 #### Required sections
 
@@ -135,6 +147,35 @@ tags: ["keyword1", "keyword2"]
 
 - **Supplementary Materials** — pointers to `supplementary/`. One line per item, noting what it is and that it is secondary to the paper.
 - **Skills** — list of `skills/<name>/` entries, each with a one-line description.
+- **External Skills and Extensions** — optional list of skills or extensions hosted outside the publication repository, including source URL, version or tag when available, purpose, and trust status.
+
+### External skills and extensions
+
+APP deliberately keeps the core publication format small. Reusable writing, proofreading, journal-response, field-specific, or workflow-specific capabilities **SHOULD** usually be distributed as external Agent Skills or APP extensions rather than added to the APP core specification. This follows the same separation as other agent protocols: the core protocol defines the stable artifact, while optional extensions evolve independently.
+
+External skills and extensions are declared in the `recommended_external_skills` and `app_extensions` frontmatter fields. The optional **External Skills and Extensions** section of `AGENTS.md` may provide human-readable context for those declarations, but it should not be the only place machine-actionable external references appear. These references let a publication point to a separate APP skills repository, a field-specific repository, or an individual contributor's repository without copying the skill into the publication release.
+
+External skill and extension identifiers **SHOULD** be namespaced to avoid collisions. Recommended formats are:
+
+- reverse-DNS style: `edu.example/latex-proofreader`, `org.lab/quantum-code-review`
+- host-scoped style: `github.com/owner/repo/skill-name`
+- organization style: `app/validate-publication`, reserved for official APP-maintained skills
+
+Each external entry **SHOULD** include:
+
+- `id` — stable namespaced identifier.
+- `source` — repository URL, registry URL, or immutable release/tag URL.
+- `version` — exact version, tag, or commit when known.
+- `purpose` — one sentence saying when an agent should use it.
+- `required` — for extensions only; defaults to `false`.
+
+External skill sources **SHOULD** point directly to a skill directory containing `SKILL.md`, preferably at a stable tag or commit. The APP protocol does not define a separate index or registry format for reusable skills. A protocol-maintained collection, a field-maintained collection, and an individual researcher's repository can all be valid sources as long as referenced entries have stable identifiers, stable source URLs, and clear licensing.
+
+External skills and extensions **MUST NOT** be treated as part of the publication's scientific ground truth merely because they are referenced. The paper, code, and data bundled in the tagged APP release remain authoritative. A third-party skill may help proofread, analyze, reproduce, or explain, but it cannot alter the authors' claims unless the authors incorporate the resulting changes into a new APP release.
+
+If a skill is necessary for representing the paper's own method or reproducing paper-specific results, authors **SHOULD** bundle it under `skills/` in the publication repository. If a skill is reusable across papers, journals, disciplines, or authoring workflows, authors **SHOULD** publish it externally and reference it from `AGENTS.md`.
+
+Agents loading a publication **SHOULD** gracefully degrade when an external skill or extension is unavailable. They may explain that an optional capability was recommended but not installed, then continue using the bundled APP contents. Agents **MUST** ask for user approval before installing, cloning, or running untrusted external code when the host environment requires such approval or when the action may affect the user's filesystem, network, or credentials.
 
 ### `README.md`
 
