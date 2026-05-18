@@ -69,6 +69,15 @@ Detail lives here; `AGENTS.md` carries only a concise pointer to `data/README.md
 
 **Create a staging `.gitignore`** tailored to the candidate release tree — build artifacts, generated files, sensitive files, OS files.
 
+**Create or copy `LICENSE`.** Use the licensing decision recorded in phase 2.
+
+- If the working repo already has the approved `LICENSE`, copy it to `publication-staging/LICENSE`.
+- If the researcher chose a standard license, create `publication-staging/LICENSE` from the standard text and add any component-specific terms the researcher approved.
+- If different components have different licenses, make the root `LICENSE` explain the terms for manuscript, code, data, and supplementary materials, and point to any component-level license files.
+- Do not invent or guess licensing terms. If the researcher has not chosen a license, ask before creating the file.
+- In real publication mode, do not proceed beyond phase 3 without `publication-staging/LICENSE`.
+- In developer sandbox mode, if the researcher explicitly defers licensing, leave `publication-staging/LICENSE` absent and record "license deferred — public-release blocker" in the internal phase notes for phase 5. Do not let this become a silent omission.
+
 **Copy supplementary materials:**
 
 - If research context was extracted in phase 2, copy the approved output into `publication-staging/supplementary/` now.

@@ -9,9 +9,14 @@ Phase 5 is shared by real publication mode and developer-sandbox mode. Phase 6 i
 
 ### 5.1 Full validation from staging root
 
-Invoke `/validate-publication --stage full` with `publication-staging/` as the effective repository root — APP structure, privacy, paths, clear factual consistency, README↔AGENTS.md cross-checks, validation status, and reader-agent usability. Fix any errors before showing the validation report to the researcher.
+Invoke `/validate-publication --stage full` with `publication-staging/` as the effective repository root — APP structure, privacy, paths, clear factual consistency, README↔AGENTS.md cross-checks, validation status, and reader-agent usability. Fix any errors before showing the validation report to the researcher, except explicitly deferred developer-sandbox release blockers such as a missing `LICENSE`.
 
-Save the final validation report as `publication-staging/supplementary/validation-report.md`. The real publication manifest will include the SHA-256 hash of this report. If validation fails, do not proceed to release.
+Save the final validation report as `publication-staging/supplementary/validation-report.md`. The real publication manifest will include the SHA-256 hash of this report. If validation fails, do not proceed to real publication. In developer-sandbox mode, a run with unresolved full-release blockers may still be recorded as a sandbox workflow result, but not as a clean full-validation pass.
+
+Licensing is a required part of full APP compliance. Before treating validation as passed, verify that `publication-staging/LICENSE` exists and matches the author's phase-2 licensing decision. If it is missing:
+
+- in real publication mode, stop and ask the researcher to choose or provide a license before continuing;
+- in developer sandbox mode, continue only if the researcher explicitly deferred licensing for the sandbox test, and classify the outcome as "completed with public-release blocker: missing LICENSE" rather than a clean full-validation pass.
 
 Also check that `publication-staging/` has no dependency on the private parent repo:
 
@@ -39,11 +44,12 @@ For real publication mode, this is the final check that the public repo will wor
 Present the final staged state **one piece at a time**, not as a single wall of information.
 
 1. **File inventory.** Show what's included in `publication-staging/` and what stayed outside it. Ask: "Is this the right set of files? Anything missing or anything that shouldn't be here?"
-2. **`AGENTS.md` and `README.md`.** Briefly confirm they still read correctly after all revisions — this is a staleness check, not a full re-review (that was phase 4).
-3. **Supplementary materials.** List what's in `publication-staging/supplementary/`. Ask: "Are you comfortable with all of this being public?" In dev-sandbox mode, phrase this as "safe for this sandbox test" if the fixture is not intended for publication.
-4. **Validation results.** Show any remaining warnings from the validation sweep. Walk through each one — don't just list them.
-5. **Figure reproduction.** Summarise counts from `code/figure-reproduction/README.md`: total figures/tables, direct scripts, reproduced, runs-but-differs, blocked, and manual-only. Walk through any non-`reproduced` items.
-6. **Paper-agent test.** Summarise what the local staging-root test showed.
+2. **License.** Confirm `publication-staging/LICENSE` and summarize the reuse terms. Ask: "Is this the license/reuse language you want attached to the staged publication?" In dev-sandbox mode, if licensing was deferred, say explicitly that this is a public-release blocker.
+3. **`AGENTS.md` and `README.md`.** Briefly confirm they still read correctly after all revisions — this is a staleness check, not a full re-review (that was phase 4).
+4. **Supplementary materials.** List what's in `publication-staging/supplementary/`. Ask: "Are you comfortable with all of this being public?" In dev-sandbox mode, phrase this as "safe for this sandbox test" if the fixture is not intended for publication.
+5. **Validation results.** Show any remaining warnings from the validation sweep. Walk through each one — don't just list them.
+6. **Figure reproduction.** Summarise counts from `code/figure-reproduction/README.md`: total figures/tables, direct scripts, reproduced, runs-but-differs, blocked, and manual-only. Walk through any non-`reproduced` items.
+7. **Paper-agent test.** Summarise what the local staging-root test showed.
 
 Wait for the researcher to engage with each item. If they say "all good" without engaging, ask about one specific thing — e.g. "I want to double-check: the supplementary materials include [X]. Are you sure that should be in the staged release tree?"
 
@@ -53,7 +59,8 @@ Use your internal phase checklist to confirm phases 1-5 are complete:
 
 - Phase 1 — Understand: canonical paper and prior-version state identified.
 - Phase 2 — Discuss: key results, include/exclude decisions, supplementary materials, and repo name confirmed.
-- Phase 3 — Build staging: approved files copied, paths updated, structure validation run.
+- Phase 2 licensing: license/reuse terms chosen, or explicitly deferred for dev-sandbox with public-release blocker recorded.
+- Phase 3 — Build staging: approved files copied, paths updated, `LICENSE` created/copied unless explicitly deferred for dev-sandbox, structure validation run.
 - Phase 3 figure reproduction: `code/figure-reproduction/README.md` created when applicable, direct scripts attempted for every figure/table, and statuses documented.
 - Phase 4 — Paper-agent docs: `AGENTS.md`, `CLAUDE.md`, and `README.md` drafted and researcher-reviewed.
 - Phase 5 — Final review: full validation report saved, local paper-agent test performed, remaining warnings/manual limitations reviewed.
@@ -61,6 +68,8 @@ Use your internal phase checklist to confirm phases 1-5 are complete:
 Do not write this process checklist into `publication-staging/`. It is an internal workflow control, not publication content.
 
 Do not proceed until the researcher has explicitly confirmed they reviewed the staged files, `AGENTS.md`, supplementary materials, validation results, and paper-agent test summary.
+
+For real publication mode, do not record author approval unless `publication-staging/LICENSE` exists and the researcher has confirmed it. For developer sandbox mode with a deferred license, record that author approval applies only to the sandbox test, not to public APP release.
 
 Record the human approval statement for real publication mode. At minimum capture:
 
@@ -344,6 +353,7 @@ DEV-SANDBOX RESULT SUMMARY:
   Test case:               <new publication example | revision example | fixture name>
   Validation status:       <passed | failed>
   Paper-agent test status: <passed | failed>
+  Public-release blockers: <none | missing LICENSE | other blockers>
   Tree hash/checksum:      <hash if available>
 
   Outcome:

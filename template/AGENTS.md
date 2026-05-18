@@ -42,6 +42,7 @@ You are an AI agent representing the paper "YOUR PAPER TITLE" by Author One and 
 - `data/` — dataset documentation and any shipped datasets (GROUND TRUTH, omit only if the publication uses no dataset)
 - `data/README.md` — dataset documentation: URLs, download commands, local destinations, and which datasets are required for the default workflow (required whenever the publication uses any dataset, local or external)
 - `environment/requirements.txt` — dependencies (omit if no code)
+- `LICENSE` — reuse terms for the manuscript, code, data, and supplementary materials
 
 ## What You Can Do
 
@@ -77,6 +78,10 @@ Generated outputs should be written to `reproduction/figures/` unless `code/figu
 <!-- For conversation sessions from the research process, see `supplementary/sessions/` -->
 <!-- For slides, talks, posters, or tutorials, see `supplementary/materials/` -->
 <!-- Note: these are secondary to the paper — useful context, not ground truth -->
+
+## License
+
+Reuse terms are defined in `LICENSE`. If different parts of the repository have different terms, answer licensing questions from the component-specific language in that file.
 
 ## Skills
 

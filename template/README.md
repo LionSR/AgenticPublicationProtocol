@@ -42,3 +42,7 @@ Authoritative figure reproduction map: `code/figure-reproduction/README.md`.
 ```bibtex
 [bibtex entry]
 ```
+
+## License
+
+See `LICENSE` for reuse terms.

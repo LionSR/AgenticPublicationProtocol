@@ -83,6 +83,7 @@ Ask **1–3 questions per round**, wait for answers, then move to the next round
 
 - Present the file list with a structured choice for each: include / exclude / ask me later.
 - "What should the eventual public publication repo be called?" This name is used as release metadata later; phase 3 still builds `publication-staging/`.
+- "What license or reuse terms should the publication use?" Treat this as an author decision, not something the agent may infer. If the working repo already has a `LICENSE`, show it and ask whether to use it. If not, offer common choices only as examples, such as MIT for code, CC BY 4.0 for manuscript/data, or a custom multi-component license, and ask the researcher to choose or defer. Record whether the same license covers manuscript, code, data, and supplementary materials, or whether components have different terms.
 
 **Round 4 — The reader's perspective.**
 
@@ -100,8 +101,9 @@ Ask **1–3 questions per round**, wait for answers, then move to the next round
 - the key results;
 - the include/exclude file list;
 - the repo name.
+- the license or explicit decision to defer licensing for a dev-sandbox-only run.
 
-These four are required to proceed. Everything else can be filled in later or inferred.
+These five are required to proceed. For real publication mode, the license cannot be deferred. For developer sandbox mode, a deferred license is allowed only if the final sandbox result clearly records it as a public-release blocker.
 
 ### 2.2 Extract research context (optional)
 

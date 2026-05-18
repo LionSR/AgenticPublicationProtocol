@@ -44,7 +44,7 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 - Supplementary materials outside `supplementary/` (e.g., `know-how.md` at root).
 - Severity: `warning` for misplaced files (the repo works but the structure is inconsistent).
 
-**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout, `data/README.md` whenever the publication uses any dataset, local or external, and `LICENSE`; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`; final validation produces `supplementary/validation-report.md`. Validate accordingly so `--stage structure` does not block on files that phase 4 or phase 5 haven't created yet.
+**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout, `data/README.md` whenever the publication uses any dataset, local or external, and creates or copies `LICENSE` after asking the researcher for licensing/reuse terms; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`; final validation produces `supplementary/validation-report.md`. Validate accordingly so `--stage structure` does not block on files that phase 4 or phase 5 haven't created yet.
 
 | Required file | `structure` | `agents-md` | `full` |
 |---------------|-------------|-------------|--------|
@@ -59,6 +59,8 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 | `supplementary/validation-report.md` | — | — | warning if missing during final `/publish-paper` validation; not required for standalone pre-report audits |
 
 The publication checklist is a skill-internal artifact of `/publish-paper` and is **not** a publication file — do not flag its absence.
+
+For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as a public-release blocker only if the researcher explicitly deferred licensing for the sandbox test. It is still an error for real publication mode and still means the staged tree is not release-ready.
 
 **File paths:**
 - Every path in AGENTS.md Repository Structure must resolve to a real file or directory
