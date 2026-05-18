@@ -35,15 +35,31 @@ Also check that `publication-staging/` has no dependency on the private parent r
 - no generated artifacts that are required but ignored or missing.
 - `code/figure-reproduction/README.md` exists for papers with generated figures/tables, lists every paper figure/table, and matches `AGENTS.md`/README figure-reproduction summaries.
 
-### 5.2 Test/load the paper agent from staging root
+### 5.2 Test the paper agent from staging root
 
-Before public release, test the candidate as a reader agent would see it. Use `/load-paper-agent` in local staging mode, or manually perform the equivalent:
+Before public release, test the candidate as a reader agent would see it. Launch a **fresh agent session** with `publication-staging/` as its working directory:
 
 ```bash
 cd publication-staging
 ```
 
-Then read `AGENTS.md`, `README.md`, the ground-truth paper file, `supplementary/`, and any `skills/`. Confirm that a fresh agent can answer basic questions, identify the ground truth, understand what it can run, and follow any reproduction commands without needing the parent repo.
+The fresh session should load `AGENTS.md` naturally from the staging root. Do not rely on the publishing agent's existing memory of the private working repo or on a separate loader skill; the publish-paper workflow tests the staged tree directly.
+
+Ask 3-5 smoke-test questions, adapted to the paper:
+
+1. What is the ground-truth paper/source for this publication?
+2. What is the main contribution?
+3. How do I reproduce one representative figure/table?
+4. Which figures/tables are blocked, manual-only, dependency-blocked, or otherwise not directly reproduced?
+5. What should a reader avoid or ask before running because it is heavy, platform-specific, or requires unavailable data?
+
+Save the transcript or concise Q&A summary as:
+
+```text
+publication-staging/supplementary/paper-agent-test.md
+```
+
+The test passes if the fresh agent answers only from staged files, identifies the ground truth, gives paths and commands that exist inside staging, and accurately reports reproduction limitations. If the environment cannot launch a fresh agent session, record `paper-agent-test: not performed` as a public-release blocker in the validation report and sandbox result rather than calling a documentation review a paper-agent test.
 
 For real publication mode, this is the final check that the public repo will work. For dev-sandbox mode, this is the key implementation test of the protocol.
 
@@ -71,7 +87,7 @@ Use your internal phase checklist to confirm phases 1-5 are complete:
 - Phase 3 — Build staging: approved files copied, paths updated, `LICENSE` created/copied unless explicitly deferred for dev-sandbox, structure validation run.
 - Phase 3 figure reproduction: `code/figure-reproduction/README.md` created when applicable, direct scripts attempted for every figure/table, and statuses documented.
 - Phase 4 — Paper-agent docs: `AGENTS.md`, `CLAUDE.md`, and `README.md` drafted and researcher-reviewed.
-- Phase 5 — Final review: full validation report saved, local paper-agent test performed, remaining warnings/manual limitations reviewed.
+- Phase 5 — Final review: full validation report saved, fresh staging-root paper-agent smoke test performed and saved to `supplementary/paper-agent-test.md`, remaining warnings/manual limitations reviewed.
 
 Do not write this process checklist into `publication-staging/`. It is an internal workflow control, not publication content.
 
@@ -360,7 +376,7 @@ DEV-SANDBOX RESULT SUMMARY:
   Candidate tree:          publication-staging/
   Test case:               <new publication example | revision example | fixture name>
   Validation status:       <release-ready | release-blocked | sandbox-pass | sandbox-pass-with-release-blockers | sandbox-fail>
-  Paper-agent test status: <passed | failed>
+  Paper-agent test status: <passed | failed | not performed>
   Public-release blockers: <none | missing LICENSE | other blockers>
   Sandbox-only deferrals:  <none | list explicitly deferred items>
   Tree hash/checksum:      <hash if available>

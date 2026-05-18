@@ -57,6 +57,7 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 | `README.md` at root | — | error if missing | error if missing |
 | `code/figure-reproduction/README.md` for papers with generated figures/tables | warning if missing | error if missing | error if missing |
 | `supplementary/validation-report.md` | — | — | warning if missing during final `/publish-paper` validation; not required for standalone pre-report audits |
+| `supplementary/paper-agent-test.md` | — | — | error if missing during final `/publish-paper` validation; not required for standalone pre-test audits |
 
 The publication checklist is a skill-internal artifact of `/publish-paper` and is **not** a publication file — do not flag its absence.
 
@@ -68,6 +69,12 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 - Every path in `supplementary/` references must resolve
 - Every script and output path in `code/figure-reproduction/README.md` must resolve, except outputs for blocked/manual items
 - Relative paths should be relative to the repo root, or to `publication-staging/` when validating a staged candidate release
+
+**Paper-agent smoke test:**
+- During final `/publish-paper` validation, `supplementary/paper-agent-test.md` should exist and document a fresh agent session launched with the staged repo root as its working directory.
+- The test should include 3-5 questions and answers covering ground-truth identification, main contribution, at least one representative reproduction command, blocked/manual/dependency-limited figures or tables, and heavy/platform-specific warnings when relevant.
+- The test passes only if the fresh agent answers from staged files, uses paths and commands that resolve inside staging, and accurately reports reproduction limitations.
+- If the environment could not launch a fresh agent session, the report should say `paper-agent-test: not performed` and classify this as a public-release blocker. A documentation-only review may be useful, but it is not a paper-agent smoke test.
 
 **Commands:**
 - Figure reproduction commands in `code/figure-reproduction/README.md` should be syntactically valid (parseable by the shell)

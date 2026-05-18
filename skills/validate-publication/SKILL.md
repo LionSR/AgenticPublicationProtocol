@@ -41,6 +41,7 @@ Read the publication repo or staging tree to understand what's being validated:
 - `skills/` — any author-published skills
 - `data/README.md` — dataset provenance, access, and download instructions when the publication uses any dataset, local or external
 - `supplementary/validation-report.md` — prior validation report, if this is a final/revalidation pass
+- `supplementary/paper-agent-test.md` — fresh staging-root paper-agent smoke test, required during final `/publish-paper` validation
 - `APP_PUBLICATION.json` release asset — only when auditing a public tagged release, not when validating `publication-staging/`
 
 ### 2. Run APP validation checks
@@ -109,6 +110,7 @@ Cross-check information across files:
 - Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.
 - Required APP files exist for the current validation stage.
 - `data/README.md` exists whenever the publication uses any dataset, local or external.
+- During final `/publish-paper` validation, `supplementary/paper-agent-test.md` exists and records a fresh agent session launched with the staged repo as its working directory. It should include representative Q&A showing the agent can identify ground truth, summarize the paper, point to real reproduction commands, and accurately report blockers. If this is missing or only a documentation review, classify it as a public-release blocker.
 - Setup, data access, and reproduction instructions are complete enough for a reader agent to know what can be run, what data is required, and what requires manual/human steps.
 
 This is a completeness/usability check, not a prose-quality review. Do not flag wording only because it sounds generic; flag missing information only when it blocks APP use.
