@@ -41,7 +41,7 @@ For phase-to-phase transitions after the start, a brief status line is enough: "
 
 These apply across every phase. Keep them in mind as you read each phase file.
 
-**Staging root discipline.** In phases 3-5, run validation, path checks, paper compilation, figure reproduction, and paper-agent loading with `publication-staging/` as the effective repository root. Paths in `AGENTS.md`, `README.md`, skills, commands, and supplementary materials must be relative to that root, not to the private parent repo.
+**Staging root discipline.** In phases 3-5, run validation, path checks, paper compilation, figure reproduction, and paper-agent smoke testing with `publication-staging/` as the effective repository root. Paths in `AGENTS.md`, `README.md`, skills, commands, and supplementary materials must be relative to that root, not to the private parent repo.
 
 **Publication invariants.**
 
@@ -86,11 +86,11 @@ These apply across every phase. Keep them in mind as you read each phase file.
 
 ### [`release.md`](release.md) — Phases 5-6
 
-- **Purpose.** Run a full validation sweep from staging root, test/load the paper agent from `publication-staging/`, freeze the validated tree, then execute the final outcome.
+- **Purpose.** Run a full validation sweep from staging root, test the paper agent through a fresh agent session rooted at `publication-staging/`, freeze the validated tree, then execute the final outcome.
 - **Assumes.** Paper-agent docs approved from `draft.md`.
 - **Produces in real publication mode.** A tagged public release whose tree equals the validated staging tree; `APP_PUBLICATION.json` release manifest; working repo publication record updated with public URL, tag, commit/tree hash, and `app_publication_id`.
 - **Produces in dev-sandbox mode.** An implementation test result; optional logs or preserved failing state; no public repo and no APP compliance record.
-- **Sub-skills called.** `/validate-publication --stage full`, `/load-paper-agent` for local staging-root testing.
+- **Sub-skills called.** `/validate-publication --stage full`.
 - **Templates used.** [`template/publications.md`](../../template/publications.md).
 - **Interaction load.** Heavy — final approval before freezing; per-action confirmation required for every remote operation in real publication mode.
 
@@ -115,7 +115,6 @@ Separate skills that phase files invoke. Read the linked SKILL.md if the phase-f
 
 - [`/extract-chat-context`](../extract-chat-context/SKILL.md) — pull publication-safe research context from local Claude Code / Codex chat/session history for supplementary materials (called in phase 2).
 - [`/validate-publication`](../validate-publication/SKILL.md) — automated quality checks at each phase's checkpoint (`--stage structure`, `--stage agents-md`, `--stage full`) with `publication-staging/` as root during `/publish-paper`.
-- [`/load-paper-agent`](../load-paper-agent/SKILL.md) — load/test the staged paper agent from `publication-staging/` before public release.
 
 ## Resuming a session
 

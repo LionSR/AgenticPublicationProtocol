@@ -64,7 +64,7 @@ code/figure-reproduction/
   ...
 ```
 
-`code/figure-reproduction/README.md` is the source of truth for mapping each paper figure/table to reproduction code. It **MUST** list every paper figure/table, the paper artifact path, the reproduction script, inputs, generated output path, status, and notes. The publication **SHOULD** provide one direct script per figure/table. If a figure/table cannot be directly reproduced, the README **MUST** document the attempted source scripts/notebooks, the attempted command, and the concrete blocker such as missing data, heavy compute, manual post-processing, or a failing command.
+`code/figure-reproduction/README.md` is the source of truth for mapping each paper figure/table to reproduction code. It **MUST** list every paper figure/table, the paper artifact path, the reproduction script, inputs, generated output path, status, and notes. The publication **SHOULD** provide one direct script per figure/table. A grouped wrapper that produces multiple figures or tables is allowed when this is the clearest direct entry point, but the README **MUST** say it is a grouped wrapper and list every artifact and generated output it covers. If a figure/table cannot be directly reproduced, the README **MUST** document the attempted source scripts/notebooks, the attempted command, and the concrete blocker such as missing data, heavy compute, external dependency/network failure, manual post-processing, or a failing command. Final statuses **MUST** be explicit reproduction states or blockers; temporary statuses such as `not-yet-run` are not valid for a release candidate.
 
 ### `data/`
 

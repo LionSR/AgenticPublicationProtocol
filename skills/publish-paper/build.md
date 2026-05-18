@@ -69,6 +69,15 @@ Detail lives here; `AGENTS.md` carries only a concise pointer to `data/README.md
 
 **Create a staging `.gitignore`** tailored to the candidate release tree — build artifacts, generated files, sensitive files, OS files.
 
+**Create or copy `LICENSE`.** Use the licensing decision recorded in phase 2.
+
+- If the working repo already has the approved `LICENSE`, copy it to `publication-staging/LICENSE`.
+- If the researcher chose a standard license, create `publication-staging/LICENSE` from the standard text and add any component-specific terms the researcher approved.
+- If different components have different licenses, make the root `LICENSE` explain the terms for manuscript, code, data, and supplementary materials, and point to any component-level license files.
+- Do not invent or guess licensing terms. If the researcher has not chosen a license, ask before creating the file.
+- In real publication mode, do not proceed beyond phase 3 without `publication-staging/LICENSE`.
+- In developer sandbox mode, if the researcher explicitly defers licensing, leave `publication-staging/LICENSE` absent and record "license deferred — public-release blocker" in the internal phase notes for phase 5. Do not let this become a silent omission.
+
 **Copy supplementary materials:**
 
 - If research context was extracted in phase 2, copy the approved output into `publication-staging/supplementary/` now.
@@ -146,7 +155,10 @@ Use these statuses:
 - `blocked-missing-data` — required input data or external artifact is unavailable; name it.
 - `blocked-heavy-compute` — reproduction requires compute the agent/researcher did not approve for this run; state requirements.
 - `blocked-broken-code` — source code fails; include command/error summary.
+- `blocked-dependency` — an external dependency, package resolver, network access, license restriction, or platform requirement prevents running the script; name the dependency and the attempted command.
 - `manual-only` — figure requires manual post-processing; document the manual step and source artifacts.
+
+Do not use temporary final statuses such as `not-yet-run`, `todo`, or `unknown`. Before phase 5 every figure/table must have one of the statuses above, with evidence or a concrete blocker.
 
 For each paper figure/table:
 
@@ -154,7 +166,7 @@ For each paper figure/table:
 2. Identify the closest source path from which the final artifact was produced.
 3. If the source path is ambiguous after inspection, ask the researcher a concrete question before guessing. Include the figure/table, candidate scripts/notebooks, observed inputs/outputs, and your best hypothesis.
 4. Write or adapt a direct script under `code/figure-reproduction/` that can be run from the staging root.
-5. Prefer making the code executable and direct, even if the original repo used notebooks or multi-step exploratory scripts. The goal is one clear script per figure/table whenever feasible.
+5. Prefer making the code executable and direct, even if the original repo used notebooks or multi-step exploratory scripts. The goal is one clear script per figure/table whenever feasible. Grouped wrappers are acceptable only when a single command naturally produces several paper artifacts; in that case, mark the script as a grouped wrapper in `code/figure-reproduction/README.md` and list every generated output it covers.
 6. Make each script write generated output to `reproduction/figures/` unless there is a stronger local convention.
 7. Document inputs and outputs in `code/figure-reproduction/README.md`.
 

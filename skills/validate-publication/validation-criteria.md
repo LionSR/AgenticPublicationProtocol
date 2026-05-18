@@ -44,7 +44,7 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 - Supplementary materials outside `supplementary/` (e.g., `know-how.md` at root).
 - Severity: `warning` for misplaced files (the repo works but the structure is inconsistent).
 
-**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout, `data/README.md` whenever the publication uses any dataset, local or external, and `LICENSE`; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`; final validation produces `supplementary/validation-report.md`. Validate accordingly so `--stage structure` does not block on files that phase 4 or phase 5 haven't created yet.
+**Required files by stage.** The `/publish-paper` workflow creates required files progressively: `build.md` (phase 3) produces the layout, `data/README.md` whenever the publication uses any dataset, local or external, and creates or copies `LICENSE` after asking the researcher for licensing/reuse terms; `draft.md` (phase 4) produces `AGENTS.md`, `CLAUDE.md`, and `README.md`; final validation produces `supplementary/validation-report.md`. Validate accordingly so `--stage structure` does not block on files that phase 4 or phase 5 haven't created yet.
 
 | Required file | `structure` | `agents-md` | `full` |
 |---------------|-------------|-------------|--------|
@@ -57,8 +57,11 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 | `README.md` at root | — | error if missing | error if missing |
 | `code/figure-reproduction/README.md` for papers with generated figures/tables | warning if missing | error if missing | error if missing |
 | `supplementary/validation-report.md` | — | — | warning if missing during final `/publish-paper` validation; not required for standalone pre-report audits |
+| `supplementary/paper-agent-test.md` | — | — | error if missing during final `/publish-paper` validation; not required for standalone pre-test audits |
 
 The publication checklist is a skill-internal artifact of `/publish-paper` and is **not** a publication file — do not flag its absence.
+
+For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as a public-release blocker only if the researcher explicitly deferred licensing for the sandbox test. It is still an error for real publication mode and still means the staged tree is not release-ready.
 
 **File paths:**
 - Every path in AGENTS.md Repository Structure must resolve to a real file or directory
@@ -66,6 +69,12 @@ The publication checklist is a skill-internal artifact of `/publish-paper` and i
 - Every path in `supplementary/` references must resolve
 - Every script and output path in `code/figure-reproduction/README.md` must resolve, except outputs for blocked/manual items
 - Relative paths should be relative to the repo root, or to `publication-staging/` when validating a staged candidate release
+
+**Paper-agent smoke test:**
+- During final `/publish-paper` validation, `supplementary/paper-agent-test.md` should exist and document a fresh agent session launched with the staged repo root as its working directory.
+- The test should include 3-5 questions and answers covering ground-truth identification, main contribution, at least one representative reproduction command, blocked/manual/dependency-limited figures or tables, and heavy/platform-specific warnings when relevant.
+- The test passes only if the fresh agent answers from staged files, uses paths and commands that resolve inside staging, and accurately reports reproduction limitations.
+- If the environment could not launch a fresh agent session, the report should say `paper-agent-test: not performed` and classify this as a public-release blocker. A documentation-only review may be useful, but it is not a paper-agent smoke test.
 
 **Commands:**
 - Figure reproduction commands in `code/figure-reproduction/README.md` should be syntactically valid (parseable by the shell)
@@ -76,13 +85,15 @@ The publication checklist is a skill-internal artifact of `/publish-paper` and i
 - `code/figure-reproduction/README.md` is authoritative when present.
 - Every paper figure/table should appear in that README.
 - Each item should include: paper artifact, script, inputs, generated output, status, and notes.
-- Status should be one of: `reproduced`, `runs-but-differs`, `blocked-missing-data`, `blocked-heavy-compute`, `blocked-broken-code`, `manual-only`.
+- Status should be one of: `reproduced`, `runs-but-differs`, `blocked-missing-data`, `blocked-heavy-compute`, `blocked-broken-code`, `blocked-dependency`, `manual-only`.
+- Unknown or temporary statuses such as `not-yet-run`, `todo`, `unknown`, or blank statuses are `error` at `full`; at earlier stages, flag them as items that must be resolved before final validation.
 - A `reproduced` item must have an existing script and either a generated output path or recorded run evidence.
 - A blocked/manual item must document the attempted source scripts/notebooks, attempted command if any, and concrete blocker.
+- A `blocked-dependency` item must name the dependency, resolver/network/platform/licensing blocker, and the command attempted or the reason no command could be attempted.
 - If the figure-to-code mapping was ambiguous, the figure map should record the researcher clarification or state that clarification is still needed.
 - `AGENTS.md` must reference `code/figure-reproduction/README.md` and summarize the figure/table statuses.
 - README should either link to the same map or duplicate a compatible summary.
-- Each paper figure/table should map to a distinct direct script when feasible. Flag duplicates as `warning` unless the researcher explicitly documents why one script produces multiple figures or tables. This is an explicit exception to the severity convention: splitting may be non-trivial and the decision belongs to the researcher.
+- Each paper figure/table should map to a distinct direct script when feasible. Grouped wrappers are allowed when explicitly documented: the map must say the script is a grouped wrapper and list every paper artifact and generated output covered by the command. Flag duplicate scripts as `warning` unless this grouped-wrapper documentation is present. This is an explicit exception to the severity convention: splitting may be non-trivial and the decision belongs to the researcher.
 
 **External links:**
 - Test with `curl -sIL <url>` — flag non-2xx responses
@@ -107,6 +118,22 @@ Extends `../extract-chat-context/confidentiality-checklist.md` to cover the enti
 - Infrastructure: `/Users/*/`, `C:\Users\*/`, `192.168.*`, `10.0.*`, internal hostnames
 - Access-controlled: private repo URLs, internal tool references, unreleased work
 
+## Generated and hidden artifacts
+
+Generated artifacts are allowed only when they are intentional publication artifacts, such as compiled paper PDFs, paper figures, shipped small datasets, or documented reproduction outputs. They should have a canonical location and be described by `AGENTS.md`, README, `data/README.md`, or `code/figure-reproduction/README.md`.
+
+**Flag as errors when present and not explicitly justified:**
+- `.ipynb_checkpoints/` directories or files.
+- Notebook execution caches that expose local paths, outputs, credentials, private URLs, or unpublished data.
+- Hidden generated directories that are not standard metadata, such as `.cache/`, `.pytest_cache/`, `.mypy_cache/`, `.ruff_cache/`, `.ipynb_checkpoints/`, or tool-specific temporary output.
+
+**Flag as warnings unless documented as intentional source artifacts:**
+- Copied stale `results/`, `outputs/`, `figures/`, `plots/`, or build directories inside `code/`.
+- Generated reproduction outputs stored outside the documented `reproduction/` area.
+- Notebook outputs that are large, stale, or not needed for reader-agent use.
+
+When a generated artifact is intentionally included, the publication should explain why it is source-of-truth or needed for reproducibility, and `.gitignore` should prevent accidental future generated files from being added.
+
 ## Consistency
 
 **Cross-file checks:**
@@ -124,6 +151,7 @@ Extends `../extract-chat-context/confidentiality-checklist.md` to cover the enti
 - `paper_format` in frontmatter matches the actual paper file type
 - Computational requirements match what the code actually needs (e.g., don't say "any laptop" if code imports CUDA)
 - `version` in frontmatter matches the git tag per the normalization rule in [PROTOCOL.md § Versioning](../../PROTOCOL.md#versioning): for `vMAJOR.MINOR.PATCH` tags, `version` has no leading `v` (tag `v1.0.0` → `version: "1.0.0"`); for non-semver tags, `version` matches the tag exactly.
+- Validation status language in AGENTS.md, README, `code/figure-reproduction/README.md`, and `supplementary/validation-report.md` should agree. Flag stale statements such as "commands have not yet been validated" when the validation report records successful runs. Also flag overly broad statements such as "fully validated" when release blockers, blocked figures, or manual-only items remain.
 
 ## Verified APP publication manifest
 

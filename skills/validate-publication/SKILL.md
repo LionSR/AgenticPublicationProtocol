@@ -41,6 +41,7 @@ Read the publication repo or staging tree to understand what's being validated:
 - `skills/` — any author-published skills
 - `data/README.md` — dataset provenance, access, and download instructions when the publication uses any dataset, local or external
 - `supplementary/validation-report.md` — prior validation report, if this is a final/revalidation pass
+- `supplementary/paper-agent-test.md` — fresh staging-root paper-agent smoke test, required during final `/publish-paper` validation
 - `APP_PUBLICATION.json` release asset — only when auditing a public tagged release, not when validating `publication-staging/`
 
 ### 2. Run APP validation checks
@@ -70,12 +71,14 @@ Only run at stages: `agents-md`, `full`.
 - Check that commands in the figure/table reproduction sections are syntactically valid.
 - For papers with generated figures/tables, verify `code/figure-reproduction/README.md` exists, is referenced from `AGENTS.md`, and is compatible with README.
 - Verify every paper figure/table is listed in `code/figure-reproduction/README.md`; every listed script exists; every `reproduced` item has run evidence or a generated output path; every blocked/manual item has a concrete reason.
+- Verify every figure/table status is in the allowed final enum from `validation-criteria.md`. Flag `not-yet-run`, `todo`, `unknown`, blank, or other temporary statuses as final-validation errors.
 - Verify `data/README.md` exists whenever the publication uses any dataset; verify every dataset documented there resolves, with local files present or external links reachable via `curl -sIL`.
-- Check that each figure/table reproduction entry maps to a distinct script when feasible; flag duplicate scripts as warnings unless the researcher explicitly documents why one script produces multiple figures or tables.
+- Check that each figure/table reproduction entry maps to a distinct script when feasible; flag duplicate scripts as warnings unless the figure map explicitly marks the script as a grouped wrapper and lists every artifact/output it covers.
 - When validating `publication-staging/`, verify commands and paths work with staging as the current working directory, and flag references to private parent-repo files.
 - Test external data links with `curl -sIL <url>` when appropriate; flag non-2xx responses or mark authentication-limited links as needing manual verification.
 - Check that `supplementary/` references point to real files.
 - Check folder structure conformance against the layout defined in [PROTOCOL.md](../../PROTOCOL.md#repository-layout). See `validation-criteria.md` for the detailed checklist of what to flag.
+- Check for hidden or generated artifacts that should not be staged as source-of-truth files, including `.ipynb_checkpoints/`, notebook execution caches, hidden generated folders, stale `results/`, stale `figures/`, and build outputs not intentionally documented as paper artifacts or reproduction outputs.
 
 Run at all stages.
 
@@ -101,11 +104,13 @@ Cross-check information across files:
 - `AGENTS.md` paper summary vs README description — should be compatible.
 - Figure/table reproduction information in `AGENTS.md` vs README — commands and paths should match.
 - Figure/table reproduction information in `AGENTS.md` and README vs `code/figure-reproduction/README.md` — the code README is authoritative.
+- Validation/reproduction status language in `AGENTS.md` and README vs the validation report and figure map — stale phrases such as "not yet validated" should be flagged when validation evidence says commands were run, and overly strong "fully validated" language should be flagged when blockers remain.
 - Citation in `AGENTS.md` vs README — should be identical when both exist.
 - Computational requirements vs actual code — for example, do not claim "runs on any laptop" if the code requires CUDA.
 - Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.
 - Required APP files exist for the current validation stage.
 - `data/README.md` exists whenever the publication uses any dataset, local or external.
+- During final `/publish-paper` validation, `supplementary/paper-agent-test.md` exists and records a fresh agent session launched with the staged repo as its working directory. It should include representative Q&A showing the agent can identify ground truth, summarize the paper, point to real reproduction commands, and accurately report blockers. If this is missing or only a documentation review, classify it as a public-release blocker.
 - Setup, data access, and reproduction instructions are complete enough for a reader agent to know what can be run, what data is required, and what requires manual/human steps.
 
 This is a completeness/usability check, not a prose-quality review. Do not flag wording only because it sounds generic; flag missing information only when it blocks APP use.
@@ -133,6 +138,8 @@ Classify findings with:
 
 - **Passed checks**: APP requirements that were checked and passed.
 - **Issues needing changes**: concrete changes required or recommended.
+- **Public-release blockers**: error-level issues or explicit sandbox deferrals that prevent real APP publication, even if a dev-sandbox run can be recorded.
+- **Sandbox-only deferrals**: items the researcher intentionally deferred for implementation testing, such as missing `LICENSE`; these must not be described as full APP compliance.
 - **Manual verification needed**: items the agent could not verify, such as authenticated data links or commands too heavy to run.
 
 For each issue include:
@@ -175,6 +182,12 @@ Warnings (1)
 
 ### Manual verification needed
 - External data link requires authentication; researcher should confirm it is accessible to intended readers.
+
+### Public-release blockers
+- None.
+
+### Sandbox-only deferrals
+- None.
 
 ### Brief summary for chat
 Validation found two release-blocking APP issues: a missing figure script and inconsistent Figure 4 commands. The rest of the checked structure, paths, and metadata passed.
