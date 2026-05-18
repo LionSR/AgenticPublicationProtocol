@@ -1,9 +1,9 @@
 ---
-name: load-paper-agent
-description: Load a published paper agent, local publication-staging tree, non-APP paper repository, or arXiv paper into your current project. Use when a user wants to consult, build on, test, import, or discuss a paper. For arXiv IDs or URLs, fetch metadata/source, search for associated public code, and create a protocol-shaped local import before continuing with paper-agent classification.
+name: load-paper
+description: Load a published paper repository, local publication-staging tree, non-APP paper repository, or arXiv paper into your current project. Use when a user wants to consult, build on, test, import, or discuss a paper. For arXiv IDs or URLs, fetch metadata/source, search for associated public code, and create a protocol-shaped local import before continuing with paper classification.
 ---
 
-# Load Paper Agent
+# Load Paper
 
 Load a published paper into your project so you can consult it, reproduce results, and build on the work. This is a reader/import utility, not a required part of publishing or validating an APP publication.
 
@@ -12,13 +12,13 @@ For debugging or exploratory review, this skill can also inspect a local APP can
 ## Triggering
 
 User says something like:
-- "Load paper agent from https://github.com/user/paper-repo"
+- "Load paper from https://github.com/user/paper-repo"
 - "I want to consult the paper at <url>"
 - "Add this paper as a sub-agent: <url>"
 - "Load arXiv paper 2301.07041"
 - "Load this paper from arXiv: https://arxiv.org/abs/2301.07041"
-- "Load <arxiv-id> as a paper agent"
-- "Test/load the paper agent from publication-staging"
+- "Load <arxiv-id> as a paper"
+- "Test/load the paper from publication-staging"
 
 ## Steps
 
@@ -277,4 +277,4 @@ Add to the user's AGENTS.md:
 - [Paper Title](papers/paper-name/AGENTS.md) — [one-line description of how it relates to this project]
 ```
 
-This makes the paper agent's context available whenever the user works on their project.
+This makes the paper context available whenever the user works on their project.

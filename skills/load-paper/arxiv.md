@@ -1,6 +1,6 @@
 # arXiv Input Mode
 
-Use this file when `/load-paper-agent` receives an arXiv ID or arXiv URL. This is a special input mode of the loader, not a separate user-facing skill.
+Use this file when `/load-paper` receives an arXiv ID or arXiv URL. This is a special input mode of the loader, not a separate user-facing skill.
 
 Load an arXiv paper into the current project by its ID or URL. Fetch metadata directly from arXiv, load the arXiv source package when available, fall back to PDF only when source is unavailable or unusable, search for associated public code by default, download credible public GitHub code when found, and generate a protocol-shaped local import. This is useful for bootstrapping a publication or pulling in a paper for reference.
 
@@ -182,7 +182,7 @@ Present:
 
 Downloaded code improves the local import, but it does not by itself create APP verification.
 
-After creating and reporting the import, continue with `load-paper-agent` classification using `papers/arxiv-ARXIV_ID/` as the repo root.
+After creating and reporting the import, continue with `load-paper` classification using `papers/arxiv-ARXIV_ID/` as the repo root.
 
 ## 6. Find Non-Code Associated Resources Only When Explicitly Asked
 
@@ -229,6 +229,6 @@ Let the user decide what to do next for these non-code resources.
 
 ## Integration
 
-- If a downloaded code repo has `AGENTS.md`, classify that repository using the normal `/load-paper-agent` APP status checks.
+- If a downloaded code repo has `AGENTS.md`, classify that repository using the normal `/load-paper` APP status checks.
 - If the user wants to publish their own version of the paper, hand off to `/publish-paper`.
 - The generated `AGENTS.md` is a starter. If the user is the author, they should flesh it out with `/publish-paper`.

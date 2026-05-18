@@ -72,7 +72,7 @@ cd their-paper
 
 The agent reads `AGENTS.md` on startup and now speaks for the paper.
 
-Claude Code users can also run `/load-paper-agent <repo-url>` to clone a published paper into the current project as a sub-agent without leaving the working session.
+Claude Code users can also run `/load-paper <repo-url>` to clone or import a paper into the current project without leaving the working session.
 
 ## Skills
 
@@ -98,7 +98,7 @@ This is a useful companion skill, but it is not required to create or validate a
 
 | Skill | What it does |
 |-------|--------------|
-| `/load-paper-agent` | Load a published paper, local APP candidate, non-APP paper repo, or arXiv paper into the current project. Classifies APP status when possible; for arXiv inputs, fetches metadata/source, searches for associated public code, and creates a protocol-shaped local import. |
+| `/load-paper` | Load a published paper, local APP candidate, non-APP paper repo, or arXiv paper into the current project. Classifies APP status when possible; for arXiv inputs, fetches metadata/source, searches for associated public code, and creates a protocol-shaped local import. |
 
 ## External skills and extensions
 
