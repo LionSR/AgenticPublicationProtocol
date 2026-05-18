@@ -18,6 +18,14 @@ Licensing is a required part of full APP compliance. Before treating validation 
 - in real publication mode, stop and ask the researcher to choose or provide a license before continuing;
 - in developer sandbox mode, continue only if the researcher explicitly deferred licensing for the sandbox test, and classify the outcome as "completed with public-release blocker: missing LICENSE" rather than a clean full-validation pass.
 
+Track the final validation outcome with these categories:
+
+- `release-ready`: full validation passed and no public-release blockers remain.
+- `release-blocked`: validation found errors or release blockers; real publication cannot proceed.
+- `sandbox-pass`: developer-sandbox workflow completed and the candidate would be release-ready except for the intentionally absent public repo/tag/manifest.
+- `sandbox-pass-with-release-blockers`: developer-sandbox workflow completed, but one or more public-release blockers remain, such as missing `LICENSE`, unresolved temporary figure statuses, stale validation language, hidden/generated artifacts that must be cleaned, or validation errors intentionally preserved for protocol testing.
+- `sandbox-fail`: developer-sandbox workflow did not complete or the candidate cannot be meaningfully evaluated.
+
 Also check that `publication-staging/` has no dependency on the private parent repo:
 
 - no commands that require files outside staging;
@@ -47,7 +55,7 @@ Present the final staged state **one piece at a time**, not as a single wall of 
 2. **License.** Confirm `publication-staging/LICENSE` and summarize the reuse terms. Ask: "Is this the license/reuse language you want attached to the staged publication?" In dev-sandbox mode, if licensing was deferred, say explicitly that this is a public-release blocker.
 3. **`AGENTS.md` and `README.md`.** Briefly confirm they still read correctly after all revisions — this is a staleness check, not a full re-review (that was phase 4).
 4. **Supplementary materials.** List what's in `publication-staging/supplementary/`. Ask: "Are you comfortable with all of this being public?" In dev-sandbox mode, phrase this as "safe for this sandbox test" if the fixture is not intended for publication.
-5. **Validation results.** Show any remaining warnings from the validation sweep. Walk through each one — don't just list them.
+5. **Validation results.** Show passed checks, warnings, public-release blockers, sandbox-only deferrals, and manual verification items separately. Walk through each issue — don't just list them.
 6. **Figure reproduction.** Summarise counts from `code/figure-reproduction/README.md`: total figures/tables, direct scripts, reproduced, runs-but-differs, blocked, and manual-only. Walk through any non-`reproduced` items.
 7. **Paper-agent test.** Summarise what the local staging-root test showed.
 
@@ -351,9 +359,10 @@ DEV-SANDBOX RESULT SUMMARY:
   Sandbox target:          <path>
   Candidate tree:          publication-staging/
   Test case:               <new publication example | revision example | fixture name>
-  Validation status:       <passed | failed>
+  Validation status:       <release-ready | release-blocked | sandbox-pass | sandbox-pass-with-release-blockers | sandbox-fail>
   Paper-agent test status: <passed | failed>
   Public-release blockers: <none | missing LICENSE | other blockers>
+  Sandbox-only deferrals:  <none | list explicitly deferred items>
   Tree hash/checksum:      <hash if available>
 
   Outcome:
@@ -373,6 +382,8 @@ Record the implementation test result in the agreed sandbox log or test notes fo
 - source fixture/example;
 - validation result;
 - paper-agent test result;
+- public-release blockers;
+- sandbox-only deferrals;
 - failures and fixes needed, if any.
 
 If the run passed and the sandbox policy says to reset, reset the reusable sandbox to baseline. If the run failed or the researcher wants to inspect it, preserve `publication-staging/` and relevant logs temporarily.

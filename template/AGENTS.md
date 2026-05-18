@@ -83,6 +83,10 @@ Generated outputs should be written to `reproduction/figures/` unless `code/figu
 
 Reuse terms are defined in `LICENSE`. If different parts of the repository have different terms, answer licensing questions from the component-specific language in that file.
 
+## Validation Status
+
+<!-- Replace with the final validation state before release. State what was tested, what passed, and what remains blocked/manual. Keep this consistent with supplementary/validation-report.md and code/figure-reproduction/README.md. Do not leave stale placeholders such as "not yet validated" after validation has run. -->
+
 ## Skills
 
 <!-- Optional: if you included custom skills for this paper -->

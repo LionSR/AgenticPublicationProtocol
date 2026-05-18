@@ -78,13 +78,15 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 - `code/figure-reproduction/README.md` is authoritative when present.
 - Every paper figure/table should appear in that README.
 - Each item should include: paper artifact, script, inputs, generated output, status, and notes.
-- Status should be one of: `reproduced`, `runs-but-differs`, `blocked-missing-data`, `blocked-heavy-compute`, `blocked-broken-code`, `manual-only`.
+- Status should be one of: `reproduced`, `runs-but-differs`, `blocked-missing-data`, `blocked-heavy-compute`, `blocked-broken-code`, `blocked-dependency`, `manual-only`.
+- Unknown or temporary statuses such as `not-yet-run`, `todo`, `unknown`, or blank statuses are `error` at `full`; at earlier stages, flag them as items that must be resolved before final validation.
 - A `reproduced` item must have an existing script and either a generated output path or recorded run evidence.
 - A blocked/manual item must document the attempted source scripts/notebooks, attempted command if any, and concrete blocker.
+- A `blocked-dependency` item must name the dependency, resolver/network/platform/licensing blocker, and the command attempted or the reason no command could be attempted.
 - If the figure-to-code mapping was ambiguous, the figure map should record the researcher clarification or state that clarification is still needed.
 - `AGENTS.md` must reference `code/figure-reproduction/README.md` and summarize the figure/table statuses.
 - README should either link to the same map or duplicate a compatible summary.
-- Each paper figure/table should map to a distinct direct script when feasible. Flag duplicates as `warning` unless the researcher explicitly documents why one script produces multiple figures or tables. This is an explicit exception to the severity convention: splitting may be non-trivial and the decision belongs to the researcher.
+- Each paper figure/table should map to a distinct direct script when feasible. Grouped wrappers are allowed when explicitly documented: the map must say the script is a grouped wrapper and list every paper artifact and generated output covered by the command. Flag duplicate scripts as `warning` unless this grouped-wrapper documentation is present. This is an explicit exception to the severity convention: splitting may be non-trivial and the decision belongs to the researcher.
 
 **External links:**
 - Test with `curl -sIL <url>` — flag non-2xx responses
@@ -109,6 +111,22 @@ Extends `../extract-chat-context/confidentiality-checklist.md` to cover the enti
 - Infrastructure: `/Users/*/`, `C:\Users\*/`, `192.168.*`, `10.0.*`, internal hostnames
 - Access-controlled: private repo URLs, internal tool references, unreleased work
 
+## Generated and hidden artifacts
+
+Generated artifacts are allowed only when they are intentional publication artifacts, such as compiled paper PDFs, paper figures, shipped small datasets, or documented reproduction outputs. They should have a canonical location and be described by `AGENTS.md`, README, `data/README.md`, or `code/figure-reproduction/README.md`.
+
+**Flag as errors when present and not explicitly justified:**
+- `.ipynb_checkpoints/` directories or files.
+- Notebook execution caches that expose local paths, outputs, credentials, private URLs, or unpublished data.
+- Hidden generated directories that are not standard metadata, such as `.cache/`, `.pytest_cache/`, `.mypy_cache/`, `.ruff_cache/`, `.ipynb_checkpoints/`, or tool-specific temporary output.
+
+**Flag as warnings unless documented as intentional source artifacts:**
+- Copied stale `results/`, `outputs/`, `figures/`, `plots/`, or build directories inside `code/`.
+- Generated reproduction outputs stored outside the documented `reproduction/` area.
+- Notebook outputs that are large, stale, or not needed for reader-agent use.
+
+When a generated artifact is intentionally included, the publication should explain why it is source-of-truth or needed for reproducibility, and `.gitignore` should prevent accidental future generated files from being added.
+
 ## Consistency
 
 **Cross-file checks:**
@@ -126,6 +144,7 @@ Extends `../extract-chat-context/confidentiality-checklist.md` to cover the enti
 - `paper_format` in frontmatter matches the actual paper file type
 - Computational requirements match what the code actually needs (e.g., don't say "any laptop" if code imports CUDA)
 - `version` in frontmatter matches the git tag per the normalization rule in [PROTOCOL.md § Versioning](../../PROTOCOL.md#versioning): for `vMAJOR.MINOR.PATCH` tags, `version` has no leading `v` (tag `v1.0.0` → `version: "1.0.0"`); for non-semver tags, `version` matches the tag exactly.
+- Validation status language in AGENTS.md, README, `code/figure-reproduction/README.md`, and `supplementary/validation-report.md` should agree. Flag stale statements such as "commands have not yet been validated" when the validation report records successful runs. Also flag overly broad statements such as "fully validated" when release blockers, blocked figures, or manual-only items remain.
 
 ## Verified APP publication manifest
 
