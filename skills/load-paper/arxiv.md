@@ -1,32 +1,31 @@
----
-name: load-arxiv-paper
-description: Load a paper directly from arXiv by ID or URL. Fetches metadata, prefers arXiv source when available, falls back to PDF only when needed, searches for associated public/open-source code by default, and downloads credible public GitHub code when found. Author blog posts and OpenReview material remain optional extra searches.
----
+# arXiv Input Mode
 
-# Load Paper from arXiv
+Use this file when `/load-paper` receives an arXiv ID or arXiv URL. This is a special input mode of the loader, not a separate user-facing skill.
 
-Load an arXiv paper into your project by its ID or URL. Fetch metadata directly from arXiv, load the arXiv source package when available, fall back to PDF only when source is unavailable or unusable, search for associated public/open-source code by default, download credible public GitHub code when found, and generate a protocol-shaped local import. This is useful for bootstrapping a publication or pulling in a paper for reference.
+Load an arXiv paper into the current project by its ID or URL. Fetch metadata directly from arXiv, load the arXiv source package when available, fall back to PDF only when source is unavailable or unusable, search for associated public code by default, download credible public GitHub code when found, and generate a protocol-shaped local import. This is useful for bootstrapping a publication or pulling in a paper for reference.
+
+The result is a local import, not an author-approved or verified APP publication.
 
 ## Triggering
 
 User says something like:
+
 - "Load arXiv paper 2301.07041"
 - "Load this paper from arXiv: https://arxiv.org/abs/2301.07041"
 - "Fetch the arXiv paper at 2301.07041v2"
 - "Load arxiv 2301.07041 and find associated code and reviews"
 
-## Steps
-
-### 1. Parse the arXiv identifier
+## 1. Parse the arXiv Identifier
 
 Accept any of these formats and extract the arXiv ID:
+
 - Bare ID: `2301.07041` or `2301.07041v2`
 - Abstract URL: `https://arxiv.org/abs/2301.07041`
 - PDF URL: `https://arxiv.org/pdf/2301.07041`
 
-Normalize to the bare ID (e.g. `2301.07041`). If a version suffix is given (e.g. `v2`), preserve it.
+Normalize to the bare ID, preserving any version suffix such as `v2`.
 
-### 2. Fetch metadata and source first
+## 2. Fetch Metadata and Source First
 
 Run metadata and source requests concurrently. Do not download the PDF in the default path:
 
@@ -37,13 +36,14 @@ curl -L "https://arxiv.org/e-print/ARXIV_ID" -o /tmp/arxiv-ARXIV_ID-source &
 wait
 ```
 
-**From the metadata** (Atom XML), extract:
-- **Title**
-- **Authors** (names and affiliations if available)
-- **Abstract**
-- **Categories** (e.g. cs.CL, stat.ML)
-- **Published date** and **updated date**
-- **Links** — PDF link, DOI link if present, any related links
+From the metadata Atom XML, extract:
+
+- title
+- authors, including affiliations if available
+- abstract
+- categories, such as `cs.CL` or `stat.ML`
+- published date and updated date
+- links, including PDF link, DOI link if present, and any related links
 
 If the API returns no results or an error, inform the user and ask them to verify the ID.
 
@@ -52,19 +52,20 @@ Inspect `/tmp/arxiv-ARXIV_ID-source`:
 - Extract tar archives into `papers/arxiv-ARXIV_ID/paper/`.
 - Decompress a gzip-compressed single TeX file to `papers/arxiv-ARXIV_ID/paper/main.tex`.
 - Copy an already-plain TeX file to `papers/arxiv-ARXIV_ID/paper/main.tex`.
-- Verify that `papers/arxiv-ARXIV_ID/paper/` contains at least one `*.tex` file. If several candidates exist, identify the likely main file by looking for `\documentclass`; if ambiguous, note that in `AGENTS.md`.
+- Verify that `papers/arxiv-ARXIV_ID/paper/` contains at least one `*.tex` file.
+- If several candidates exist, identify the likely main file by looking for `\documentclass`; if ambiguous, note that in `AGENTS.md`.
 
-If source is unavailable or unusable, then download the PDF:
+If source is unavailable or unusable, download the PDF fallback:
 
 ```bash
 curl -L "https://arxiv.org/pdf/ARXIV_ID" -o papers/arxiv-ARXIV_ID/paper/paper.pdf
 ```
 
-Verify `paper/paper.pdf` exists and is >0 bytes, retry once if needed, and report that this import used the PDF fallback. Do not create `paper.pdf` when usable source was loaded.
+Verify `paper/paper.pdf` exists and is nonempty, retry once if needed, and report that this import used the PDF fallback. Do not create `paper.pdf` when usable source was loaded.
 
-### 3. Find and download associated public code
+## 3. Find and Download Associated Public Code
 
-Code discovery is part of the default arXiv-loading workflow. Do not wait for a separate user request before checking for code. Treat "load this arXiv paper" as also meaning "look for the paper's associated public/open-source implementation".
+Code discovery is part of the default arXiv-loading workflow. Do not wait for a separate user request before checking for code. Treat "load this arXiv paper" as also meaning "look for the paper's associated public implementation".
 
 Create:
 
@@ -113,15 +114,15 @@ papers/arxiv-ARXIV_ID/supplementary/code-provenance.md
 
 The provenance file must list:
 
-- repositories found and evidence linking each to the paper;
-- canonical URL, commit SHA, archive path, and extracted path when downloaded;
-- repositories skipped because they are non-GitHub, too large, private, unreachable, or not clearly linked to the paper;
-- download or extraction failures;
-- whether each downloaded repository appears agent-readable, APP-structured, or neither.
+- repositories found and evidence linking each to the paper
+- canonical URL, commit SHA, archive path, and extracted path when downloaded
+- repositories skipped because they are non-GitHub, too large, private, unreachable, or not clearly linked to the paper
+- download or extraction failures
+- whether each downloaded repository appears agent-readable, APP-structured, or neither
 
 Do not classify a downloaded code repository as a verified APP publication unless a matching public tagged release manifest is actually verified. A normal public repository with paper code is only associated code. If no license is discoverable, call it "publicly visible code" rather than "open-source code".
 
-### 4. Generate a protocol-shaped local import
+## 4. Generate a Protocol-Shaped Local Import
 
 Create a local tree that follows the APP repository layout as far as a third-party arXiv import can. It is not a verified APP publication, but it should be easy for a reader agent to use.
 
@@ -147,7 +148,7 @@ Required files:
 
 Use root-relative paths throughout. Do not reference temporary files or parent-repo paths from `AGENTS.md`, README, or provenance files.
 
-Populate `AGENTS.md` following [PROTOCOL.md](../../PROTOCOL.md#agentsmd). Use the YAML frontmatter fields from the protocol (`protocol`, `protocol_version`, `title`, `authors`, `arxiv_id`, `paper_format`, `version`, `domain`, `tags`).
+Populate `AGENTS.md` following [PROTOCOL.md](../../PROTOCOL.md#agentsmd). Use the YAML frontmatter fields from the protocol: `protocol`, `protocol_version`, `title`, `authors`, `arxiv_id`, `paper_format`, `version`, `domain`, and `tags`.
 
 This creates an APP-structured local import, not a verified APP publication. It has no public tagged release, no validation manifest, and no `app_publication_id`. State that explicitly in `AGENTS.md` and README.
 
@@ -156,76 +157,78 @@ Set `paper_format` according to the imported artifact:
 - `latex` when the arXiv source package produced TeX files.
 - `pdf` only when source import failed and the workflow fell back to PDF.
 
-Since this is an import (not an author publication), fill in what the metadata provides and mark the rest as placeholders:
-- **Paper Summary**: Use the arXiv abstract (note it's not an author-written agent summary)
-- **Key Results**: Leave as placeholder — the abstract doesn't enumerate contributions clearly enough
-- **Repository Structure**: List `paper/` and the likely main TeX file as the ground truth document when source was loaded. List `paper/paper.pdf` only for PDF fallback imports. List downloaded associated repositories under `code/external/`.
-- **What You Can Do**: distinguish reading the paper from inspecting or running downloaded code. Include setup/build commands from downloaded repository READMEs only when they are present and path-correct from the import root.
-- **Computational Requirements**: state what can be read locally, what can be inspected, and what has not been run. Warn before heavy downloads, builds, or external dataset access.
-- **Citation**: Generate a BibTeX entry from the metadata
-- Other required sections: populate with conservative defaults per the protocol
+Since this is an import, not an author publication, fill in what the metadata provides and mark the rest conservatively:
 
-### 5. Report to the user
+- **Paper Summary**: Use the arXiv abstract and note it is not an author-written agent summary.
+- **Key Results**: Leave as placeholder if the abstract does not enumerate contributions clearly enough.
+- **Repository Structure**: List `paper/` and the likely main TeX file as the ground truth document when source was loaded. List `paper/paper.pdf` only for PDF fallback imports. List downloaded associated repositories under `code/external/`.
+- **What You Can Do**: Distinguish reading the paper from inspecting or running downloaded code. Include setup/build commands from downloaded repository READMEs only when they are present and path-correct from the import root.
+- **Computational Requirements**: State what can be read locally, what can be inspected, and what has not been run. Warn before heavy downloads, builds, or external dataset access.
+- **Citation**: Generate a BibTeX entry from the metadata.
+- Other required sections: populate with conservative defaults per the protocol.
+
+## 5. Report to the User
 
 Present:
-- Paper title and authors
-- Abstract (first 3-4 sentences)
-- arXiv categories
-- Where files were saved
-- Whether LaTeX source was loaded or the workflow had to fall back to PDF
-- Associated public/open-source code repositories found, downloaded, and extracted, including local paths and commit SHAs.
-- Any code repositories searched for but not found, not clearly linked, not reachable, too large, or not downloaded.
-- That this is a local arXiv import, not an author-approved or verified APP publication. Downloaded code improves the local import, but it does not by itself create APP verification.
 
-### 6. Find non-code associated resources (ONLY when explicitly asked)
+- paper title and authors
+- abstract, using the first 3-4 sentences or a concise summary
+- arXiv categories
+- where files were saved
+- whether LaTeX source was loaded or the workflow had to fall back to PDF
+- associated public code repositories found, downloaded, and extracted, including local paths and commit SHAs
+- any code repositories searched for but not found, not clearly linked, not reachable, too large, or not downloaded
+- that this is a local arXiv import, not an author-approved or verified APP publication
+
+Downloaded code improves the local import, but it does not by itself create APP verification.
+
+After creating and reporting the import, continue with `load-paper` classification using `papers/arxiv-ARXIV_ID/` as the repo root.
+
+## 6. Find Non-Code Associated Resources Only When Explicitly Asked
 
 Code search and code download are already part of the default load path. Do not repeat them here unless the user asks for a deeper code search.
 
-Search for author blog posts, OpenReview rebuttals, reviews, social-media threads, slides, and talks only when the user explicitly asks — e.g. "look for reviews", "find everything related to this paper", "find associated resources", or "find author commentary".
+Search for author blog posts, OpenReview rebuttals, reviews, social-media threads, slides, and talks only when the user explicitly asks, e.g. "look for reviews", "find everything related to this paper", "find associated resources", or "find author commentary".
 
-When the user asks for non-code resources, spawn parallel subagents for the relevant searches.
+When the user asks for non-code resources, run the relevant searches in parallel when possible.
 
-#### 6a. Author blog posts
+### Author Blog Posts
 
 Search the web for blog posts by the authors about this paper:
-- Search for `"PAPER_TITLE" blog` or `"FIRST_AUTHOR" "PAPER_TITLE" blog`
-- Check common platforms: author's personal site, Medium, Towards Data Science, distill.pub, the institution's blog
-- Look for Twitter/X threads by the authors discussing the paper
 
-Report any blog posts or threads found with URLs. Don't editorialize — just provide the links and a one-line description of each.
+- Search for `"PAPER_TITLE" blog` or `"FIRST_AUTHOR" "PAPER_TITLE" blog`.
+- Check common platforms: author's personal site, Medium, Towards Data Science, distill.pub, the institution's blog.
+- Look for Twitter/X threads by the authors discussing the paper.
 
-#### 6b. OpenReview rebuttals and reviews
+Report any blog posts or threads found with URLs. Do not editorialize; provide the links and a one-line description of each.
+
+### OpenReview Rebuttals and Reviews
 
 Search for the paper on OpenReview:
-- Search `https://openreview.net/search?term=PAPER_TITLE` (or use web search: `site:openreview.net "PAPER_TITLE"`)
-- If found, report:
-  - The OpenReview forum URL
-  - The venue (e.g. ICLR 2024, NeurIPS 2023)
-  - Number of reviews available
-  - Whether author responses/rebuttals are present
-- If the paper has reviews, offer to fetch and summarize them
 
-If not found on OpenReview, report that — not all papers go through OpenReview.
+- Search `https://openreview.net/search?term=PAPER_TITLE`, or use web search: `site:openreview.net "PAPER_TITLE"`.
+- If found, report the OpenReview forum URL, venue, number of reviews available, and whether author responses or rebuttals are present.
+- If the paper has reviews, offer to fetch and summarize them.
 
-#### 6c. Present findings
+If not found on OpenReview, report that; not all papers go through OpenReview.
 
-After all subagent searches complete, present a consolidated summary:
+### Present Findings
 
-```
+After searches complete, present a consolidated summary:
+
+```text
 ## Associated Resources for "PAPER TITLE"
 
-**Blog posts**: [found/not found] — URLs if found
-**OpenReview**: [found/not found] — URL and venue if found
+Blog posts: found/not found — URLs if found
+OpenReview: found/not found — URL and venue if found
 
-Would you like me to:
-- Fetch and summarize the OpenReview reviews?
-- Inspect downloaded code more deeply?
+Would you like me to fetch and summarize the OpenReview reviews or inspect downloaded code more deeply?
 ```
 
 Let the user decide what to do next for these non-code resources.
 
-## Integration with other skills
+## Integration
 
-- If a downloaded code repo has `AGENTS.md`, hand off to `/load-paper-agent` to classify that repository as agent-readable, APP-structured, or verified APP.
-- If the user wants to publish their own version of the paper, hand off to `/publish-paper`
-- The generated AGENTS.md is a starter — if the user is the author, they should flesh it out with `/publish-paper`
+- If a downloaded code repo has `AGENTS.md`, classify that repository using the normal `/load-paper` APP status checks.
+- If the user wants to publish their own version of the paper, hand off to `/publish-paper`.
+- The generated `AGENTS.md` is a starter. If the user is the author, they should flesh it out with `/publish-paper`.

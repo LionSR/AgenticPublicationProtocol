@@ -72,30 +72,33 @@ cd their-paper
 
 The agent reads `AGENTS.md` on startup and now speaks for the paper.
 
-Claude Code users can also run `/load-paper-agent <repo-url>` to clone a published paper into the current project as a sub-agent without leaving the working session.
+Claude Code users can also run `/load-paper <repo-url>` to clone or import a paper into the current project without leaving the working session.
 
 ## Skills
 
-**Main entry point**
+The skills in this repository are grouped by how essential they are to the APP workflow.
+
+**Core publication workflow**
 
 | Skill | What it does |
 |-------|--------------|
 | `/publish-paper` | Package a working repo into an APP publication. |
+| `/validate-publication` | Check APP structure, paths, privacy, clear factual consistency, reader-agent usability, and release manifest verification when applicable. Called by `/publish-paper` and also useful on its own. |
+| `/extract-chat-context` | Pull publication-safe research context from local Claude Code / Codex chat/session history for supplementary materials. Optional helper called by `/publish-paper`. |
 
-**Called by `/publish-paper`**
-
-| Skill | What it does |
-|-------|--------------|
-| `/validate-publication` | Check APP structure, paths, privacy, clear factual consistency, reader-agent usability, and release manifest verification when applicable. |
-| `/extract-chat-context` | Pull publication-safe research context from local Claude Code / Codex chat/session history for supplementary materials. |
-
-**Standalone**
+**Optional publication add-ons**
 
 | Skill | What it does |
 |-------|--------------|
-| `/create-paper-page` | Generate a GitHub Pages landing page for a published paper. |
-| `/load-paper-agent` | Load a published paper into the current project as a sub-agent and classify whether it is agent-readable, APP-structured, or a verified APP publication. |
-| `/load-arxiv-paper` | Load a paper directly from arXiv — fetch metadata, prefer source/LaTeX, fall back to PDF only when needed, search for associated public/open-source code by default, and download credible public GitHub code when found. Works on any paper, not only APP-compliant ones. |
+| `/create-paper-page` | Generate a GitHub Pages landing page for a published paper. Not required for APP compliance; may be offered after `/publish-paper` succeeds. |
+
+**Reader and import utility**
+
+This is a useful companion skill, but it is not required to create or validate an APP publication.
+
+| Skill | What it does |
+|-------|--------------|
+| `/load-paper` | Load a published paper, local APP candidate, non-APP paper repo, or arXiv paper into the current project. Classifies APP status when possible; for arXiv inputs, fetches metadata/source, searches for associated public code, and creates a protocol-shaped local import. |
 
 ## External skills and extensions
 

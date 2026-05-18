@@ -1,28 +1,30 @@
 ---
-name: load-paper-agent
-description: Load a published paper agent or local publication-staging tree into your current project as a sub-agent. Use when a user wants to consult, build on, test, or discuss a paper that follows the Agentic Publication Protocol. Also works with non-APP repos by using AGENTS.md, CLAUDE.md, README, paper files, and code when available.
+name: load-paper
+description: Load a published paper repository, local publication-staging tree, non-APP paper repository, or arXiv paper into your current project. Use when a user wants to consult, build on, test, import, or discuss a paper. For arXiv IDs or URLs, fetch metadata/source, search for associated public code, and create a protocol-shaped local import before continuing with paper classification.
 ---
 
-# Load Paper Agent
+# Load Paper
 
-Load a published paper into your project so you can consult it, reproduce results, and build on the work. During pre-publication validation, load a local `publication-staging/` tree so it can be tested exactly as a future reader agent would see it.
+Load a published paper into your project so you can consult it, reproduce results, and build on the work. This is a reader/import utility, not a required part of publishing or validating an APP publication.
 
-During `/publish-paper`, this skill can also be used in local staging-root mode to test `publication-staging/` before it is promoted to a public repo. In that case, do not clone anything; treat the supplied local staging directory as the paper repo root.
+For debugging or exploratory review, this skill can also inspect a local APP candidate such as `publication-staging/`. In that case, do not clone anything; treat the supplied local staging directory as the paper repo root. The `/publish-paper` workflow performs its required final paper-agent smoke test directly from the staging root rather than depending on this loader.
 
 ## Triggering
 
 User says something like:
-- "Load paper agent from https://github.com/user/paper-repo"
+- "Load paper from https://github.com/user/paper-repo"
 - "I want to consult the paper at <url>"
 - "Add this paper as a sub-agent: <url>"
-- "Load <arxiv-id> as a paper agent"
-- "Test/load the paper agent from publication-staging"
+- "Load arXiv paper 2301.07041"
+- "Load this paper from arXiv: https://arxiv.org/abs/2301.07041"
+- "Load <arxiv-id> as a paper"
+- "Test/load the paper from publication-staging"
 
 ## Steps
 
-### 1. Locate the paper repo
+### 1. Locate or import the paper
 
-If the user or `/publish-paper` supplies a local staging path such as `publication-staging/`, skip cloning:
+If the user supplies a local staging path such as `publication-staging/`, skip cloning:
 
 ```bash
 cd publication-staging
@@ -44,7 +46,7 @@ git clone --branch v1.0.0 <url> papers/<repo-name>
 
 If the user does not specify a version and the default branch is not exactly at a release tag, the repo can still be explored, but it cannot be verified as an APP publication from that checkout. For APP verification, prefer checking out an explicit release tag. If GitHub release metadata is available, identify the latest release tag and offer to check it out before verification.
 
-If the user gives an arXiv ID instead of a GitHub URL, prefer using the `/load-arxiv-paper` skill — it fetches arXiv metadata and source/PDF, searches for associated public/open-source code by default, and downloads credible public GitHub code when found. If that skill is not available, fall back to searching for the corresponding repo (check the paper's PDF for public code links, then search GitHub and the web for the arXiv ID, title, and first author plus `code` or `implementation`).
+If the user gives an arXiv ID or URL instead of a GitHub URL, use the arXiv input mode in [`arxiv.md`](arxiv.md). That mode creates a local import under `papers/arxiv-ARXIV_ID/`, then returns here for APP compliance and exploration checks using that import root.
 
 If the clone fails (private repo, wrong URL), inform the user and ask for the correct URL or access.
 
@@ -275,4 +277,4 @@ Add to the user's AGENTS.md:
 - [Paper Title](papers/paper-name/AGENTS.md) — [one-line description of how it relates to this project]
 ```
 
-This makes the paper agent's context available whenever the user works on their project.
+This makes the paper context available whenever the user works on their project.

@@ -10,7 +10,7 @@
 
 This paper is published with an AI agent ([Agentic Publication Protocol](https://github.com/LionSR/AgenticPublicationProtocol)). Clone this repo and open it in an AI coding agent to ask questions, reproduce figures, and explore the work.
 
-**Claude Code:** clone and open — it reads `AGENTS.md` automatically. Or use `/load-paper-agent https://github.com/<owner>/<repo>`.
+**Claude Code:** clone and open — it reads `AGENTS.md` automatically. Or use `/load-paper https://github.com/<owner>/<repo>`.
 
 **Codex or other agents:** clone and open — any agent that reads `AGENTS.md` picks up the paper context.
 
