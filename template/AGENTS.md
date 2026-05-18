@@ -12,6 +12,8 @@ paper_format: ""  # latex, docx, markdown, html, video, pptx, pdf
 version: "1.0.0"
 domain: "your-field"
 tags: ["keyword1", "keyword2"]
+recommended_external_skills: []
+app_extensions: []
 ---
 
 # I am the agent for: YOUR PAPER TITLE
@@ -92,6 +94,17 @@ Reuse terms are defined in `LICENSE`. If different parts of the repository have 
 <!-- Optional: if you included custom skills for this paper -->
 <!-- List each skill and what it does -->
 <!-- - `skills/skill-name/SKILL.md` — description -->
+<!-- Bundled skills are part of this publication release only when they are in `skills/` and covered by the release license/manifest. -->
+
+## External Skills and Extensions
+
+<!-- Optional: list reusable skills or APP extensions hosted outside this repo. -->
+<!-- These are recommendations, not paper ground truth. Include source, version/tag, purpose, and trust status. -->
+<!-- Example:
+- `org.example/proofread-paper` v1.2.0 — https://github.com/example/app-skills/tree/v1.2.0/proofread-paper
+  Purpose: proofread manuscript prose before APP staging.
+  Trust: third-party; optional; not part of this publication's scientific ground truth.
+-->
 
 ## Computational Requirements
 
