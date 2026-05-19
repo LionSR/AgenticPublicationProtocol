@@ -4,22 +4,41 @@
 [![Latest release](https://img.shields.io/github/v/release/LionSR/AgenticPublicationProtocol?include_prereleases&sort=semver)](https://github.com/LionSR/AgenticPublicationProtocol/releases)
 [![License: CC-BY-4.0 / MIT](https://img.shields.io/badge/license-CC--BY--4.0%20%2F%20MIT-blue)](#license)
 
-APP is a format for authors to publish a finished paper as a GitHub repository any AI coding agent can represent. The repo carries the paper alongside the code, data, and context needed for the agent to explain the work, reproduce figures, run experiments, and answer questions — more of what the research actually contains than a static PDF can convey. A verified APP publication is a tagged public release with `AGENTS.md` plus an `APP_PUBLICATION.json` release manifest tying the release to validation and author approval. Readers clone the repo, open it in [Claude Code](https://claude.ai/claude-code), [Codex](https://github.com/openai/codex), or any other agent that reads [`AGENTS.md`](https://agents.md), and the agent speaks for the paper.
+## Motivation
 
-APP packages results authors have already produced; it does not help write or produce the research. Bring a finished paper, and APP defines how to publish it.
+In scientific research, the main product, the scientific paper, often contains only incomplete information about the work. Readers often need substantial effort to understand a paper and reproduce its results before using it in their own research. Important author know-how from the research process is often absent from the manuscript.
+
+Recent progress in AI agents creates a new way to address this problem: instead of only publishing a paper, **publish an agent**. If every publication comes with an agent that can explain the paper, help readers reproduce the results, and even support follow-up work, each user can access a faithful and thorough representation of the scientific work. This can accelerate research and enable forms of scientific collaboration that were not previously possible.
+
+## What is APP
+
+APP is an interactive format for authors to publish an AI agent together with research artifacts such as the paper, code, data, and related context. The bundle is a GitHub repository that users can open with any AI coding agent that reads `AGENTS.md`. The repo carries the paper alongside the code, data, and context needed for the agent to explain the work, reproduce figures, run experiments, and answer questions — more of what the research actually contains than a static manuscript can convey. The repo may also contain author-developed agent skills that are useful for understanding the work. A verified APP publication is a tagged public release with `AGENTS.md` plus an `APP_PUBLICATION.json` release manifest tying the release to validation and author approval. The structure of the published repository is illustrated below.
+
+![APP publication repository structure](assets/readme/publication_repo_structure.png)
+
+Readers clone the repo, open it in [Claude Code](https://claude.ai/claude-code), [Codex](https://github.com/openai/codex), or any other agent that reads [`AGENTS.md`](https://agents.md), and the agent speaks for the paper.
+
+Authors who plan to publish their paper in APP format can use the `publish-paper` skill. An agent with this skill helps authors prepare the repo for publication, including organizing publication materials, drafting the `AGENTS.md` instructions, validating the publication, and publishing the tagged release. The `publish-paper` workflow is shown below.
+
+![APP publishing workflow](assets/readme/publish_workflow.png)
+
+APP helps organize results authors have already produced. It does not provide AI tools for writing the paper itself or carrying out the research.
 
 This repository contains:
 
 - [`PROTOCOL.md`](PROTOCOL.md) — the specification of what an APP publication looks like.
-- [`skills/`](skills/) — tools that walk authors through producing one.
+- [`skills/`](skills/) — official APP skills, including `publish-paper`, `validate-publication`, `extract-chat-context`, `create-paper-page`, and `load-paper`.
 - [`template/`](template/) — starter files the skills adapt:
   - [`template/AGENTS.md`](template/AGENTS.md) — starter for the publication's `AGENTS.md`.
   - [`template/README.md`](template/README.md) — starter for the publication's human-facing `README.md`.
   - [`template/CLAUDE.md`](template/CLAUDE.md) — one-line Claude Code import (`@AGENTS.md`).
   - [`template/publications.md`](template/publications.md) — template for the working repo's `.publications.md` release log.
+- [`assets/readme/`](assets/readme/) — images used by this README.
+- [`.agents/`](.agents/), [`.claude-plugin/`](.claude-plugin/), and [`.codex-plugin/`](.codex-plugin/) — marketplace and plugin metadata for Codex and Claude Code.
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — how to propose changes to the protocol, templates, and official skills.
+- [`LICENSE`](LICENSE) — license terms for the protocol, skills, and templates.
 
-## Install
+## Install and Update
 
 ### Claude Code
 
@@ -36,29 +55,37 @@ codex plugin marketplace add LionSR/AgenticPublicationProtocol
 
 Then open Codex, find `Agentic Publication Protocol` in the plugin browser, and enable it.
 
-### Other tools
+### Manual install
 
-Clone this repo and point your agent at the `skills/` directory.
+Clone this repo and point your agent at the `skills/` directory. Use this path when you want to load the skills directly rather than installing the plugin.
 
-## Update
+### Update
 
 | Platform | Command |
 |----------|---------|
 | Claude Code | `/plugin update paper-protocol` |
 | Codex | `codex plugin marketplace upgrade paper-protocol` |
-| Other tools | `git pull` in the cloned directory |
+| Manual install | `git pull` in the cloned directory |
 
 New skills, reference files, and templates appear automatically after update — no re-install needed.
 
 ## Publish a paper
 
-Open your working repo in an AI coding agent with this plugin installed, then invoke:
+The working repo is the folder that contains the materials you want to publish. It may also contain raw materials, notes, or other context that helps explain the paper.
 
-```
+You need an AI coding agent that can read APP skills and operate in your working repo. To complete publication, the required Git and GitHub operations must also be completed, such as creating commits, tags, releases, and release assets. You can either allow the agent to perform these operations or run them manually when the skill instructs you to do so. If you want the agent to perform them, you may need to set up GitHub authentication.
+
+Open your working repo in an AI coding agent with this plugin installed, then invoke the `publish-paper` skill:
+
+```text
+# Claude Code
 /publish-paper
+
+# Codex
+$publish-paper
 ```
 
-The skill interviews you about the paper, copies the approved files into `publication-staging/`, creates the paper-agent docs with you, runs validation, and walks you through publishing a tagged release with a verifiable APP manifest. The process can span multiple sessions.
+The skill interviews you about the paper, copies the approved files into a `publication-staging/` subfolder, creates the publication's agent-facing docs with you, runs validation, and walks you through publishing a tagged release with a verifiable APP manifest. The process can span multiple sessions.
 
 ## Use a published paper
 
@@ -72,7 +99,7 @@ cd their-paper
 
 The agent reads `AGENTS.md` on startup and now speaks for the paper.
 
-Claude Code users can also run `/load-paper <repo-url>` to clone or import a paper into the current project without leaving the working session.
+If the `load-paper` skill is installed, you can use it with a repo URL to clone or import a paper into the current project without leaving the working session.
 
 ## Skills
 
@@ -82,15 +109,15 @@ The skills in this repository are grouped by how essential they are to the APP w
 
 | Skill | What it does |
 |-------|--------------|
-| `/publish-paper` | Package a working repo into an APP publication. |
-| `/validate-publication` | Check APP structure, paths, privacy, clear factual consistency, reader-agent usability, and release manifest verification when applicable. Called by `/publish-paper` and also useful on its own. |
-| `/extract-chat-context` | Pull publication-safe research context from local Claude Code / Codex chat/session history for supplementary materials. Optional helper called by `/publish-paper`. |
+| `publish-paper` | Package a working repo into an APP publication. |
+| `validate-publication` | Check APP structure, paths, privacy, clear factual consistency, reader-agent usability, and release manifest verification when applicable. Called by `publish-paper` and also useful on its own. |
+| `extract-chat-context` | Pull publication-safe research context from local Claude Code / Codex chat/session history for supplementary materials. Optional helper called by `publish-paper`. |
 
 **Optional publication add-ons**
 
 | Skill | What it does |
 |-------|--------------|
-| `/create-paper-page` | Generate a GitHub Pages landing page for a published paper. Not required for APP compliance; may be offered after `/publish-paper` succeeds. |
+| `create-paper-page` | Generate a GitHub Pages landing page for a published paper. Not required for APP compliance; may be offered after `publish-paper` succeeds. |
 
 **Reader and import utility**
 
@@ -98,7 +125,7 @@ This is a useful companion skill, but it is not required to create or validate a
 
 | Skill | What it does |
 |-------|--------------|
-| `/load-paper` | Load a published paper, local APP candidate, non-APP paper repo, or arXiv paper into the current project. Classifies APP status when possible; for arXiv inputs, fetches metadata/source, searches for associated public code, and creates a protocol-shaped local import. |
+| `load-paper` | Load a published paper, local APP candidate, non-APP paper repo, or arXiv paper into the current project. Classifies APP status when possible; for arXiv inputs, fetches metadata/source, searches for associated public code, and creates a protocol-shaped local import. |
 
 ## External skills and extensions
 
