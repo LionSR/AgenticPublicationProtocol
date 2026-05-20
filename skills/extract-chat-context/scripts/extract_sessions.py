@@ -34,8 +34,13 @@ def _extract_text(content):
 
 _SYSTEM_TAGS = (
     "system-reminder", "environment_context", "command-message",
-    "command-name", "INSTRUCTIONS", "instructions",
+    "command-name", "command-output", "command-stderr",
+    "local-command-stdout", "local-command-stderr",
+    "bash-input", "bash-stdout", "bash-stderr",
+    "INSTRUCTIONS", "instructions",
     "user-prompt-submit-hook", "context",
+    "github-webhook-activity", "available-skills",
+    "function_calls", "function_results",
 )
 
 
@@ -55,12 +60,6 @@ def _is_system_preamble(text):
     if re.match(r"^# (AGENTS|CLAUDE|GEMINI)\.md\b", stripped):
         return True
     return False
-
-
-def _truncate(text, max_chars=500):
-    if len(text) <= max_chars:
-        return text
-    return text[:max_chars] + "..."
 
 
 def _cwd_to_project_key(cwd):
@@ -160,7 +159,7 @@ def extract_claude_turns(lines):
             turns.append({
                 "index": idx,
                 "user": user_text,
-                "assistant": _truncate(assistant_text),
+                "assistant": assistant_text,
             })
         else:
             i += 1
@@ -249,7 +248,7 @@ def extract_codex_turns(lines):
             turns.append({
                 "index": idx,
                 "user": user_text,
-                "assistant": _truncate(assistant_text),
+                "assistant": assistant_text,
             })
         else:
             i += 1
