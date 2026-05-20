@@ -258,30 +258,20 @@ The recommended identifier format is:
 app-v1:sha256:<sha256(canonical-json-payload)>
 ```
 
-#### Canonicalization rules for `app-v1`
+### Canonicalization rules for `app-v1`
 
-To make `app_publication_id` reproducible across publishers, loaders, and platforms, the canonical JSON payload **MUST** be produced as follows:
+The canonical payload is the manifest with `app_publication_id` removed, serialized as JSON with sorted keys (Unicode code-point order at every level), no insignificant whitespace, no trailing newline, and non-ASCII characters escaped as `\uXXXX`. All required `app-v1` fields are strings or booleans; future optional fields that introduce numbers **MUST** be JSON integers. SHA-256 the resulting ASCII bytes; the lowercase hex digest follows the `app-v1:sha256:` prefix.
 
-1. Construct a JSON object containing every required field above, omitting `app_publication_id`. Required nested fields **MUST** be present; optional fields are excluded entirely.
-2. All string values **MUST** be UTF-8 and **MUST NOT** contain raw control characters (U+0000–U+001F).
-3. Within the required canonical fields, any numeric value **MUST** be a JSON integer (no fractional part, no exponent, no leading zeros, no leading `+`). Optional future fields that need floating-point representation **MUST** define their own canonicalization in the field that introduces them.
-4. Object keys **MUST** be sorted lexicographically by Unicode code point at every nesting level.
-5. The serialization **MUST** contain no insignificant whitespace and no trailing newline.
-6. Non-ASCII characters in string values **MUST** be escaped as `\uXXXX` sequences (six-byte ASCII form). The canonical payload is therefore pure ASCII.
-7. Hash the resulting byte sequence with SHA-256 and format the digest as lowercase hexadecimal.
-
-A reference command using `jq` 1.6 or later, followed by `shasum`:
+Reference command:
 
 ```bash
 jq -j -S -c -a 'del(.app_publication_id)' APP_PUBLICATION.json \
   | shasum -a 256 | awk '{print "app-v1:sha256:"$1}'
 ```
 
-`-S` sorts keys, `-c` produces compact output, `-a` escapes non-ASCII characters, and `-j` suppresses the trailing newline `jq` would otherwise append (required by rule 5). Publishers and loaders that use other tools **MUST** verify that their canonicalizer produces the same byte sequence as the reference command for a representative manifest before relying on it.
+Implementations that use other tools **MUST** verify they produce the same bytes as the reference command on a representative manifest before relying on them.
 
-#### Amending a published manifest
-
-A `(tag, manifest)` pair is immutable. If a published manifest needs to be revised — for example, to correct a typo in the validation report or to add an additional approving author — issue a new release with a new tag and a freshly computed manifest, just as for any other revision. Do not mutate the existing tag, force-push over the existing commit, or replace the published `APP_PUBLICATION.json` release asset in place; verifiers will continue to see the original `app_publication_id`, and downstream copies of the old manifest become inconsistent with the new one.
+### Verification
 
 The manifest is valid only for the exact `(repo_url, tag, commit, tree)` it names. A loader verifies APP status by downloading the release manifest, checking that the local checkout matches the manifest commit and tree, recomputing `app_publication_id`, and confirming that validation passed and human approval is recorded.
 
@@ -290,6 +280,10 @@ Repositories without a valid manifest can still be useful:
 - `AGENTS.md` present, no APP frontmatter: agent-readable repository.
 - `AGENTS.md` with `protocol: agentic-publication-protocol`, no valid manifest: APP-structured candidate.
 - Valid release manifest matching the checkout: verified APP publication.
+
+### Amending a published manifest
+
+A `(tag, manifest)` pair is immutable. Revisions **MUST** be issued as a new release with a new tag and a freshly computed manifest; do not mutate the tag, force-push over the commit, or replace the published `APP_PUBLICATION.json` asset in place.
 
 
 ## License
