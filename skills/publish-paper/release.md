@@ -140,7 +140,7 @@ PUBLICATION SUMMARY — please review before I publish:
     paper/          — <paper source format>, figures, bibliography
     code/           — <brief description>
     data/           — <brief description>
-    environment/    — <dependencies file>
+    environment/    — README.md plus dependency manifests/lockfiles/setup scripts when executable code or build tooling exists
     supplementary/  — <list which files: know-how, authors-note, sessions, validation-report, materials>
     skills/         — <list skill names, or "none">
     AGENTS.md       — paper agent instructions

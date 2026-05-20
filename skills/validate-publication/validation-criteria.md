@@ -52,6 +52,7 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 | `data/README.md` (when the publication uses any dataset, local or external) | error if missing | error if missing | error if missing |
 | `LICENSE` at root | error if missing | error if missing | error if missing |
 | `.gitignore` at root | warning if missing | warning if missing | warning if missing |
+| `environment/README.md` (when executable code, figure/table scripts, notebooks, or nontrivial build tools exist) | error if missing | error if missing | error if missing |
 | `AGENTS.md` at root | — | error if missing | error if missing |
 | `CLAUDE.md` at root (`@AGENTS.md`) | — | warning if missing | warning if missing |
 | `README.md` at root | — | error if missing | error if missing |
@@ -79,6 +80,8 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 **Commands:**
 - Figure reproduction commands in `code/figure-reproduction/README.md` should be syntactically valid (parseable by the shell)
 - Install commands should reference real package files (e.g., `environment/requirements.txt` exists)
+- If `environment/README.md` exists, setup commands in AGENTS.md, README, and figure-reproduction commands should use the documented environment or runner prefix (`.venv/bin/python`, `uv run`, project-local Julia depot, conda env, `Rscript`, `octave`, `matlab -batch`, `wolframscript`, etc.) unless the environment README says no activation/prefix is required.
+- Installed environment directories such as `.venv/`, `.julia_depot/`, `node_modules/`, conda env folders, and package caches should be gitignored rather than committed. Dependency manifests, lockfiles, setup scripts, and `environment/README.md` should be committed.
 - Don't run heavy commands unless explicitly approved — check they parse and reference real files, and require heavy commands to be marked as such
 
 **Figure/table reproduction:**
@@ -143,6 +146,7 @@ When a generated artifact is intentionally included, the publication should expl
 | Paper title | Frontmatter + identity | Heading | Exact |
 | Authors | Frontmatter | Under heading | Exact |
 | Paper summary | Paper Summary section | 1-2 sentence summary | Compatible (README is shorter) |
+| Environment setup | Environment Setup section | Setup section | Compatible; same setup commands and runner prefixes |
 | Figure reproduction | "Reproduce figures" section | "Figures" section | Compatible summary; both point to `code/figure-reproduction/README.md` when present |
 | Citation | Citation section | Citation section | Identical BibTeX |
 | Computational reqs | Computational Requirements | Setup section | Compatible |
@@ -150,6 +154,7 @@ When a generated artifact is intentionally included, the publication should expl
 **Internal consistency:**
 - `paper_format` in frontmatter matches the actual paper file type
 - Computational requirements match what the code actually needs (e.g., don't say "any laptop" if code imports CUDA)
+- Environment setup instructions match actual dependency files and command evidence. Flag stale or impossible setup commands, missing `environment/README.md`, or figure commands that bypass the documented environment.
 - `version` in frontmatter matches the git tag per the normalization rule in [PROTOCOL.md § Versioning](../../PROTOCOL.md#versioning): for `vMAJOR.MINOR.PATCH` tags, `version` has no leading `v` (tag `v1.0.0` → `version: "1.0.0"`); for non-semver tags, `version` matches the tag exactly.
 - Validation status language in AGENTS.md, README, `code/figure-reproduction/README.md`, and `supplementary/validation-report.md` should agree. Flag stale statements such as "commands have not yet been validated" when the validation report records successful runs. Also flag overly broad statements such as "fully validated" when release blockers, blocked figures, or manual-only items remain.
 
@@ -196,6 +201,7 @@ This is not a referee or prose-quality check. Do not flag wording simply because
 - The paper source designated as ground truth is easy to identify.
 - AGENTS.md explains what the agent can do with concrete paths or commands where needed.
 - README gives enough setup context for a reader to start using the paper agent.
+- Environment setup is reproducible: installed env directories are not required to be committed, but manifests/lockfiles/setup commands are present and documented.
 - Figure/table reproduction instructions cover the figures/tables the publication claims are reproducible.
 - Data requirements are clear: what is included, what must be downloaded, what is too large or access-controlled, and what is optional.
 - Heavy commands are labeled with expected runtime/hardware or marked as manual/heavy.

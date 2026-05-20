@@ -39,6 +39,7 @@ cp requirements.txt publication-staging/environment/
 
 Do not create an empty `LICENSE` placeholder at this point — wait until step 3.3 writes the real text.
 If the publication uses any dataset, local or external, `publication-staging/data/README.md` must also exist — authored below with the researcher.
+If the publication has executable code, figure/table reproduction scripts, notebooks, or a compilable manuscript with nontrivial tooling, `publication-staging/environment/README.md` must exist — authored below with the researcher and verified during validation.
 
 Use the file list from phase 2 — copy only what the researcher approved. Organize into the directory layout defined in [PROTOCOL.md § Repository layout](../../PROTOCOL.md#repository-layout). Not every directory is required — adapt to what is actually being published. See [`paper-types.md`](paper-types.md) for format-specific minimums.
 
@@ -68,6 +69,33 @@ Detail lives here; `AGENTS.md` carries only a concise pointer to `data/README.md
 - Record verified/flagged status in your internal phase notes and later in `publication-staging/supplementary/validation-report.md` during final validation.
 
 **Create a staging `.gitignore`** tailored to the candidate release tree — build artifacts, generated files, sensitive files, OS files.
+
+**Author `environment/README.md`.** If the publication includes runnable code, generated figures/tables, notebooks, or any nontrivial toolchain, create `publication-staging/environment/README.md`. Use [`template/environment-README.md`](../../template/environment-README.md) as a starting point, but remove unused examples before final validation. If the publication has no executable artifacts, omit `environment/` or include a short README saying no computational environment is required.
+
+Installed environments are normally **not** publication artifacts. Gitignore local environment directories and caches such as `.venv/`, `.julia_depot/`, `node_modules/`, `.Rproj.user/`, `.renv/` package caches, `.matlab/`, `.wolfram/`, `.cache/`, and tool-specific build caches unless the researcher explicitly identifies a small file as source material. The published repo must instead include enough recipes and pinned dependency files to recreate the environment.
+
+Detect the relevant toolchain from the source tree and staged files:
+
+- Python: `pyproject.toml`, `uv.lock`, `requirements.txt`, `environment.yml`, imports, notebooks.
+- Julia: `Project.toml`, `Manifest.toml`.
+- R: `renv.lock`, `DESCRIPTION`, `install.R`.
+- Node/JavaScript: `package.json`, npm/pnpm/yarn lockfiles.
+- MATLAB/Octave: `.m` files, required toolboxes/packages, Octave compatibility.
+- Mathematica/Wolfram: `.nb`, `.wl`, required paclets/kernel version.
+- TeX and document tools: `latexmkrc`, `.sty`, BibTeX/Biber, `pandoc`, `make`.
+- System tools: `make`, `cmake`, `ffmpeg`, solvers, CUDA/GPU drivers, compilers.
+
+`environment/README.md` must record:
+
+- supported platform(s) and versions actually tested, or "not tested";
+- dependency recipe files included in the repo, such as `environment/requirements.txt`, `pyproject.toml`, `uv.lock`, `Project.toml`, `Manifest.toml`, `environment.yml`, `package-lock.json`, or `renv.lock`;
+- exact setup commands from the staging root;
+- exact command prefixes readers/agents should use, such as `.venv/bin/python`, `uv run`, `JULIA_DEPOT_PATH=.julia_depot julia --project=code`, `Rscript`, `octave`, `matlab -batch`, or `wolframscript`;
+- what local generated environment directories are intentionally gitignored and how to recreate them;
+- heavyweight, proprietary, credentialed, platform-specific, or manually installed requirements;
+- setup commands attempted during staging and their result.
+
+Also make `AGENTS.md` and `README.md` contain the same setup information in concise form; `environment/README.md` is the detailed source of truth.
 
 **Create or copy `LICENSE`.** Use the licensing decision recorded in phase 2.
 
@@ -162,9 +190,11 @@ Do not use temporary final statuses such as `not-yet-run`, `todo`, or `unknown`.
 
 ### Dependency installation policy
 
-Before marking a figure/table or validation command `blocked-dependency`, make a reasonable attempt to satisfy missing dependencies when it is safe and authorized in the host environment.
+Before marking a figure/table or validation command `blocked-dependency`, make a reasonable attempt to prepare the needed execution environment when it is safe and authorized in the host environment.
 
-Safe install attempts include project-local or environment-scoped installs from explicit dependency files, such as `pip install -r requirements.txt`, `uv sync`, `npm install`, `julia --project -e 'using Pkg; Pkg.instantiate()'`, `Rscript` package restore commands, TeX package managers, or conda/mamba environment creation when those tools are already available. Prefer installs that are reproducible, logged, and scoped to the staged project or a disposable environment.
+Safe install attempts include project-local or environment-scoped installs from explicit dependency files, such as `python -m venv .venv && .venv/bin/pip install -r environment/requirements.txt`, `uv sync`, `npm ci`, `npm install`, `JULIA_DEPOT_PATH=.julia_depot julia --project=code -e 'using Pkg; Pkg.instantiate()'`, `Rscript`/`renv` restore commands, TeX package managers, or conda/mamba environment creation when those tools are already available. Prefer installs that are reproducible, logged, and scoped to the staged project or a disposable environment.
+
+Do not commit installed environments such as `.venv/`, `.julia_depot/`, `node_modules/`, conda env directories, or package caches. Commit the dependency manifests, lockfiles, and setup instructions needed to recreate them.
 
 Ask the researcher before installing or cloning anything when:
 
@@ -172,7 +202,7 @@ Ask the researcher before installing or cloning anything when:
 - the install would modify global system state, consume substantial disk/network/compute, require credentials, accept a license, or run untrusted external code;
 - the dependency is proprietary, commercial, platform-specific, unusually large, or likely to affect the user's machine beyond the current project.
 
-If authorization is already available and the install is low-risk, try it and record the command and result. If authorization is absent, unclear, denied, or the dependency cannot be safely installed, ask for permission or record the precise blocker. A `blocked-dependency` entry must say whether a safe install was attempted, skipped for authorization/safety reasons, or impossible because of licensing/platform constraints.
+If authorization is already available and the install is low-risk, try it and record the command and result in `environment/README.md` and later in `supplementary/validation-report.md`. If authorization is absent, unclear, denied, or the dependency cannot be safely installed, ask for permission or record the precise blocker. A `blocked-dependency` entry must say whether a safe install was attempted, skipped for authorization/safety reasons, or impossible because of licensing/platform constraints.
 
 For each paper figure/table:
 
@@ -209,6 +239,7 @@ Tell the researcher you're testing that everything runs with the new staging-roo
 
 Run commands from inside `publication-staging/` unless a tool truly requires a parent-repo command.
 
+- **Environment setup.** If `environment/README.md` exists, run the documented setup or verification commands when safe. Verify tool versions and record whether commands use the intended environment (`.venv/bin/python`, `uv run`, project-local Julia depot, conda env, MATLAB/Octave, Wolfram, etc.). If setup is unsafe, unavailable, proprietary, credentialed, or too heavy, record the precise blocker.
 - **Paper compilation.** Run the build command and check it succeeds (if the format compiles).
 - **Figure generation.** Run each script in `code/figure-reproduction/` whose status is intended to be `reproduced`; verify it produces the documented output and update the README status. Confirm the script-to-figure mapping still holds after the copy and reorganization — no new duplicates, no missing scripts.
 - **Tests.** If the staging tree has tests, run them.
