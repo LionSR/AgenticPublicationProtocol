@@ -264,7 +264,7 @@ To make `app_publication_id` reproducible across publishers, loaders, and platfo
 
 1. Construct a JSON object containing every required field above, omitting `app_publication_id`. Required nested fields **MUST** be present; optional fields are excluded entirely.
 2. All string values **MUST** be UTF-8 and **MUST NOT** contain raw control characters (U+0000–U+001F).
-3. Numeric values **MUST** be JSON integers (no fractional part, no exponent, no leading zeros, no leading `+`). Floating-point numbers are not permitted in the canonical payload.
+3. Within the required canonical fields, any numeric value **MUST** be a JSON integer (no fractional part, no exponent, no leading zeros, no leading `+`). Optional future fields that need floating-point representation **MUST** define their own canonicalization in the field that introduces them.
 4. Object keys **MUST** be sorted lexicographically by Unicode code point at every nesting level.
 5. The serialization **MUST** contain no insignificant whitespace and no trailing newline.
 6. Non-ASCII characters in string values **MUST** be escaped as `\uXXXX` sequences (six-byte ASCII form). The canonical payload is therefore pure ASCII.
@@ -273,11 +273,11 @@ To make `app_publication_id` reproducible across publishers, loaders, and platfo
 A reference command using `jq` 1.6 or later, followed by `shasum`:
 
 ```bash
-jq -S -c -a 'del(.app_publication_id)' APP_PUBLICATION.json \
+jq -j -S -c -a 'del(.app_publication_id)' APP_PUBLICATION.json \
   | shasum -a 256 | awk '{print "app-v1:sha256:"$1}'
 ```
 
-`-S` sorts keys, `-c` produces compact output, `-a` escapes non-ASCII characters. Publishers and loaders that use other tools **MUST** verify that their canonicalizer produces the same byte sequence as the reference command for a representative manifest before relying on it.
+`-S` sorts keys, `-c` produces compact output, `-a` escapes non-ASCII characters, and `-j` suppresses the trailing newline `jq` would otherwise append (required by rule 5). Publishers and loaders that use other tools **MUST** verify that their canonicalizer produces the same byte sequence as the reference command for a representative manifest before relying on it.
 
 #### Amending a published manifest
 

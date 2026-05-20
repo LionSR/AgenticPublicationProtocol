@@ -113,13 +113,13 @@ Create a release manifest payload that excludes `app_publication_id`, using the 
 Canonicalize the payload per [`PROTOCOL.md` § Canonicalization rules for `app-v1`](../../PROTOCOL.md#canonicalization-rules-for-app-v1) — sorted keys, compact output, non-ASCII escaped — and hash it:
 
 ```bash
-jq -S -c -a . APP_PUBLICATION.payload.json > APP_PUBLICATION.payload.canonical.json
+jq -j -S -c -a . APP_PUBLICATION.payload.json > APP_PUBLICATION.payload.canonical.json
 APP_ID="app-v1:sha256:$(shasum -a 256 APP_PUBLICATION.payload.canonical.json | awk '{print $1}')"
 jq --arg app_id "$APP_ID" '. + {app_publication_id: $app_id}' \
   APP_PUBLICATION.payload.json > APP_PUBLICATION.json
 ```
 
-The `-a` flag is required: it escapes non-ASCII characters (e.g. accented author names) to `\uXXXX` so the hash is reproducible across platforms with different default encodings.
+Both `-j` and `-a` are required — see PROTOCOL.md for why.
 
 The final `APP_PUBLICATION.json` should follow the manifest schema in [`PROTOCOL.md` § Verified APP publication manifest](../../PROTOCOL.md#verified-app-publication-manifest). Keep `APP_PUBLICATION.payload.json` and `APP_PUBLICATION.payload.canonical.json` out of the public repo unless the researcher explicitly wants to include them; `APP_PUBLICATION.json` is a release asset, not part of the committed tree.
 
