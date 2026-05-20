@@ -7,7 +7,7 @@ This file is the source of truth for recreating the computational environment fo
 - Tested platform: <!-- OS, architecture, date -->
 - Primary toolchain: <!-- Python / Julia / R / Node / MATLAB / Mathematica / TeX / other -->
 - Environment required: <!-- yes/no; if no, explain -->
-- Heavy/proprietary requirements: <!-- GPU, MATLAB toolbox, Mathematica paclet, licensed solver, credentials, etc. -->
+- External/proprietary requirements: <!-- GPU, VASP, MATLAB toolbox, Mathematica paclet, licensed solver, credentials, pseudopotential library, cluster module, etc. -->
 
 ## Dependency Files
 
@@ -58,6 +58,14 @@ matlab -batch "<command>"
 ```
 
 State the MATLAB release, required toolboxes, and whether Octave was tested.
+
+## External Or Licensed Software
+
+If reproducing the paper requires software that is not bundled with this repository and cannot be installed automatically, document it here even if the current agent could not run it.
+
+| Software | Version | Required components | Access/license | Expected command | Tested here? | Notes |
+|----------|---------|---------------------|----------------|------------------|--------------|-------|
+| <!-- VASP / MATLAB / Mathematica / COMSOL / Gaussian / solver --> | <!-- version --> | <!-- toolboxes, paclets, pseudopotentials, modules --> | <!-- license/credentials/manual install --> | <!-- command or executable --> | <!-- yes/no --> | <!-- blocker or alternative --> |
 
 ## Gitignored Local Environment Artifacts
 

@@ -82,6 +82,7 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 - Install commands should reference real package files (e.g., `environment/requirements.txt` exists)
 - If `environment/README.md` exists, setup commands in AGENTS.md, README, and figure-reproduction commands should use the documented environment or runner prefix (`.venv/bin/python`, `uv run`, project-local Julia depot, conda env, `Rscript`, `octave`, `matlab -batch`, `wolframscript`, etc.) unless the environment README says no activation/prefix is required.
 - Installed environment directories such as `.venv/`, `.julia_depot/`, `node_modules/`, conda env folders, and package caches should be gitignored rather than committed. Dependency manifests, lockfiles, setup scripts, and `environment/README.md` should be committed.
+- If reproduction requires external licensed or manually installed software such as VASP, MATLAB, Mathematica, COMSOL, Gaussian, or commercial solvers, `environment/README.md` should document the software name, version if known, required components, access/license requirement, expected executable/command, and whether validation could run it. Absence of the software in the validation environment is a blocker to record, not a reason to omit the requirement.
 - Don't run heavy commands unless explicitly approved — check they parse and reference real files, and require heavy commands to be marked as such
 
 **Figure/table reproduction:**

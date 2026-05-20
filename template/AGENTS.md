@@ -71,6 +71,9 @@ Run Julia commands with `JULIA_DEPOT_PATH=.julia_depot julia --project=code ...`
 
 MATLAB/Octave:
 State the tested MATLAB release/toolboxes or Octave version, and use `matlab -batch ...` or `octave ...`.
+
+External licensed software:
+If reproduction requires software such as VASP, Mathematica, MATLAB, COMSOL, Gaussian, or a commercial solver, state the software/version/access requirement here and point to `environment/README.md`. If it was not available during validation, say so explicitly.
 -->
 
 Local installed environments such as `.venv/`, `.julia_depot/`, and `node_modules/` are intentionally gitignored. Recreate them from the dependency manifests and commands documented here and in `environment/README.md`.

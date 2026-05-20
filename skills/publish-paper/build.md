@@ -82,6 +82,7 @@ Detect the relevant toolchain from the source tree and staged files:
 - Node/JavaScript: `package.json`, npm/pnpm/yarn lockfiles.
 - MATLAB/Octave: `.m` files, required toolboxes/packages, Octave compatibility.
 - Mathematica/Wolfram: `.nb`, `.wl`, required paclets/kernel version.
+- Licensed or manually installed scientific software: VASP, COMSOL, Gaussian, commercial solvers, domain-specific binaries, cluster modules, pseudopotential libraries, license servers, and wrapper scripts.
 - TeX and document tools: `latexmkrc`, `.sty`, BibTeX/Biber, `pandoc`, `make`.
 - System tools: `make`, `cmake`, `ffmpeg`, solvers, CUDA/GPU drivers, compilers.
 
@@ -93,6 +94,7 @@ Detect the relevant toolchain from the source tree and staged files:
 - exact command prefixes readers/agents should use, such as `.venv/bin/python`, `uv run`, `JULIA_DEPOT_PATH=.julia_depot julia --project=code`, `Rscript`, `octave`, `matlab -batch`, or `wolframscript`;
 - what local generated environment directories are intentionally gitignored and how to recreate them;
 - heavyweight, proprietary, credentialed, platform-specific, or manually installed requirements;
+- required external software that cannot be bundled or installed by the agent, including software name, version if known, license/access requirement, required modules/toolboxes/paclets/pseudopotentials, expected executable/command, and what was or was not tested;
 - setup commands attempted during staging and their result.
 
 Also make `AGENTS.md` and `README.md` contain the same setup information in concise form; `environment/README.md` is the detailed source of truth.
