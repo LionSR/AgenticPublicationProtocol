@@ -40,16 +40,17 @@ _SYSTEM_TAGS = (
     "INSTRUCTIONS", "instructions",
     "user-prompt-submit-hook", "context",
     "github-webhook-activity", "available-skills",
-    "function_calls", "function_results",
+)
+
+_SYSTEM_TAG_RE = re.compile(
+    r"<(" + "|".join(map(re.escape, _SYSTEM_TAGS)) + r")>.*?</\1>",
+    re.DOTALL,
 )
 
 
 def _strip_system_tags(text):
     """Remove known XML-style system tags from text."""
-    result = text
-    for tag in _SYSTEM_TAGS:
-        result = re.sub(rf"<{tag}>.*?</{tag}>", "", result, flags=re.DOTALL)
-    return result.strip()
+    return _SYSTEM_TAG_RE.sub("", text).strip()
 
 
 def _is_system_preamble(text):
