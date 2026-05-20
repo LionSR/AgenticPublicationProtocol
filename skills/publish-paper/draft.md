@@ -68,4 +68,4 @@ Show the README draft to the researcher and iterate on it before finalising.
 
 ## Handoff
 
-`publication-staging/AGENTS.md`, `publication-staging/CLAUDE.md`, and `publication-staging/README.md` drafted and approved. Next: [`release.md`](release.md).
+`publication-staging/AGENTS.md`, `publication-staging/CLAUDE.md`, and `publication-staging/README.md` drafted and approved. Next: [`review.md`](review.md).
