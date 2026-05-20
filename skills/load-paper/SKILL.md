@@ -120,15 +120,17 @@ jq -e --arg report "$REPORT_SHA" '.validation.validation_report_sha256 == $repor
 
 If the validation report is a release asset rather than committed in the repo, download that asset and hash it instead.
 
-Recompute the APP publication ID. Remove `app_publication_id` from the manifest, canonicalize the payload with sorted keys and compact JSON, hash it, and compare:
+Recompute the APP publication ID per [`PROTOCOL.md` § Canonicalization rules for `app-v1`](../../PROTOCOL.md#canonicalization-rules-for-app-v1). Remove `app_publication_id`, canonicalize with sorted keys, compact output, and non-ASCII characters escaped to `\uXXXX`, then hash and compare:
 
 ```bash
-jq 'del(.app_publication_id)' /tmp/app-manifest/APP_PUBLICATION.json \
-  | jq -S -c . > /tmp/app-manifest/APP_PUBLICATION.payload.canonical.json
+jq -S -c -a 'del(.app_publication_id)' /tmp/app-manifest/APP_PUBLICATION.json \
+  > /tmp/app-manifest/APP_PUBLICATION.payload.canonical.json
 COMPUTED_ID="app-v1:sha256:$(shasum -a 256 /tmp/app-manifest/APP_PUBLICATION.payload.canonical.json | awk '{print $1}')"
 MANIFEST_ID=$(jq -r '.app_publication_id' /tmp/app-manifest/APP_PUBLICATION.json)
 test "$COMPUTED_ID" = "$MANIFEST_ID"
 ```
+
+The `-a` flag is required for cross-platform reproducibility; without it, manifests containing non-ASCII characters (e.g. accented author names) can hash differently on different systems.
 
 Also compare the manifest `repo_url` to the clone URL after normalizing common GitHub forms (`git@github.com:user/repo.git`, `https://github.com/user/repo`, `https://github.com/user/repo.git`). If they do not identify the same GitHub repo, do not mark the publication as verified.
 
