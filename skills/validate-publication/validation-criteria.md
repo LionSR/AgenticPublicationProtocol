@@ -73,7 +73,7 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 
 **Paper-agent smoke test:**
 - During final `/publish-paper` validation, `supplementary/paper-agent-test.md` should exist and document a paper-agent test run from the staged repo root.
-- The first line of the file should declare the fidelity level used, e.g. `fidelity: A` (separate process / independent agent) or `fidelity: B` (isolated tool call within the publishing session). Flag missing or unknown fidelity declarations as `warning`.
+- The first line of the file **MUST** declare the fidelity level used, e.g. `fidelity: A` (separate top-level agent) or `fidelity: B` (isolated in-session call). Flag missing or unknown fidelity declarations as `error` during final `/publish-paper` validation — without it, validators cannot tell whether the test was a real smoke test or self-review.
 - The test should include 3-5 questions and answers covering ground-truth identification, main contribution, at least one representative reproduction command, blocked/manual/dependency-limited figures or tables, and heavy/platform-specific warnings when relevant.
 - The test passes only if the testing agent answered from staged files, used paths and commands that resolve inside staging, and accurately reported reproduction limitations. A transcript written from the publishing agent's pre-existing context is not a smoke test; flag this as `error`.
 - If the environment could not provide any isolated agent, the report should say `paper-agent-test: not performed (no isolated agent available)` and classify this as a public-release blocker. Real publication mode must not proceed with this status.
@@ -184,11 +184,7 @@ The manifest is required only for a public tagged release. It is not required du
 - `human_approval.approved_by` lists the approving authors.
 - Recomputed `app_publication_id` equals the manifest value.
 
-**ID recomputation:**
-- Remove `app_publication_id` from the manifest.
-- Canonicalize the remaining JSON with sorted keys and compact separators.
-- SHA-256 hash the canonical JSON.
-- Compare `app-v1:sha256:<digest>` to `app_publication_id`.
+**ID recomputation:** follow the canonicalization rules in [PROTOCOL.md § Canonicalization rules for `app-v1`](../../PROTOCOL.md#canonicalization-rules-for-app-v1) — sorted keys, compact output, non-ASCII escaped to `\uXXXX`, no trailing newline — then hash and compare `app-v1:sha256:<digest>` to the manifest's `app_publication_id`.
 
 **Classification:**
 - Valid manifest: verified APP publication.
