@@ -10,7 +10,6 @@ publication-staging/code/figure-reproduction/
   fig01_<short-name>.py
   fig02_<short-name>.py
   ...
-publication-staging/reproduction/figures/
 ```
 
 `code/figure-reproduction/README.md` is source-of-truth computational documentation, not supplementary commentary. It must contain a table:
@@ -31,9 +30,7 @@ Use these statuses:
 
 Do not use temporary final statuses such as `not-yet-run`, `todo`, or `unknown`. Before phase 5 every figure/table must have one of the statuses above, with evidence or a concrete blocker.
 
-## Dependency Installation Policy
-
-Use the policy in [`environment.md`](environment.md). Before marking any figure/table or validation command `blocked-dependency`, make a reasonable safe project-scoped environment setup attempt when authorized, or record why the attempt was skipped or impossible.
+Use the dependency installation policy in [`environment.md`](environment.md) before marking any figure/table or validation command `blocked-dependency`.
 
 For each paper figure/table:
 
@@ -42,8 +39,10 @@ For each paper figure/table:
 3. If the source path is ambiguous after inspection, ask the researcher a concrete question before guessing. Include the figure/table, candidate scripts/notebooks, observed inputs/outputs, and your best hypothesis.
 4. Write or adapt a direct script under `code/figure-reproduction/` that can be run from the staging root.
 5. Prefer making the code executable and direct, even if the original repo used notebooks or multi-step exploratory scripts. The goal is one clear script per figure/table whenever feasible. Grouped wrappers are acceptable only when a single command naturally produces several paper artifacts; in that case, mark the script as a grouped wrapper in `code/figure-reproduction/README.md` and list every generated output it covers.
-6. Make each script write generated output to `reproduction/figures/` unless there is a stronger local convention.
+6. Make each script write generated output under `code/figure-reproduction/generated/` unless there is a stronger local convention documented in `code/figure-reproduction/README.md`.
 7. Document inputs and outputs in `code/figure-reproduction/README.md`.
+
+Generated reproduced figures are local run artifacts by default. Add `code/figure-reproduction/generated/` to `publication-staging/.gitignore` unless the researcher explicitly wants to commit generated outputs as intentional publication artifacts, validation evidence, or outputs that are not cheaply reproducible. If generated outputs are committed, explain in `code/figure-reproduction/README.md` why they are included, how they were generated, and whether they match the paper artifact.
 
 When the runtime supports parallel subagents, use two specialized agents:
 

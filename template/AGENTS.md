@@ -88,7 +88,7 @@ The authoritative figure reproduction map is `code/figure-reproduction/README.md
 | Fig 2 | `paper/figures/fig2.png` | `python code/figure-reproduction/fig02_example.py` | `data/results.csv` | reproduced | ~10s |
 
 Before running: create or activate the environment above, then use the documented runner prefix for each command.
-Generated outputs should be written to `reproduction/figures/` unless `code/figure-reproduction/README.md` says otherwise. After generating: compare output with `paper/figures/` to verify.
+Generated outputs should be written under `code/figure-reproduction/generated/` unless `code/figure-reproduction/README.md` says otherwise. They are local run artifacts and are gitignored by default unless the figure map explicitly documents that generated outputs are intentionally committed. After generating: compare output with `paper/figures/` to verify.
 
 ### Run experiments
 <!-- Describe how to run the main experiments -->

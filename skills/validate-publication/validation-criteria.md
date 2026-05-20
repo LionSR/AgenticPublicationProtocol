@@ -124,7 +124,7 @@ Extends `../extract-chat-context/confidentiality-checklist.md` to cover the enti
 
 ## Generated and hidden artifacts
 
-Generated artifacts are allowed only when they are intentional publication artifacts, such as compiled paper PDFs, paper figures, shipped small datasets, or documented reproduction outputs. They should have a canonical location and be described by `AGENTS.md`, README, `data/README.md`, or `code/figure-reproduction/README.md`.
+Generated artifacts are allowed only when they are intentional publication artifacts, such as compiled paper PDFs, paper figures, shipped small datasets, or explicitly documented reproduction evidence. Generated reproduced figures are local run artifacts by default and should usually be gitignored under `code/figure-reproduction/generated/`. If generated reproduction outputs are committed, they should have a canonical location and be described by `AGENTS.md`, README, `data/README.md`, or `code/figure-reproduction/README.md`.
 
 **Flag as errors when present and not explicitly justified:**
 - `.ipynb_checkpoints/` directories or files.
@@ -133,10 +133,11 @@ Generated artifacts are allowed only when they are intentional publication artif
 
 **Flag as warnings unless documented as intentional source artifacts:**
 - Copied stale `results/`, `outputs/`, `figures/`, `plots/`, or build directories inside `code/`.
-- Generated reproduction outputs stored outside the documented `reproduction/` area.
+- Generated reproduction outputs committed without documentation that explains why they are intentional publication artifacts or validation evidence.
+- Generated reproduction outputs stored outside `code/figure-reproduction/generated/` or another location explicitly documented in `code/figure-reproduction/README.md`.
 - Notebook outputs that are large, stale, or not needed for reader-agent use.
 
-When a generated artifact is intentionally included, the publication should explain why it is source-of-truth or needed for reproducibility, and `.gitignore` should prevent accidental future generated files from being added.
+When a generated artifact is intentionally included, the publication should explain why it is source-of-truth, validation evidence, or needed for reproducibility, and `.gitignore` should prevent accidental future generated files from being added.
 
 ## Consistency
 

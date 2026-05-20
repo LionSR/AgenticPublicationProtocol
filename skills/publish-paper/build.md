@@ -25,7 +25,6 @@ mkdir -p publication-staging/paper/figures \
          publication-staging/code/scripts \
          publication-staging/code/figure-reproduction \
          publication-staging/data \
-         publication-staging/reproduction/figures \
          publication-staging/environment \
          publication-staging/supplementary
 cp paper/main.tex publication-staging/paper/
@@ -68,7 +67,7 @@ Detail lives here; `AGENTS.md` carries only a concise pointer to `data/README.md
 - Ask the researcher to confirm each link works (some require authentication the agent doesn't have).
 - Record verified/flagged status in your internal phase notes and later in `publication-staging/supplementary/validation-report.md` during final validation.
 
-**Create a staging `.gitignore`** tailored to the candidate release tree — build artifacts, generated files, sensitive files, OS files.
+**Create a staging `.gitignore`** tailored to the candidate release tree — build artifacts, generated files, sensitive files, OS files. For papers with figure/table reproduction scripts, gitignore `code/figure-reproduction/generated/` by default unless generated outputs are intentionally committed and documented as publication artifacts or validation evidence.
 
 **Prepare the execution environment.** Follow [`environment.md`](environment.md) to detect toolchains, create `publication-staging/environment/README.md`, copy dependency manifests, gitignore local installed environments, and attempt safe project-scoped setup when authorized.
 
