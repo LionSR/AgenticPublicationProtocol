@@ -71,8 +71,9 @@ These apply across every phase. Keep them in mind as you read each phase file.
 
 - **Purpose.** Create or revise `publication-staging/`. Copy and organize approved files. Run structure validation. Verify the code runs with staging-root paths.
 - **Assumes.** Staging plan from `gather.md`.
-- **Produces.** A self-contained `publication-staging/` tree with files in the layout defined by [`PROTOCOL.md` § Repository layout](../../PROTOCOL.md#repository-layout); `.gitignore` in place; `LICENSE` written; `data/README.md` populated whenever the publication uses any dataset, local or external; approved supplementary materials copied; `code/figure-reproduction/` created for generated figures/tables when applicable; code verified to run from staging root. Keep the phase checklist in chat/internal notes, not inside `publication-staging/`.
+- **Produces.** A self-contained `publication-staging/` tree with files in the layout defined by [`PROTOCOL.md` § Repository layout](../../PROTOCOL.md#repository-layout); `.gitignore` in place; `LICENSE` written; `data/README.md` populated whenever the publication uses any dataset, local or external; `environment/README.md` and dependency manifests populated whenever executable code/tooling exists; approved supplementary materials copied; `code/figure-reproduction/` created for generated figures/tables when applicable; environment setup and code verified from staging root when safe. Keep the phase checklist in chat/internal notes, not inside `publication-staging/`.
 - **Sub-skills called.** `/validate-publication --stage structure`.
+- **Support files.** [`environment.md`](environment.md) for environment detection, setup recipes, safe dependency installation, and environment verification; [`figure-reproduction.md`](figure-reproduction.md) for direct figure/table reproduction scripts and status documentation.
 - **Interaction load.** Light — confirmation on the file list before copying, then mostly automated.
 
 ### [`draft.md`](draft.md) — Phase 4: Paper-agent docs
@@ -84,15 +85,23 @@ These apply across every phase. Keep them in mind as you read each phase file.
 - **Templates used.** [`template/AGENTS.md`](../../template/AGENTS.md), [`template/CLAUDE.md`](../../template/CLAUDE.md), [`template/README.md`](../../template/README.md).
 - **Interaction load.** Heavy — walk the researcher through `AGENTS.md` one section at a time and revise until intent matches.
 
-### [`release.md`](release.md) — Phases 5-6
+### [`review.md`](review.md) — Phase 5
 
-- **Purpose.** Run a full validation sweep from staging root, test the paper agent through a fresh agent session rooted at `publication-staging/`, freeze the validated tree, then execute the final outcome.
+- **Purpose.** Run a full validation sweep from staging root, test the paper agent through a fresh agent session rooted at `publication-staging/`, walk the researcher through the final state, record approval, and freeze the validated tree.
 - **Assumes.** Paper-agent docs approved from `draft.md`.
+- **Produces.** A final validation report, `supplementary/paper-agent-test.md`, approval state, and frozen staging tree.
+- **Sub-skills called.** `/validate-publication --stage full`.
+- **Interaction load.** Heavy — final review and approval before freezing.
+
+### [`release.md`](release.md) — Phase 6
+
+- **Purpose.** Execute the final outcome after Phase 5 review/freeze.
+- **Assumes.** Validated staging tree frozen by `review.md`.
 - **Produces in real publication mode.** A tagged public release whose tree equals the validated staging tree; `APP_PUBLICATION.json` release manifest; working repo publication record updated with public URL, tag, commit/tree hash, and `app_publication_id`.
 - **Produces in dev-sandbox mode.** An implementation test result; optional logs or preserved failing state; no public repo and no APP compliance record.
-- **Sub-skills called.** `/validate-publication --stage full`.
+- **Support files.** [`release-real.md`](release-real.md) for public GitHub publication; [`release-sandbox.md`](release-sandbox.md) for developer-sandbox outcomes.
 - **Templates used.** [`template/publications.md`](../../template/publications.md).
-- **Interaction load.** Heavy — final approval before freezing; per-action confirmation required for every remote operation in real publication mode.
+- **Interaction load.** Heavy in real publication mode — per-action confirmation required for every remote operation.
 
 ### [`paper-types.md`](paper-types.md) — appendix
 
@@ -100,13 +109,14 @@ Not a workflow step. Format-specific guidance for theory-only, computational, ex
 
 ## Templates
 
-Four files ship in `template/` at the repo root. Phase files copy or adapt them at the right moment — do not re-author these artifacts; start from the template.
+Five files ship in `template/` at the repo root. Phase files copy or adapt them at the right moment — do not re-author these artifacts; start from the template.
 
 | Template | Adapted by | Lands as |
 |----------|------------|----------|
 | [`template/AGENTS.md`](../../template/AGENTS.md) | `draft.md` (phase 4 paper-agent docs) | `publication-staging/AGENTS.md`, populated and researcher-approved. |
 | [`template/CLAUDE.md`](../../template/CLAUDE.md) | `draft.md` (phase 4 paper-agent docs) | `publication-staging/CLAUDE.md` — one line: `@AGENTS.md`. |
 | [`template/README.md`](../../template/README.md) | `draft.md` (phase 4 paper-agent docs) | `publication-staging/README.md`, populated from phases 1-2 and the finalized `AGENTS.md`. |
+| [`template/environment-README.md`](../../template/environment-README.md) | `environment.md` (phase 3 support) | `publication-staging/environment/README.md`, populated when executable code/tooling exists. |
 | [`template/publications.md`](../../template/publications.md) | `release.md` (phase 6, real mode only) | `<working-repo>/.publications.md` — a table of this working repo's public APP releases. |
 
 ## Sub-skills
@@ -132,6 +142,6 @@ If the researcher has already begun, detect filesystem state and jump to the mat
 | No `publication-staging/` yet | `gather.md` |
 | `publication-staging/` exists, no `AGENTS.md` | `build.md` |
 | `publication-staging/AGENTS.md` exists, paper-agent docs not yet reviewed with researcher | `draft.md` |
-| Paper-agent docs reviewed, staging not yet fully validated/tested | `release.md` phase 5 |
+| Paper-agent docs reviewed, staging not yet fully validated/tested | `review.md` phase 5 |
 | Validated staging tree already frozen, no final outcome yet | `release.md` phase 6 |
 | Public tagged release exists | `gather.md` (new version; `.publications.md` provides prior-version context in real mode) |

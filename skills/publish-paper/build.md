@@ -10,7 +10,7 @@ publication-staging/
 
 For a new publication, create `publication-staging/` from scratch. For a revision, start from the previous public release or the existing `publication-staging/`, whichever is cleaner, then revise it. If replacing an existing staging tree, preserve or summarize anything the researcher may need before removing generated staging files.
 
-Do not create a GitHub repository in this phase. Public repo creation happens only in [`release.md`](release.md) after the staging tree has passed validation and paper-agent testing.
+Do not create a GitHub repository in this phase. Public repo creation happens only in [`release.md`](release.md) after the staging tree has passed validation, paper-agent testing, and Phase 5 review/freeze in [`review.md`](review.md).
 
 ## 3.2 Copy and organize selected files
 
@@ -39,6 +39,7 @@ cp requirements.txt publication-staging/environment/
 
 Do not create an empty `LICENSE` placeholder at this point — wait until step 3.3 writes the real text.
 If the publication uses any dataset, local or external, `publication-staging/data/README.md` must also exist — authored below with the researcher.
+If the publication has executable code, figure/table reproduction scripts, notebooks, or a compilable manuscript with nontrivial tooling, `publication-staging/environment/README.md` must exist — authored below with the researcher and verified during validation.
 
 Use the file list from phase 2 — copy only what the researcher approved. Organize into the directory layout defined in [PROTOCOL.md § Repository layout](../../PROTOCOL.md#repository-layout). Not every directory is required — adapt to what is actually being published. See [`paper-types.md`](paper-types.md) for format-specific minimums.
 
@@ -68,6 +69,8 @@ Detail lives here; `AGENTS.md` carries only a concise pointer to `data/README.md
 - Record verified/flagged status in your internal phase notes and later in `publication-staging/supplementary/validation-report.md` during final validation.
 
 **Create a staging `.gitignore`** tailored to the candidate release tree — build artifacts, generated files, sensitive files, OS files.
+
+**Prepare the execution environment.** Follow [`environment.md`](environment.md) to detect toolchains, create `publication-staging/environment/README.md`, copy dependency manifests, gitignore local installed environments, and attempt safe project-scoped setup when authorized.
 
 **Create or copy `LICENSE`.** Use the licensing decision recorded in phase 2.
 
@@ -129,86 +132,19 @@ rm -f LICENSE.api.json
 
 ## 3.4 Create direct figure/table reproduction scripts
 
-For any paper with generated figures or tables, make a serious attempt to directly reproduce every paper figure/table from code. Do not downgrade to "selected reproduction" merely because the source repo is messy.
+For any paper with generated figures or tables, follow [`figure-reproduction.md`](figure-reproduction.md). Make a serious attempt to directly reproduce every paper figure/table from code, document every artifact in `publication-staging/code/figure-reproduction/README.md`, and use only final statuses with concrete evidence or blockers before Phase 5.
 
-Create:
-
-```text
-publication-staging/code/figure-reproduction/
-  README.md
-  fig01_<short-name>.py
-  fig02_<short-name>.py
-  ...
-publication-staging/reproduction/figures/
-```
-
-`code/figure-reproduction/README.md` is source-of-truth computational documentation, not supplementary commentary. It must contain a table:
-
-```text
-Figure/Table | Paper artifact | Script | Inputs | Generated output | Status | Notes
-```
-
-Use these statuses:
-
-- `reproduced` — script ran from staging root and generated the expected output.
-- `runs-but-differs` — script ran, but generated output differs materially from the paper artifact; explain how.
-- `blocked-missing-data` — required input data or external artifact is unavailable; name it.
-- `blocked-heavy-compute` — reproduction requires compute the agent/researcher did not approve for this run; state requirements.
-- `blocked-broken-code` — source code fails; include command/error summary.
-- `blocked-dependency` — an external dependency, package resolver, network access, license restriction, or platform requirement prevents running the script; name the dependency and the attempted command.
-- `manual-only` — figure requires manual post-processing; document the manual step and source artifacts.
-
-Do not use temporary final statuses such as `not-yet-run`, `todo`, or `unknown`. Before phase 5 every figure/table must have one of the statuses above, with evidence or a concrete blocker.
-
-### Dependency installation policy
-
-Before marking a figure/table or validation command `blocked-dependency`, make a reasonable attempt to satisfy missing dependencies when it is safe and authorized in the host environment.
-
-Safe install attempts include project-local or environment-scoped installs from explicit dependency files, such as `pip install -r requirements.txt`, `uv sync`, `npm install`, `julia --project -e 'using Pkg; Pkg.instantiate()'`, `Rscript` package restore commands, TeX package managers, or conda/mamba environment creation when those tools are already available. Prefer installs that are reproducible, logged, and scoped to the staged project or a disposable environment.
-
-Ask the researcher before installing or cloning anything when:
-
-- the platform requires approval or the current agent lacks authorization;
-- the install would modify global system state, consume substantial disk/network/compute, require credentials, accept a license, or run untrusted external code;
-- the dependency is proprietary, commercial, platform-specific, unusually large, or likely to affect the user's machine beyond the current project.
-
-If authorization is already available and the install is low-risk, try it and record the command and result. If authorization is absent, unclear, denied, or the dependency cannot be safely installed, ask for permission or record the precise blocker. A `blocked-dependency` entry must say whether a safe install was attempted, skipped for authorization/safety reasons, or impossible because of licensing/platform constraints.
-
-For each paper figure/table:
-
-1. Inspect the paper source, existing scripts, notebooks, saved outputs, and paper figure files.
-2. Identify the closest source path from which the final artifact was produced.
-3. If the source path is ambiguous after inspection, ask the researcher a concrete question before guessing. Include the figure/table, candidate scripts/notebooks, observed inputs/outputs, and your best hypothesis.
-4. Write or adapt a direct script under `code/figure-reproduction/` that can be run from the staging root.
-5. Prefer making the code executable and direct, even if the original repo used notebooks or multi-step exploratory scripts. The goal is one clear script per figure/table whenever feasible. Grouped wrappers are acceptable only when a single command naturally produces several paper artifacts; in that case, mark the script as a grouped wrapper in `code/figure-reproduction/README.md` and list every generated output it covers.
-6. Make each script write generated output to `reproduction/figures/` unless there is a stronger local convention.
-7. Document inputs and outputs in `code/figure-reproduction/README.md`.
-
-When the runtime supports parallel subagents, use two specialized agents:
-
-- **Figure-script agent:** owns `publication-staging/code/figure-reproduction/`; reads paper, notebooks, scripts, data, and paper figures; writes the direct scripts and README map.
-- **Figure-validation agent:** independently runs the figure scripts from `publication-staging/`, checks that outputs are created, compares dimensions/format and, when reasonable, image similarity to `paper/figures/`, then reports concrete failures.
-
-If subagents are unavailable, do the same work sequentially. The publishing agent remains responsible for integrating fixes.
-
-Only mark a figure/table as not directly reproduced after documenting in `code/figure-reproduction/README.md`:
-
-- source scripts/notebooks inspected;
-- any ambiguity question asked to the researcher and the answer received, or why the researcher could not answer;
-- command attempted;
-- exact missing input, failure, or manual/heavy step;
-- what a future reader or author would need to do to make it `reproduced`.
-
-### Structure validation
+## 3.5 Run structure validation
 
 Invoke `/validate-publication --stage structure` with `publication-staging/` as the effective repository root. Review the validation report, fix any errors, and summarize warnings or manual verification items for the researcher.
 
-## 3.5 Verify the code works from staging root
+## 3.6 Verify the code works from staging root
 
 Tell the researcher you're testing that everything runs with the new staging-root paths.
 
 Run commands from inside `publication-staging/` unless a tool truly requires a parent-repo command.
 
+- **Environment setup.** Follow [`environment.md`](environment.md): run documented setup or verification commands when safe, verify tool versions and command prefixes, and record blockers in `environment/README.md` and the validation report.
 - **Paper compilation.** Run the build command and check it succeeds (if the format compiles).
 - **Figure generation.** Run each script in `code/figure-reproduction/` whose status is intended to be `reproduced`; verify it produces the documented output and update the README status. Confirm the script-to-figure mapping still holds after the copy and reorganization — no new duplicates, no missing scripts.
 - **Tests.** If the staging tree has tests, run them.

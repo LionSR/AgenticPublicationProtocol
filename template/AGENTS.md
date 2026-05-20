@@ -43,13 +43,40 @@ You are an AI agent representing the paper "YOUR PAPER TITLE" by Author One and 
 - `code/figure-reproduction/fig01_*.py` — direct figure/table reproduction scripts
 - `data/` — dataset documentation and any shipped datasets (GROUND TRUTH, omit only if the publication uses no dataset)
 - `data/README.md` — dataset documentation: URLs, download commands, local destinations, and which datasets are required for the default workflow (required whenever the publication uses any dataset, local or external)
-- `environment/requirements.txt` — dependencies (omit if no code)
+- `environment/README.md` — environment setup, tested platforms, install commands, and runner prefixes (omit only if no executable code/tooling)
+- `environment/requirements.txt` — Python dependencies or generated lock input (adapt to actual toolchain; omit if not Python)
 - `LICENSE` — reuse terms for the manuscript, code, data, and supplementary materials
 
 ## What You Can Do
 
 ### Explain the paper
 Read the paper source to answer questions about methods, results, and implications. Always ground answers in what the paper actually says.
+
+### Environment setup
+Use the same setup commands as README. See `environment/README.md` for detailed tested platform and dependency notes.
+
+<!-- Replace with the actual environment. Examples:
+Python:
+```sh
+python -m venv .venv
+.venv/bin/pip install -r environment/requirements.txt
+```
+Run Python commands with `.venv/bin/python ...`.
+
+Julia:
+```sh
+JULIA_DEPOT_PATH=.julia_depot julia --project=code -e 'using Pkg; Pkg.instantiate()'
+```
+Run Julia commands with `JULIA_DEPOT_PATH=.julia_depot julia --project=code ...`.
+
+MATLAB/Octave:
+State the tested MATLAB release/toolboxes or Octave version, and use `matlab -batch ...` or `octave ...`.
+
+External licensed software:
+If reproduction requires software such as VASP, Mathematica, MATLAB, COMSOL, Gaussian, or a commercial solver, state the software/version/access requirement here and point to `environment/README.md`. If it was not available during validation, say so explicitly.
+-->
+
+Local installed environments such as `.venv/`, `.julia_depot/`, and `node_modules/` are intentionally gitignored. Recreate them from the dependency manifests and commands documented here and in `environment/README.md`.
 
 ### Reproduce figures
 The authoritative figure reproduction map is `code/figure-reproduction/README.md`.
@@ -60,7 +87,7 @@ The authoritative figure reproduction map is `code/figure-reproduction/README.md
 | Fig 1 | `paper/figures/fig1.png` | `python code/figure-reproduction/fig01_example.py` | `data/results.csv` | reproduced | ~5s |
 | Fig 2 | `paper/figures/fig2.png` | `python code/figure-reproduction/fig02_example.py` | `data/results.csv` | reproduced | ~10s |
 
-Before running: `pip install -r environment/requirements.txt`
+Before running: create or activate the environment above, then use the documented runner prefix for each command.
 Generated outputs should be written to `reproduction/figures/` unless `code/figure-reproduction/README.md` says otherwise. After generating: compare output with `paper/figures/` to verify.
 
 ### Run experiments

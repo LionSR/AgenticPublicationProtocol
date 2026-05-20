@@ -39,12 +39,12 @@ The goal of APP is to transform the format of academic publication. Rather than 
 ├── paper/             paper source, figures, compiled PDF
 ├── code/              source and scripts, including figure reproduction code
 ├── data/              shipped datasets; external datasets are documented in data/README.md
-├── environment/       requirements.txt, environment.yml, Dockerfile, or equivalent
+├── environment/       README.md plus requirements.txt, environment.yml, Dockerfile, or equivalent
 ├── supplementary/     optional supplementary files such as authors' notes, slides, chat sessions, etc.
 └── skills/            optional: author-published SKILL.md capabilities
 ```
 
-`AGENTS.md`, `README.md`, `LICENSE`, and `paper/` are required for every publication. `code/`, `data/`, `environment/`, `supplementary/`, and `skills/` **MAY** be omitted when not applicable — for example, a theory-only paper with no code or data can ship only `paper/` plus the required root files.
+`AGENTS.md`, `README.md`, `LICENSE`, and `paper/` are required for every publication. `code/`, `data/`, `environment/`, `supplementary/`, and `skills/` **MAY** be omitted when not applicable — for example, a theory-only paper with no code or data can ship only `paper/` plus the required root files. If the publication includes executable code, figure/table reproduction scripts, notebooks, or nontrivial build tools, `environment/README.md` **MUST** be included.
 
 ### `paper/`
 
@@ -72,7 +72,11 @@ The `data/` directory contains datasets small enough to be stored comfortably in
 
 ### `environment/`
 
-The `environment/` directory contains the files required to recreate the runtime environment, such as `requirements.txt`, `pyproject.toml`, `environment.yml`, `package.json`, `Dockerfile`, or an equivalent specification. If multiple dependency specifications are present, such as both pip and conda files, `AGENTS.md` **MUST** identify the canonical environment specification.
+The `environment/` directory contains the files required to recreate the runtime environment, such as `README.md`, `requirements.txt`, `pyproject.toml`, `uv.lock`, `Project.toml`, `Manifest.toml`, `renv.lock`, `environment.yml`, `package.json`, lockfiles, `Dockerfile`, or an equivalent specification. If multiple dependency specifications are present, such as both pip and conda files, `AGENTS.md` **MUST** identify the canonical environment specification.
+
+When `environment/` is present, `environment/README.md` **MUST** describe the tested platform, dependency files, exact setup commands, and the command prefix that readers and agents should use to run code, such as `.venv/bin/python`, `uv run`, `JULIA_DEPOT_PATH=.julia_depot julia --project=code`, `Rscript`, `octave`, `matlab -batch`, or `wolframscript`. `AGENTS.md` and `README.md` **MUST** include the same setup information in concise form and point to `environment/README.md` for details.
+
+Installed environments and package caches, such as `.venv/`, `.julia_depot/`, `node_modules/`, conda environment directories, and tool caches, **SHOULD NOT** be committed. They **SHOULD** be listed in `.gitignore` and recreated from the dependency manifests, lockfiles, and commands committed to the repository. If external software is required but cannot be bundled or installed by the agent, including licensed/proprietary/manual tools such as VASP, MATLAB, Mathematica, COMSOL, Gaussian, or commercial solvers, `environment/README.md` **MUST** still document the requirement: software name, version if known, required modules/toolboxes/paclets/pseudopotentials/licenses, expected executable or command, what was tested, and any open alternative or reason no alternative is available.
 
 ### `supplementary/`
 
@@ -139,7 +143,7 @@ app_extensions:
 - **Paper Summary** — 2–4 paragraphs covering the problem, the approach, the results, and the implications. In the authors' own words.
 - **Key Results** — numbered list of the main contributions, phrased as the authors want them cited.
 - **Repository Structure** — every important file with its path and purpose, grouped by function. Datasets, local and external, are documented in `data/README.md`; this section carries a concise pointer rather than the full URL, download command, and destination detail.
-- **What You Can Do** — concrete capabilities: *explain the paper* (what to read for what), *reproduce figures* (a summary table and pointer to `code/figure-reproduction/README.md`; commands, data, runtime, output paths, and statuses must match the README), *run experiments* (real commands, real parameters), *extend the work* (what to vary).
+- **What You Can Do** — concrete capabilities: *explain the paper* (what to read for what), *set up the environment* (same setup commands and runner prefixes as README and `environment/README.md`), *reproduce figures* (a summary table and pointer to `code/figure-reproduction/README.md`; commands, data, runtime, output paths, and statuses must match the README), *run experiments* (real commands, real parameters), *extend the work* (what to vary).
 - **Computational Requirements** — time, hardware, and memory for each class of task; platform tested. The agent warns before running anything heavy.
 - **Citation** — full BibTeX entry.
 
@@ -181,7 +185,7 @@ Agents loading a publication **SHOULD** gracefully degrade when an external skil
 
 Each APP publication **MUST** include a `README.md` file at the root of the repository. The README is the human-facing entry point for readers and **SHOULD** summarize the paper, identify the authors, and link to the canonical public record when available, such as arXiv, DOI, or PDF.
 
-The README **SHOULD** explain that the repository is an APP publication and that readers can clone the repository and open it in an AI coding agent that reads `AGENTS.md`. It **SHOULD** provide practical instructions for interacting with the paper through supported agents, reproducing figures or results, setting up the environment, and citing the work. The README **MAY** duplicate high-level commands from `AGENTS.md` for reader convenience, but `AGENTS.md` remains the canonical instruction file for agents.
+The README **SHOULD** explain that the repository is an APP publication and that readers can clone the repository and open it in an AI coding agent that reads `AGENTS.md`. It **SHOULD** provide practical instructions for interacting with the paper through supported agents, reproducing figures or results, setting up the environment, and citing the work. When an executable environment is needed, README **MUST** contain the same concise setup commands and runner prefixes as `AGENTS.md`, and both files **MUST** point to `environment/README.md` for detailed environment notes. The README **MAY** duplicate high-level commands from `AGENTS.md` for reader convenience, but `AGENTS.md` remains the canonical instruction file for agents.
 
 ### `LICENSE`
 

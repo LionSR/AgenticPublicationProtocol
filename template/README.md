@@ -27,11 +27,20 @@ Authoritative figure reproduction map: `code/figure-reproduction/README.md`.
 
 ### Setup
 
-[how to install dependencies — platform-agnostic]
+[copy the concise setup from AGENTS.md; point to `environment/README.md` for details when present]
+
+Example Python layout:
+
+```sh
+python -m venv .venv
+.venv/bin/pip install -r environment/requirements.txt
+```
+
+Run Python commands with `.venv/bin/python ...`. The `.venv/` directory is intentionally gitignored and should be recreated locally from the included dependency files.
 
 ### Run figures
 
-[Use the commands in `code/figure-reproduction/README.md`. Generated outputs are written to `reproduction/figures/` unless the figure map says otherwise.]
+[Use the commands in `code/figure-reproduction/README.md`. Run them with the environment prefix documented above and in `environment/README.md`. Generated outputs are written to `reproduction/figures/` unless the figure map says otherwise.]
 
 ### Full experiment
 
