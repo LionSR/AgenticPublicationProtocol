@@ -72,10 +72,11 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 - Relative paths should be relative to the repo root, or to `publication-staging/` when validating a staged candidate release
 
 **Paper-agent smoke test:**
-- During final `/publish-paper` validation, `supplementary/paper-agent-test.md` should exist and document a fresh agent session launched with the staged repo root as its working directory.
+- During final `/publish-paper` validation, `supplementary/paper-agent-test.md` should exist and document a paper-agent test run from the staged repo root.
+- The first line of the file should declare the fidelity level used, e.g. `fidelity: A` (separate process / independent agent) or `fidelity: B` (isolated tool call within the publishing session). Flag missing or unknown fidelity declarations as `warning`.
 - The test should include 3-5 questions and answers covering ground-truth identification, main contribution, at least one representative reproduction command, blocked/manual/dependency-limited figures or tables, and heavy/platform-specific warnings when relevant.
-- The test passes only if the fresh agent answers from staged files, uses paths and commands that resolve inside staging, and accurately reports reproduction limitations.
-- If the environment could not launch a fresh agent session, the report should say `paper-agent-test: not performed` and classify this as a public-release blocker. A documentation-only review may be useful, but it is not a paper-agent smoke test.
+- The test passes only if the testing agent answered from staged files, used paths and commands that resolve inside staging, and accurately reported reproduction limitations. A transcript written from the publishing agent's pre-existing context is not a smoke test; flag this as `error`.
+- If the environment could not provide any isolated agent, the report should say `paper-agent-test: not performed (no isolated agent available)` and classify this as a public-release blocker. Real publication mode must not proceed with this status.
 
 **Commands:**
 - Figure reproduction commands in `code/figure-reproduction/README.md` should be syntactically valid (parseable by the shell)

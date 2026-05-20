@@ -32,15 +32,19 @@ Also check that `publication-staging/` has no dependency on the private parent r
 
 ## 5.2 Test the paper agent from staging root
 
-Before public release, test the candidate as a reader agent would see it. Launch a **fresh agent session** with `publication-staging/` as its working directory:
+Before public release, test the candidate the way a reader agent would see it. The staging tree must answer questions correctly on its own, with no leakage from the publishing agent's memory of the private working repo. **Do not author the test transcript from the publishing agent's existing context** — that is self-review, not a smoke test.
+
+**Test fidelity ladder.** Use the strongest level the host environment supports, and record which level was actually used.
+
+- **Level A — separate process or independent agent (strongest).** Launch a new agent session (subagent, separate process, fresh CLI invocation, or a parallel agent in a different chat) with `publication-staging/` as its working directory and no prior context from this publishing session. This is the only level that fully attests to reader-agent behavior.
+- **Level B — isolated tool call within this session (acceptable).** Use a single-purpose subagent / tool invocation that receives only `publication-staging/` paths in its prompt and is instructed to answer purely from files it reads under that root. The publishing agent **MUST NOT** pre-summarize the answers — pass only the questions and the staging root; the isolated call must read the files itself.
+- **Level C — no isolation available (blocker for real publication).** If neither A nor B is possible in the host environment, do not synthesize a test transcript from the publishing agent's existing context. Record `paper-agent-test: not performed (no isolated agent available)` as a public-release blocker in the validation report. Dev-sandbox runs may proceed with this recorded; real publication mode **MUST NOT** proceed.
 
 ```bash
 cd publication-staging
 ```
 
-The fresh session should load `AGENTS.md` naturally from the staging root. Do not rely on the publishing agent's existing memory of the private working repo or on a separate loader skill; the publish-paper workflow tests the staged tree directly.
-
-Ask 3-5 smoke-test questions, adapted to the paper:
+Whichever level is used, ask 3–5 smoke-test questions adapted to the paper:
 
 1. What is the ground-truth paper/source for this publication?
 2. What is the main contribution?
@@ -54,7 +58,7 @@ Save the transcript or concise Q&A summary as:
 publication-staging/supplementary/paper-agent-test.md
 ```
 
-The test passes if the fresh agent answers only from staged files, identifies the ground truth, gives paths and commands that exist inside staging, and accurately reports reproduction limitations. If the environment cannot launch a fresh agent session, record `paper-agent-test: not performed` as a public-release blocker in the validation report and sandbox result rather than calling a documentation review a paper-agent test.
+The file **MUST** begin with a single line naming the fidelity level used, e.g. `fidelity: A` or `fidelity: B`. The test passes (at level A or B) if the isolated agent answers only from staged files, identifies the ground truth, gives paths and commands that exist inside staging, and accurately reports reproduction limitations.
 
 For real publication mode, this is the final check that the public repo will work. For dev-sandbox mode, this is the key implementation test of the protocol.
 
