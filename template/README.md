@@ -40,7 +40,7 @@ Run Python commands with `.venv/bin/python ...`. The `.venv/` directory is inten
 
 ### Run figures
 
-[Use the commands in `code/figure-reproduction/README.md`. Run them with the environment prefix documented above and in `environment/README.md`. Generated outputs are written to `reproduction/figures/` unless the figure map says otherwise.]
+[Use the commands in `code/figure-reproduction/README.md`. Run them with the environment prefix documented above and in `environment/README.md`. Generated outputs are written under `code/figure-reproduction/generated/` unless the figure map says otherwise. They are local run artifacts and are gitignored by default unless the figure map explicitly documents that generated outputs are intentionally committed.]
 
 ### Full experiment
 
