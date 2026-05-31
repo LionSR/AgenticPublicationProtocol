@@ -40,20 +40,30 @@ This repository contains:
 
 ## Install and Update
 
+First make sure the agent itself is installed. APP runs *inside* an AI coding agent — it is not a standalone program. Install [Claude Code](https://claude.ai/claude-code) or [Codex](https://github.com/openai/codex) first, then follow the matching section below.
+
 ### Claude Code
+
+These are slash commands. Type them **inside a running Claude Code session** (at the Claude Code prompt), not in your shell. Press Enter after each line:
 
 ```
 /plugin marketplace add LionSR/AgenticPublicationProtocol
 /plugin install paper-protocol@paper-protocol
+/reload-plugins
 ```
+
+If you haven't started a session yet, run `claude` in your terminal first, then enter the commands above. (`/reload-plugins` activates the plugin in the current session; the `paper-protocol@paper-protocol` form is `plugin-name@marketplace-name`, not a typo.) When it works, the plugin's skills such as `/publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
 
 ### Codex
 
-```
+These are shell commands. Run them in your **terminal** (your normal shell prompt), not inside Codex. First register the marketplace, then install the plugin:
+
+```bash
 codex plugin marketplace add LionSR/AgenticPublicationProtocol
+codex plugin add paper-protocol@paper-protocol
 ```
 
-Then open Codex, find `Agentic Publication Protocol` in the plugin browser, and enable it.
+`codex plugin add` may prompt you to authenticate on install. (`paper-protocol@paper-protocol` is `plugin-name@marketplace-name`, not a typo.) You can also install and toggle plugins interactively: open Codex, find `Agentic Publication Protocol` in the plugin browser, and press Space to enable it. Once enabled, its skills such as `$publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
 
 ### Manual install
 
@@ -63,7 +73,7 @@ Clone this repo and point your agent at the `skills/` directory. Use this path w
 
 | Platform | Command |
 |----------|---------|
-| Claude Code | `/plugin update paper-protocol` |
+| Claude Code | `/plugin marketplace update paper-protocol` |
 | Codex | `codex plugin marketplace upgrade paper-protocol` |
 | Manual install | `git pull` in the cloned directory |
 
