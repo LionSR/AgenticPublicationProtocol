@@ -49,9 +49,10 @@ These are slash commands. Type them **inside a running Claude Code session** (at
 ```
 /plugin marketplace add LionSR/AgenticPublicationProtocol
 /plugin install paper-protocol@paper-protocol
+/reload-plugins
 ```
 
-If you haven't started a session yet, run `claude` in your terminal first, then enter the commands above. (The `paper-protocol@paper-protocol` form is `plugin-name@marketplace-name`, not a typo.) When it works, the plugin's skills such as `/publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
+If you haven't started a session yet, run `claude` in your terminal first, then enter the commands above. (`/reload-plugins` activates the plugin in the current session; the `paper-protocol@paper-protocol` form is `plugin-name@marketplace-name`, not a typo.) When it works, the plugin's skills such as `/publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
 
 ### Codex
 
