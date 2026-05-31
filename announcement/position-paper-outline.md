@@ -88,21 +88,24 @@ Condensed from `PROTOCOL.md`; full spec lives in the repo.
 - External skills / extensions mechanism: keeping the core small, letting
   field-specific capabilities evolve independently.
 
-## 6. Case Study (our own paper)
+## 6. Worked Example (illustrative, no experiments required)
 
-The most persuasive section. Take one of our own papers through `publish-paper`
-and report honestly:
+Reframed from an empirical case study to an **illustrative worked example**, to
+keep authoring cost low. The goal is to make APP concrete, not to report a study.
+Three illustrative artifacts, all clearly labeled as illustrative:
 
-- What the working repo looked like before.
-- The authoring session(s): what the skill asked, what we approved, effort spent.
-- The resulting APP publication structure.
-- **Demonstrated reader-agent capabilities**: explain a result, reproduce a
-  specific figure end-to-end (show the command + output match), run a small
-  experiment, answer a grounded question with provenance.
-- What worked, what was awkward, what we would improve in the spec.
+- **An example publication structure** — a filled-in repository layout for a
+  representative paper, with an example `AGENTS.md` excerpt (Identity + Paper
+  Summary + a couple of "What You Can Do" entries) and an example
+  figure-reproduction map row.
+- **A reader-agent interaction vignette** — a short dialogue showing the agent
+  explaining a result and citing the specific file/section (provenance), and
+  pointing at the exact command to reproduce a figure.
+- **Dogfooding snippet** — this very paper shipped as an APP publication: its own
+  `AGENTS.md` frontmatter and the "clone-and-talk-to-it" instruction.
 
-> TODO: pick which of our papers; gather screenshots / transcripts; record exact
-> reproduction commands and runtimes.
+> Note: examples are illustrative. They demonstrate the format and the intended
+> reader experience without claiming measured results.
 
 ## 7. Related Work
 
