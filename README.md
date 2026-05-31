@@ -42,14 +42,20 @@ This repository contains:
 
 ### Claude Code
 
+These are slash commands. Type them **inside a running Claude Code session** (at the Claude Code prompt), not in your shell. Press Enter after each line:
+
 ```
 /plugin marketplace add LionSR/AgenticPublicationProtocol
 /plugin install paper-protocol@paper-protocol
 ```
 
+If you haven't started a session yet, run `claude` in your terminal first, then enter the commands above.
+
 ### Codex
 
-```
+This is a shell command. Run it in your **terminal** (your normal shell prompt), not inside Codex:
+
+```bash
 codex plugin marketplace add LionSR/AgenticPublicationProtocol
 ```
 
