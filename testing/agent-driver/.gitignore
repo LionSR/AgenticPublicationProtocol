@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+*.bin
+*.log
+publish_paper_transcript.*
