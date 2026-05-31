@@ -40,6 +40,8 @@ This repository contains:
 
 ## Install and Update
 
+First make sure the agent itself is installed. APP runs *inside* an AI coding agent — it is not a standalone program. Install [Claude Code](https://claude.ai/claude-code) or [Codex](https://github.com/openai/codex) first, then follow the matching section below.
+
 ### Claude Code
 
 These are slash commands. Type them **inside a running Claude Code session** (at the Claude Code prompt), not in your shell. Press Enter after each line:
@@ -49,7 +51,7 @@ These are slash commands. Type them **inside a running Claude Code session** (at
 /plugin install paper-protocol@paper-protocol
 ```
 
-If you haven't started a session yet, run `claude` in your terminal first, then enter the commands above.
+If you haven't started a session yet, run `claude` in your terminal first, then enter the commands above. (The `paper-protocol@paper-protocol` form is `plugin-name@marketplace-name`, not a typo.) When it works, the plugin's skills such as `/publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
 
 ### Codex
 
@@ -59,7 +61,7 @@ This is a shell command. Run it in your **terminal** (your normal shell prompt),
 codex plugin marketplace add LionSR/AgenticPublicationProtocol
 ```
 
-Then open Codex, find `Agentic Publication Protocol` in the plugin browser, and enable it.
+Then open Codex, find `Agentic Publication Protocol` in the plugin browser, and enable it. Once enabled, its skills such as `$publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
 
 ### Manual install
 
