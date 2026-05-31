@@ -72,7 +72,7 @@ Clone this repo and point your agent at the `skills/` directory. Use this path w
 
 | Platform | Command |
 |----------|---------|
-| Claude Code | `/plugin update paper-protocol` |
+| Claude Code | `/plugin marketplace update paper-protocol` |
 | Codex | `codex plugin marketplace upgrade paper-protocol` |
 | Manual install | `git pull` in the cloned directory |
 
