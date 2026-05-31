@@ -55,13 +55,14 @@ If you haven't started a session yet, run `claude` in your terminal first, then 
 
 ### Codex
 
-This is a shell command. Run it in your **terminal** (your normal shell prompt), not inside Codex:
+These are shell commands. Run them in your **terminal** (your normal shell prompt), not inside Codex. First register the marketplace, then install the plugin:
 
 ```bash
 codex plugin marketplace add LionSR/AgenticPublicationProtocol
+codex plugin add paper-protocol@paper-protocol
 ```
 
-Then open Codex, find `Agentic Publication Protocol` in the plugin browser, and enable it. Once enabled, its skills such as `$publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
+`codex plugin add` may prompt you to authenticate on install. (`paper-protocol@paper-protocol` is `plugin-name@marketplace-name`, not a typo.) You can also install and toggle plugins interactively: open Codex, find `Agentic Publication Protocol` in the plugin browser, and press Space to enable it. Once enabled, its skills such as `$publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
 
 ### Manual install
 
