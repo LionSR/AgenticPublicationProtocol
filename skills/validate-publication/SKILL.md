@@ -9,7 +9,7 @@ Automated APP compliance checks for publication repos or `publication-staging/` 
 
 This skill is not a referee report. Do not judge novelty, writing style, scientific importance, or whether the paper is "good." Restrict factual checks to clear APP-relevant inconsistencies: conflicting stated numbers, commands that do not run, missing files, unreproducible figures/tables, broken links, privacy issues, or documentation that would mislead a reader agent.
 
-When called by `/publish-paper`, treat `publication-staging/` as the effective repository root. Do not validate paths against the private parent working repo. A staged candidate passes only if a reader agent could use the staging tree on its own.
+When called by `/publish-paper` or its modular step skills, treat `publication-staging/` as the effective repository root. Do not validate paths against the private parent working repo. A staged candidate passes only if a reader agent could use the staging tree on its own.
 
 ## When to use
 
@@ -26,7 +26,7 @@ Invoke with `--stage <name>` to validate specific artifacts. Omit for a full val
 |-------|------|----------------|
 | `structure` | After organizing files (phase 3) | Folder structure, file paths, sensitive files, data links, `.gitignore` |
 | `agents-md` | After creating AGENTS.md (phase 4) | APP metadata, ground-truth hierarchy, paths, commands, clear factual consistency |
-| `full` | Final review (phase 5) or standalone | All of the above + README consistency, confidentiality sweep, validation report consistency, local reader-agent usability, and release manifest verification when validating a public tagged release |
+| `full` | Step 4 of `/publish-paper`, pre-release review, or standalone | All of the above + README consistency, confidentiality sweep, validation report consistency, local reader-agent usability, and release manifest verification when validating a public tagged release |
 
 ## Process
 
@@ -43,6 +43,8 @@ Read the publication repo or staging tree to understand what's being validated:
 - `supplementary/validation-report.md` — prior validation report, if this is a final/revalidation pass
 - `supplementary/paper-agent-test.md` — fresh staging-root paper-agent smoke test, required during final `/publish-paper` validation
 - `APP_PUBLICATION.json` release asset — only when auditing a public tagged release, not when validating `publication-staging/`
+
+When running `--stage full` as Step 4 of the modular `/publish-paper` workflow, perform or ensure the fresh staging-root paper-agent smoke test before declaring full validation passed. Save it as `supplementary/paper-agent-test.md`. If the environment cannot launch a fresh agent session, write or require a `paper-agent-test: not performed` note and classify it as a public-release blocker rather than treating a documentation review as a smoke test.
 
 ### 2. Run APP validation checks
 
@@ -110,7 +112,7 @@ Cross-check information across files:
 - Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.
 - Required APP files exist for the current validation stage.
 - `data/README.md` exists whenever the publication uses any dataset, local or external.
-- During final `/publish-paper` validation, `supplementary/paper-agent-test.md` exists and records a fresh agent session launched with the staged repo as its working directory. It should include representative Q&A showing the agent can identify ground truth, summarize the paper, point to real reproduction commands, and accurately report blockers. If this is missing or only a documentation review, classify it as a public-release blocker.
+- During full modular `/publish-paper` validation, `supplementary/paper-agent-test.md` exists and records a fresh agent session launched with the staged repo as its working directory. It should include representative Q&A showing the agent can identify ground truth, summarize the paper, point to real reproduction commands, and accurately report blockers. If this is missing or only a documentation review, classify it as a public-release blocker.
 - Setup, data access, and reproduction instructions are complete enough for a reader agent to know what can be run, what data is required, and what requires manual/human steps.
 
 This is a completeness/usability check, not a prose-quality review. Do not flag wording only because it sounds generic; flag missing information only when it blocks APP use.

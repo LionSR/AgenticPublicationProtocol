@@ -18,16 +18,16 @@ APP is an interactive format for authors to publish an AI agent together with re
 
 Readers clone the repo, open it in [Claude Code](https://claude.ai/claude-code), [Codex](https://github.com/openai/codex), or any other agent that reads [`AGENTS.md`](https://agents.md), and the agent speaks for the paper.
 
-Authors who plan to publish their paper in APP format can use the `publish-paper` skill. An agent with this skill helps authors prepare the repo for publication, including organizing publication materials, drafting the `AGENTS.md` instructions, validating the publication, and publishing the tagged release. The `publish-paper` workflow is shown below.
+Authors who plan to publish their paper in APP format can use the `publish-paper` skill. It orchestrates modular step skills that help authors reproduce/check existing results, organize publication materials, draft the `AGENTS.md` instructions, validate the publication, and carry out the final release or developer-sandbox outcome. The `publish-paper` workflow is shown below.
 
 ![APP publishing workflow](assets/readme/publish_workflow.png)
 
-APP helps organize results authors have already produced. It does not provide AI tools for writing the paper itself or carrying out the research.
+APP helps organize and reproduce/check results authors have already produced. It does not provide AI tools for improving the paper's scientific claims, adding new experiments, or carrying out new research.
 
 This repository contains:
 
 - [`PROTOCOL.md`](PROTOCOL.md) — the specification of what an APP publication looks like.
-- [`skills/`](skills/) — official APP skills, including `publish-paper`, `validate-publication`, `extract-chat-context`, `create-paper-page`, and `load-paper`.
+- [`skills/`](skills/) — official APP skills, including `publish-paper`, `reproduce-results`, `prepare-staging`, `define-paper-agent`, `validate-publication`, `public-release`, `extract-chat-context`, `create-paper-page`, and `load-paper`.
 - [`template/`](template/) — starter files the skills adapt:
   - [`template/AGENTS.md`](template/AGENTS.md) — starter for the publication's `AGENTS.md`.
   - [`template/README.md`](template/README.md) — starter for the publication's human-facing `README.md`.
@@ -85,7 +85,7 @@ Open your working repo in an AI coding agent with this plugin installed, then in
 $publish-paper
 ```
 
-The skill interviews you about the paper, copies the approved files into a `publication-staging/` subfolder, creates the publication's agent-facing docs with you, runs validation, and walks you through publishing a tagged release with a verifiable APP manifest. The process can span multiple sessions.
+The skill walks through five steps: reproduce/check existing results, prepare `publication-staging/`, define the paper agent, run full validation, and perform the final review/freeze plus release or dev-sandbox outcome. The process can span multiple sessions, and each step can also be run directly.
 
 ## Use a published paper
 
@@ -109,9 +109,13 @@ The skills in this repository are grouped by how essential they are to the APP w
 
 | Skill | What it does |
 |-------|--------------|
-| `publish-paper` | Package a working repo into an APP publication. |
-| `validate-publication` | Check APP structure, paths, privacy, clear factual consistency, reader-agent usability, and release manifest verification when applicable. Called by `publish-paper` and also useful on its own. |
-| `extract-chat-context` | Pull publication-safe research context from local Claude Code / Codex chat/session history for supplementary materials. Optional helper called by `publish-paper`. |
+| `publish-paper` | Orchestrate the full modular APP publication workflow. |
+| `reproduce-results` | Reproduce/check existing paper results before staging, including figures, tables, experiments, and analytic derivations, without adding new results. |
+| `prepare-staging` | Build the self-contained `publication-staging/` tree from author-approved materials and reproduction findings. |
+| `define-paper-agent` | Draft and iterate `AGENTS.md`, `CLAUDE.md`, and README with the author. |
+| `validate-publication` | Check APP structure, paths, privacy, clear factual consistency, reader-agent usability, figure/table reproduction status, and release manifest verification when applicable. |
+| `public-release` | Perform lightweight final review/freeze and either publish the validated release or record a dev-sandbox outcome. |
+| `extract-chat-context` | Pull publication-safe research context from local Claude Code / Codex chat/session history for supplementary materials. Optional helper called by `reproduce-results`. |
 
 **Optional publication add-ons**
 
