@@ -14,5 +14,5 @@ Common options to offer as examples:
 
 If paper, code, data, and supplementary materials have different terms, the root `LICENSE` must say so clearly. For custom or multi-component terms, ask the author to provide/approve the full text.
 
-In dev-sandbox mode, a deferred license is allowed only as an explicit public-release blocker. In real publication mode, do not proceed without a license.
+In dev-sandbox mode, a deferred license is allowed only as an explicit release-outcome blocker. In real publication mode, do not proceed without a license.
 

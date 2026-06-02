@@ -1,9 +1,9 @@
 ---
-name: public-release
+name: release-outcome
 description: Perform the lightweight final author review/freeze gate after full APP validation, then either publish a real tagged APP release with manifest or record a developer-sandbox outcome without public compliance records.
 ---
 
-# Public Release
+# Release Outcome
 
 Use this after `/validate-publication --stage full`. This skill performs final author approval/freeze and then the final outcome.
 

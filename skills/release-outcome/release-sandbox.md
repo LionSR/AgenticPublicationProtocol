@@ -19,7 +19,7 @@ DEV-SANDBOX RESULT SUMMARY
   No APP compliance record will be written.
 ```
 
-Record the implementation test result in the requested sandbox log. Include date, protocol/skill version or commit, source fixture/example, validation result, paper-agent test result, public-release blockers, sandbox-only deferrals, and failures/fixes needed.
+Record the implementation test result in the requested sandbox log. Include date, protocol/skill version or commit, source fixture/example, validation result, paper-agent test result, release-outcome blockers, sandbox-only deferrals, and failures/fixes needed.
 
 Never write `.publications.md` or `APP_PUBLICATION.json` in dev-sandbox mode.
 

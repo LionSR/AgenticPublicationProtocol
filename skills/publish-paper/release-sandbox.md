@@ -3,8 +3,8 @@
 Developer-sandbox outcome guidance has moved to:
 
 ```text
-../public-release/release-sandbox.md
+../release-outcome/release-sandbox.md
 ```
 
-The current workflow reaches this only through `/public-release` after full validation and lightweight final review/freeze.
+The current workflow reaches this only through `/release-outcome` after full validation and lightweight final review/freeze.
 

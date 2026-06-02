@@ -62,7 +62,7 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 
 The publication checklist is a skill-internal artifact of `/publish-paper` and is **not** a publication file — do not flag its absence.
 
-For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as a public-release blocker only if the researcher explicitly deferred licensing for the sandbox test. It is still an error for real publication mode and still means the staged tree is not release-ready.
+For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as a release-outcome blocker only if the researcher explicitly deferred licensing for the sandbox test. It is still an error for real publication mode and still means the staged tree is not release-ready.
 
 **File paths:**
 - Every path in AGENTS.md Repository Structure must resolve to a real file or directory
@@ -75,7 +75,7 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 - During full modular `/publish-paper` validation, `supplementary/paper-agent-test.md` should exist and document a fresh agent session launched with the staged repo root as its working directory.
 - The test should include 3-5 questions and answers covering ground-truth identification, main contribution, at least one representative reproduction command, blocked/manual/dependency-limited figures or tables, and heavy/platform-specific warnings when relevant.
 - The test passes only if the fresh agent answers from staged files, uses paths and commands that resolve inside staging, and accurately reports reproduction limitations.
-- If the environment could not launch a fresh agent session, the report should say `paper-agent-test: not performed` and classify this as a public-release blocker. A documentation-only review may be useful, but it is not a paper-agent smoke test.
+- If the environment could not launch a fresh agent session, the report should say `paper-agent-test: not performed` and classify this as a release-outcome blocker. A documentation-only review may be useful, but it is not a paper-agent smoke test.
 
 **Commands:**
 - Figure reproduction commands in `code/figure-reproduction/README.md` should be syntactically valid (parseable by the shell)

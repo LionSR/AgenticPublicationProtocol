@@ -1,6 +1,6 @@
 ---
 name: publish-paper
-description: Orchestrate the full Agentic Publication Protocol workflow by calling modular step skills: reproduce-results, prepare-staging, define-paper-agent, validate-publication, and public-release.
+description: Orchestrate the full Agentic Publication Protocol workflow by calling modular step skills: reproduce-results, prepare-staging, define-paper-agent, validate-publication, and release-outcome.
 ---
 
 # Publish Paper — Orchestrator
@@ -58,7 +58,7 @@ Keep this roadmap in chat/internal notes, not in `publication-staging/`.
 4. `/validate-publication --stage full`
    - Finds substantive APP issues before release.
    - Requires the final validation report and staging-root paper-agent test.
-5. `/public-release`
+5. `/release-outcome`
    - Performs only lightweight final release guards, author approval, freeze, and final outcome.
    - If a substantive issue appears, route back to the owning step.
 
@@ -72,7 +72,7 @@ Detect filesystem state and continue at the matching step:
 | Reproduction report exists, no coherent `publication-staging/` | `/prepare-staging` |
 | `publication-staging/` exists, no approved `AGENTS.md`/README | `/define-paper-agent` |
 | Paper-agent docs approved, no full validation report or paper-agent test | `/validate-publication --stage full` |
-| Full validation passed, no final outcome | `/public-release` |
+| Full validation passed, no final outcome | `/release-outcome` |
 | Public tagged release exists | `/reproduce-results` for a new version/revision |
 
 Existing `.publications.md` means a previous real release exists. Read it during `reproduce-results` and focus author questions on what changed.

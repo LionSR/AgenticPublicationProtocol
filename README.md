@@ -27,7 +27,7 @@ APP helps organize and reproduce/check results authors have already produced. It
 This repository contains:
 
 - [`PROTOCOL.md`](PROTOCOL.md) — the specification of what an APP publication looks like.
-- [`skills/`](skills/) — official APP skills, including `publish-paper`, `reproduce-results`, `prepare-staging`, `define-paper-agent`, `validate-publication`, `public-release`, `extract-chat-context`, `create-paper-page`, and `load-paper`.
+- [`skills/`](skills/) — official APP skills, including `publish-paper`, `reproduce-results`, `prepare-staging`, `define-paper-agent`, `validate-publication`, `release-outcome`, `extract-chat-context`, `create-paper-page`, and `load-paper`.
 - [`template/`](template/) — starter files the skills adapt:
   - [`template/AGENTS.md`](template/AGENTS.md) — starter for the publication's `AGENTS.md`.
   - [`template/README.md`](template/README.md) — starter for the publication's human-facing `README.md`.
@@ -114,7 +114,7 @@ The skills in this repository are grouped by how essential they are to the APP w
 | `prepare-staging` | Build the self-contained `publication-staging/` tree from author-approved materials and reproduction findings. |
 | `define-paper-agent` | Draft and iterate `AGENTS.md`, `CLAUDE.md`, and README with the author. |
 | `validate-publication` | Check APP structure, paths, privacy, clear factual consistency, reader-agent usability, figure/table reproduction status, and release manifest verification when applicable. |
-| `public-release` | Perform lightweight final review/freeze and either publish the validated release or record a dev-sandbox outcome. |
+| `release-outcome` | Perform lightweight final review/freeze and either publish the validated release or record a dev-sandbox outcome. |
 | `extract-chat-context` | Pull publication-safe research context from local Claude Code / Codex chat/session history for supplementary materials. Optional helper called by `reproduce-results`. |
 
 **Optional publication add-ons**
