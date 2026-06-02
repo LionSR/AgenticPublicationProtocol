@@ -1,6 +1,6 @@
 ---
 name: publish-paper
-description: Orchestrate the full Agentic Publication Protocol workflow by calling modular step skills: reproduce-results, prepare-staging, define-paper-agent, validate-publication, and release-outcome.
+description: "Orchestrate the full Agentic Publication Protocol workflow by calling modular step skills: reproduce-results, prepare-staging, define-paper-agent, validate-publication, and release-outcome."
 ---
 
 # Publish Paper — Orchestrator
@@ -92,4 +92,3 @@ Existing `.publications.md` means a previous real release exists. Read it during
 - `/extract-chat-context` may be called by `/reproduce-results` after asking the author whether they want chat/session context.
 - `/validate-publication` is called at structure, agents-md, and full checkpoints.
 - `/create-paper-page` may be offered only after a real public release succeeds.
-
