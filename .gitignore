@@ -1,3 +1,4 @@
 *.jpg
 *.txt
 .claude/
+.DS_Store
