@@ -72,14 +72,15 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 - Relative paths should be relative to the repo root, or to `publication-staging/` when validating a staged candidate release
 
 **Paper-agent smoke test:**
-- During full validation of an APP candidate or release, including standalone `--stage full`, the validating agent should explicitly ask the author which route they want for the fresh paper-agent smoke test:
+- During full validation of an APP candidate or release, including standalone `--stage full`, the validating agent must explicitly ask the author which route they want for the fresh paper-agent smoke test before writing final validation status, unless the author has already made a clear route choice in the current conversation. The prompt must present both routes:
   - authorize the publishing agent to launch a fresh subagent/fresh agent session rooted at `publication-staging/`, when the platform supports that and the author explicitly asks for it; or
   - run the smoke test manually by opening a new agent session themselves, setting the working directory to `publication-staging/`, asking the smoke-test questions, and confirming whether the paper-agent behaved correctly.
 - If the publishing/validating agent runs the test, `supplementary/paper-agent-test.md` should exist and document the resulting fresh agent session transcript or concise Q&A summary.
 - If the author runs the test manually, a transcript is optional; `supplementary/validation-report.md` should record that the author manually tested and approved the paper-agent.
 - The smoke-test questions should cover ground-truth identification, main contribution, at least one representative reproduction command, blocked/manual/dependency-limited figures or tables, and heavy/platform-specific warnings when relevant.
 - An agent-run test passes only if the fresh agent answers from staged files, uses paths and commands that resolve inside staging, and accurately reports reproduction limitations. An author-run manual test passes when the author confirms the paper-agent behaved correctly.
-- If the author declines both routes, the environment could not launch a fresh agent session, or the author does not confirm manual approval, the report should say `paper-agent-test: not performed` and classify this as a release-outcome blocker. A documentation-only review may be useful, but it is not a paper-agent smoke test.
+- If the author declines both routes, says the smoke test is not required for the current sandbox exercise, the environment could not launch a fresh agent session, or the author does not confirm manual approval, the report should say `paper-agent-test: not performed` and classify this as a release-outcome blocker. A documentation-only review may be useful, but it is not a paper-agent smoke test.
+- If the smoke test is not completed, final validation wording must be qualified as "full validation attempted; release-blocked" or "dev-sandbox validation completed with release blockers." Flag unqualified phrases such as "full validation passed" or "validation complete" when they hide the missing smoke test.
 
 **Commands:**
 - Figure reproduction commands in `code/figure-reproduction/README.md` should be syntactically valid (parseable by the shell)
