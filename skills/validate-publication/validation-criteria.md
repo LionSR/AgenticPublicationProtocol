@@ -57,8 +57,8 @@ The authoritative layout is defined in [PROTOCOL.md § Repository layout](../../
 | `CLAUDE.md` at root (`@AGENTS.md`) | — | warning if missing | warning if missing |
 | `README.md` at root | — | error if missing | error if missing |
 | `code/figure-reproduction/README.md` for papers with generated figures/tables | warning if missing | error if missing | error if missing |
-| `supplementary/validation-report.md` | — | — | warning if missing during full modular `/publish-paper` validation; not required for standalone pre-report audits |
-| `supplementary/paper-agent-test.md` | — | — | error if missing during full modular `/publish-paper` validation; not required for standalone pre-test audits |
+| `supplementary/validation-report.md` | — | — | warning if missing during full validation of an APP candidate/release; not required for explicitly scoped pre-report audits |
+| `supplementary/paper-agent-test.md` | — | — | error if missing during full validation of an APP candidate/release unless `supplementary/validation-report.md` records author manual paper-agent testing and approval; not required for explicitly scoped pre-test audits |
 
 The publication checklist is a skill-internal artifact of `/publish-paper` and is **not** a publication file — do not flag its absence.
 
@@ -72,10 +72,14 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 - Relative paths should be relative to the repo root, or to `publication-staging/` when validating a staged candidate release
 
 **Paper-agent smoke test:**
-- During full modular `/publish-paper` validation, `supplementary/paper-agent-test.md` should exist and document a fresh agent session launched with the staged repo root as its working directory.
-- The test should include 3-5 questions and answers covering ground-truth identification, main contribution, at least one representative reproduction command, blocked/manual/dependency-limited figures or tables, and heavy/platform-specific warnings when relevant.
-- The test passes only if the fresh agent answers from staged files, uses paths and commands that resolve inside staging, and accurately reports reproduction limitations.
-- If the environment could not launch a fresh agent session, the report should say `paper-agent-test: not performed` and classify this as a release-outcome blocker. A documentation-only review may be useful, but it is not a paper-agent smoke test.
+- During full validation of an APP candidate or release, including standalone `--stage full`, the validating agent should explicitly ask the author which route they want for the fresh paper-agent smoke test:
+  - authorize the publishing agent to launch a fresh subagent/fresh agent session rooted at `publication-staging/`, when the platform supports that and the author explicitly asks for it; or
+  - run the smoke test manually by opening a new agent session themselves, setting the working directory to `publication-staging/`, asking the smoke-test questions, and confirming whether the paper-agent behaved correctly.
+- If the publishing/validating agent runs the test, `supplementary/paper-agent-test.md` should exist and document the resulting fresh agent session transcript or concise Q&A summary.
+- If the author runs the test manually, a transcript is optional; `supplementary/validation-report.md` should record that the author manually tested and approved the paper-agent.
+- The smoke-test questions should cover ground-truth identification, main contribution, at least one representative reproduction command, blocked/manual/dependency-limited figures or tables, and heavy/platform-specific warnings when relevant.
+- An agent-run test passes only if the fresh agent answers from staged files, uses paths and commands that resolve inside staging, and accurately reports reproduction limitations. An author-run manual test passes when the author confirms the paper-agent behaved correctly.
+- If the author declines both routes, the environment could not launch a fresh agent session, or the author does not confirm manual approval, the report should say `paper-agent-test: not performed` and classify this as a release-outcome blocker. A documentation-only review may be useful, but it is not a paper-agent smoke test.
 
 **Commands:**
 - Figure reproduction commands in `code/figure-reproduction/README.md` should be syntactically valid (parseable by the shell)
