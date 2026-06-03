@@ -7,7 +7,6 @@
     {
       "name": "paper-protocol",
       "description": "Publish academic papers as AI agents",
-      "version": "0.1.0",
       "source": "./"
     }
   ]
