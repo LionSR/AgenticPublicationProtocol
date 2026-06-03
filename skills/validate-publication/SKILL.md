@@ -41,10 +41,17 @@ Read the publication repo or staging tree to understand what's being validated:
 - `skills/` — any author-published skills
 - `data/README.md` — dataset provenance, access, and download instructions when the publication uses any dataset, local or external
 - `supplementary/validation-report.md` — prior validation report, if this is a final/revalidation pass
-- `supplementary/paper-agent-test.md` — fresh staging-root paper-agent smoke test, required during final `/publish-paper` validation
+- `supplementary/paper-agent-test.md` — fresh staging-root paper-agent smoke-test transcript when the publishing/validating agent runs the test; for manual author-run tests, the validation report may instead record author-tested-and-approved status
 - `APP_PUBLICATION.json` release asset — only when auditing a public tagged release, not when validating `publication-staging/`
 
-When running `--stage full` as Step 4 of the modular `/publish-paper` workflow, perform or ensure the fresh staging-root paper-agent smoke test before declaring full validation passed. Save it as `supplementary/paper-agent-test.md`. If the environment cannot launch a fresh agent session, write or require a `paper-agent-test: not performed` note and classify it as a release-outcome blocker rather than treating a documentation review as a smoke test.
+When running `--stage full` on an APP candidate or release, including Step 4 of the modular `/publish-paper` workflow or a standalone full validation, perform or ensure the fresh staging-root paper-agent smoke test before declaring full validation passed. If the publishing/validating agent runs the test, save the transcript or concise Q&A summary as `supplementary/paper-agent-test.md`. If the author runs the test manually, record the author's manual test and approval in `supplementary/validation-report.md`.
+
+Before attempting the paper-agent smoke test, explicitly ask the author which route they want. This is a required author decision checkpoint, not just report language. Unless the author has already made a clear route choice in the current conversation, pause full validation and present these two options before writing final validation status:
+
+1. **Authorize the publishing agent to launch a fresh subagent/fresh agent session.** Use this only when the platform supports such a session and the author has explicitly authorized it. The fresh session must be rooted at `publication-staging/`, load `AGENTS.md` naturally, answer the smoke-test questions from staged files only, and produce a transcript or concise Q&A summary for `supplementary/paper-agent-test.md`.
+2. **Manual author-run smoke test.** The author opens a new agent session themselves, sets its working directory to `publication-staging/`, asks the smoke-test questions, and confirms whether the paper-agent behaved correctly. A transcript is optional. Record the author's confirmation in `supplementary/validation-report.md` as an author-tested-and-approved paper-agent test.
+
+Do not silently choose option 1 merely because the platform has subagent tooling. Do not proceed directly to final dev-sandbox outcome after saying "choose a route first"; spell out the two routes above in the user-facing checkpoint. If the author declines both options, says the smoke test is not required for the current sandbox exercise, the environment cannot launch a fresh agent session, or the author does not confirm a manual test, write or require a `paper-agent-test: not performed` note and classify it as a release-outcome blocker rather than treating a documentation review as a smoke test. In that case, describe the result as "full validation attempted; release-blocked" or "dev-sandbox validation completed with release blockers," never simply "full validation passed" or "validation complete" without qualification.
 
 ### 2. Run APP validation checks
 
@@ -112,7 +119,7 @@ Cross-check information across files:
 - Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.
 - Required APP files exist for the current validation stage.
 - `data/README.md` exists whenever the publication uses any dataset, local or external.
-- During full modular `/publish-paper` validation, `supplementary/paper-agent-test.md` exists and records a fresh agent session launched with the staged repo as its working directory. It should include representative Q&A showing the agent can identify ground truth, summarize the paper, point to real reproduction commands, and accurately report blockers. If this is missing or only a documentation review, classify it as a release-outcome blocker.
+- During full validation of an APP candidate or release, either `supplementary/paper-agent-test.md` exists and records an author-authorized fresh subagent/fresh agent session, or `supplementary/validation-report.md` records that the author manually opened a fresh agent session rooted at the staged repo and approved the paper-agent behavior. If the agent-run transcript exists, it should include representative Q&A showing the agent can identify ground truth, summarize the paper, point to real reproduction commands, and accurately report blockers. If neither an agent-run transcript nor author-tested-and-approved validation note exists, classify it as a release-outcome blocker.
 - Setup, data access, and reproduction instructions are complete enough for a reader agent to know what can be run, what data is required, and what requires manual/human steps.
 
 This is a completeness/usability check, not a prose-quality review. Do not flag wording only because it sounds generic; flag missing information only when it blocks APP use.
