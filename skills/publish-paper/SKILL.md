@@ -49,6 +49,9 @@ Keep this roadmap in chat/internal notes, not in `publication-staging/`.
    - Checks existing results only.
    - Does not improve the science, add experiments, or create new claims.
    - Produces `working/reproduction/reproduction-report.md`.
+   - Must end with an author-facing reproduction summary that says what reproduced, what differed, what could not be reproduced, and why.
+   - If any result has a blocked, manual-only, or runs-but-differs status, stop and ask the author how to proceed before starting `/prepare-staging`.
+   - Do not quietly continue past reproduction blockers. Warn that significant blockers or failed reproduction will likely become validation issues unless resolved, explicitly deferred, or accepted by the author for a dev-sandbox/partial outcome.
 2. `/prepare-staging`
    - Builds `publication-staging/` from the reproduction report and author decisions.
    - Runs `/validate-publication --stage structure`.
@@ -69,6 +72,7 @@ Detect filesystem state and continue at the matching step:
 | State | Resume at |
 |---|---|
 | No `working/reproduction/reproduction-report.md` and no reliable staging | `/reproduce-results` |
+| Reproduction report exists with unresolved blocked, `runs-but-differs`, or `manual-only` statuses and no explicit author decision to continue | `/reproduce-results` author-facing reproduction gate |
 | Reproduction report exists, no coherent `publication-staging/` | `/prepare-staging` |
 | `publication-staging/` exists, no approved `AGENTS.md`/README | `/define-paper-agent` |
 | Paper-agent docs approved, no full validation report or paper-agent test | `/validate-publication --stage full` |
@@ -83,6 +87,8 @@ Existing `.publications.md` means a previous real release exists. Read it during
 - Never treat "ok" after a multi-item review as full approval. Ask what they reviewed.
 - Draft author-facing material from author intent, not from agent guesses.
 - Explain each step at a high level before doing it.
+- Never advance from `/reproduce-results` to `/prepare-staging` while blockers are merely recorded in a report. First show the author the reproduction status and options, then wait for explicit instruction to resolve, defer, accept and continue, switch to dev-sandbox/partial outcome, or stop.
+- Treat reproduction statuses other than `reproduced` as requiring an author-visible decision. The severity depends on the paper claim and artifact role, but hidden carry-forward is not allowed.
 - Keep paths in staged docs relative to `publication-staging/`, not the private parent repo.
 - Do not write workflow checklists into `publication-staging/`.
 - In dev-sandbox mode, record blockers honestly and never create real publication artifacts.

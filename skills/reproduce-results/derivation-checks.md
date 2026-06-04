@@ -15,12 +15,11 @@ Use this for theory papers and for computational papers with nontrivial formulas
 
 ## Author Control
 
-If an AI-written derivation could help readers, default to proposing it as optional context under `supplementary/`. Explain:
+If a more detailed derivation of key steps would help readers or future agents, write a detailed note in Markdown or LaTeX and inform the author. Add the note to `supplementary/` by default. Explain:
 
 - `paper/` is ground truth: material there is treated as part of the paper.
 - `supplementary/` is optional additional context: useful, but secondary to the paper.
 
-If the derivation seems essential for understanding the work, tell the author why and ask whether they want to revise the paper or keep the derivation supplementary. The author decides placement. Never silently add AI-written derivations to `paper/`.
+If the derivation seems essential for understanding the work, tell the author why. If they want the note to become part of the paper itself, they should move or adapt it into `paper/`. The author decides placement. Never silently add agent-written derivations to `paper/`.
 
 Record checked steps, uncertainty, and author decisions in `working/reproduction/reproduction-report.md`.
-
