@@ -7,8 +7,9 @@
     {
       "name": "paper-protocol",
       "source": {
-        "source": "local",
-        "path": "./"
+        "source": "url",
+        "url": "https://github.com/LionSR/AgenticPublicationProtocol.git",
+        "ref": "main"
       },
       "policy": {
         "installation": "AVAILABLE",
