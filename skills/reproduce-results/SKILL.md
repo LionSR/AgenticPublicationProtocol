@@ -53,7 +53,7 @@ Assume the author may not know APP. Explain that this step checks the existing p
    - follow `derivation-checks.md`;
    - verify included derivation steps when feasible;
    - distinguish derivations in the paper, derivations quoted from literature, and missing nontrivial derivations;
-   - if an AI-written derivation may help, explain that `paper/` is ground truth and `supplementary/` is optional context. Default to proposing `supplementary/`; the author decides whether to revise the paper.
+   - if a more detailed derivation of certain key steps would help readers or future agents, write a detailed note in Markdown or LaTeX and inform the author. Add detailed derivation notes to `supplementary/` by default, since `paper/` is ground truth and `supplementary/` is optional context. Tell the author that if they want a derivation note to become part of the paper itself, they should move or adapt it into `paper/`.
 8. Write the handoff report:
 
 ```text
@@ -64,3 +64,12 @@ Include canonical paper, prior state, author decisions, key results, figure/tabl
 
 This report is private workflow context by default. `prepare-staging` decides what becomes reader-facing material.
 
+9. Present an author-facing reproduction gate before any next workflow step:
+   - summarize what was reproduced successfully;
+   - summarize what ran but differed from the paper or saved outputs;
+   - summarize what could not be reproduced and name the blocker for each item;
+   - distinguish minor/documentation blockers from significant blockers that affect central claims, required figures/tables, public data availability, or executable reproduction;
+   - warn clearly when reproduction fails or significant blockers remain, and say this will likely cause problems during `validate-publication` unless resolved, explicitly deferred, or accepted as part of a dev-sandbox/partial outcome;
+   - offer concrete options, such as supplying missing data, fixing dependencies, providing compute access or cached outputs, revising scripts, marking a result manual-only with evidence, excluding/deferring nonessential artifacts, switching to dev-sandbox mode, continuing with known validation risk, or stopping.
+
+Do not move on to `prepare-staging` automatically when blockers, `runs-but-differs`, or `manual-only` statuses remain. Wait for explicit author instruction to resolve the blockers, defer/exclude specific items, accept the risk and continue, switch outcome mode, or stop. If there are no blockers and all required checks are `reproduced`, say so and continue according to the orchestrator.
