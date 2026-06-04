@@ -44,7 +44,7 @@ First make sure the agent itself is installed. APP runs *inside* an AI coding ag
 
 ### Claude Code
 
-These are slash commands. Type them **inside a running Claude Code session** (at the Claude Code prompt), not in your shell. Press Enter after each line:
+These are slash commands. Type them **inside a running Claude Code session** (at the Claude Code prompt), not in your shell. Press Enter after each line to install APP:
 
 ```
 /plugin marketplace add LionSR/AgenticPublicationProtocol
@@ -53,6 +53,15 @@ These are slash commands. Type them **inside a running Claude Code session** (at
 ```
 
 If you haven't started a session yet, run `claude` in your terminal first, then enter the commands above. (`/reload-plugins` activates the plugin in the current session; the `paper-protocol@paper-protocol` form is `plugin-name@marketplace-name`, not a typo.) When it works, the plugin's skills such as `/publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
+
+To update an existing Claude Code install, type this inside Claude Code:
+
+```
+/plugin marketplace update paper-protocol
+/reload-plugins
+```
+
+New skills, reference files, and templates appear after update; you do not need to reinstall the plugin.
 
 ### Codex
 
@@ -65,19 +74,39 @@ codex plugin add paper-protocol@paper-protocol
 
 `codex plugin add` may prompt you to authenticate on install. (`paper-protocol@paper-protocol` is `plugin-name@marketplace-name`, not a typo.) You can also install and toggle plugins interactively: open Codex, find `Agentic Publication Protocol` in the plugin browser, and press Space to enable it. Once enabled, its skills such as `$publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
 
+To update an existing Codex install, run this in your terminal:
+
+```bash
+codex plugin marketplace upgrade paper-protocol
+```
+
+New skills, reference files, and templates appear after update; you do not need to reinstall the plugin.
+
 ### Manual install
 
-Clone this repo and point your agent at the `skills/` directory. Use this path when you want to load the skills directly rather than installing the plugin.
+Use this path when you want to load the skills directly rather than installing the plugin. First clone this repo locally. Use HTTPS if you do not have GitHub SSH keys set up:
 
-### Update
+```bash
+git clone https://github.com/LionSR/AgenticPublicationProtocol.git
+cd AgenticPublicationProtocol
+```
 
-| Platform | Command |
-|----------|---------|
-| Claude Code | `/plugin marketplace update paper-protocol` |
-| Codex | `codex plugin marketplace upgrade paper-protocol` |
-| Manual install | `git pull` in the cloned directory |
+Or use SSH if your GitHub account is configured for SSH:
 
-New skills, reference files, and templates appear automatically after update — no re-install needed.
+```bash
+git clone git@github.com:LionSR/AgenticPublicationProtocol.git
+cd AgenticPublicationProtocol
+```
+
+Then point your agent at the cloned `skills/` directory.
+
+To update a manual install, pull the latest changes in the cloned directory:
+
+```bash
+git pull
+```
+
+Then keep pointing your agent at the same `skills/` directory. New skills, reference files, and templates appear after update.
 
 ## Publish a paper
 
@@ -95,11 +124,23 @@ Open your working repo in an AI coding agent with this plugin installed, then in
 $publish-paper
 ```
 
-The skill walks through five steps: reproduce/check existing results, prepare `publication-staging/`, define the paper agent, run full validation, and perform the final review/freeze plus release or dev-sandbox outcome. The process can span multiple sessions, and each step can also be run directly.
+The `publish-paper` skill walks through the full workflow in order. It can span multiple sessions, and it may pause for author decisions between steps.
+
+![publish-paper five-step workflow](assets/readme/publish_paper_steps.svg)
+
+You can also call each step directly if you only need part of the workflow, want to resume from a known checkpoint, or are debugging a publication candidate. The step skills should be used in this order:
+
+1. `reproduce-results` — reproduce/check existing paper results before staging, including figures, tables, experiments, and analytic derivations.
+2. `prepare-staging` — organize the author-approved paper, code, data, environment notes, reproduction reports, and supplementary materials into `publication-staging/`.
+3. `define-paper-agent` — draft and revise `AGENTS.md`, `CLAUDE.md`, and reader-facing documentation for the staged paper agent.
+4. `validate-publication` — check APP structure, paths, privacy, consistency, reproduction status, and reader-agent usability.
+5. `release-outcome` — perform the final review/freeze and either publish the validated release or record a developer-sandbox outcome.
+
+`publish-paper` is still the recommended entry point because it keeps these steps coordinated and asks for author approval at the right checkpoints.
 
 ## Use a published paper
 
-Clone the repo and open it in an AI coding agent:
+Clone the published paper repo and open it in an AI coding agent. Replace the placeholder URL below with the actual APP publication repository URL:
 
 ```bash
 git clone https://github.com/author/their-paper.git
