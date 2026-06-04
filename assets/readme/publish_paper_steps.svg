@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="430" viewBox="0 0 1280 430" role="img" aria-labelledby="title desc">
+  <title id="title">publish-paper workflow step skills</title>
+  <desc id="desc">Five ordered boxes showing reproduce-results, prepare-staging, define-paper-agent, validate-publication, and release-outcome.</desc>
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#25324a" flood-opacity="0.14"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 1 1 L 11 6 L 1 11 z" fill="#526071"/>
+    </marker>
+  </defs>
+
+  <rect width="1280" height="430" fill="#f7f9fc"/>
+  <text x="640" y="48" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="30" font-weight="700" fill="#172033">publish-paper workflow</text>
+  <text x="640" y="78" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="16" fill="#526071">The orchestrator calls these step skills in order and pauses for author review at key checkpoints.</text>
+
+  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">
+    <line x1="242" y1="218" x2="282" y2="218" stroke="#526071" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="478" y1="218" x2="518" y2="218" stroke="#526071" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="714" y1="218" x2="754" y2="218" stroke="#526071" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="950" y1="218" x2="990" y2="218" stroke="#526071" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <g transform="translate(38 118)" filter="url(#shadow)">
+      <rect width="204" height="220" rx="10" fill="#ffffff" stroke="#cdd6e3"/>
+      <rect width="204" height="10" rx="5" fill="#3b82f6"/>
+      <circle cx="30" cy="42" r="17" fill="#e8f1ff"/>
+      <text x="30" y="48" text-anchor="middle" font-size="16" font-weight="700" fill="#1d4ed8">1</text>
+      <text x="102" y="74" text-anchor="middle" font-size="20" font-weight="700" fill="#172033">reproduce-results</text>
+      <text x="102" y="110" text-anchor="middle" font-size="14" fill="#526071">
+        <tspan x="102" dy="0">Check existing figures,</tspan>
+        <tspan x="102" dy="21">tables, experiments,</tspan>
+        <tspan x="102" dy="21">and derivations before</tspan>
+        <tspan x="102" dy="21">anything is staged.</tspan>
+      </text>
+      <text x="102" y="197" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8">reproduction report</text>
+    </g>
+
+    <g transform="translate(274 118)" filter="url(#shadow)">
+      <rect width="204" height="220" rx="10" fill="#ffffff" stroke="#cdd6e3"/>
+      <rect width="204" height="10" rx="5" fill="#14b8a6"/>
+      <circle cx="30" cy="42" r="17" fill="#e6fffb"/>
+      <text x="30" y="48" text-anchor="middle" font-size="16" font-weight="700" fill="#0f766e">2</text>
+      <text x="102" y="74" text-anchor="middle" font-size="20" font-weight="700" fill="#172033">prepare-staging</text>
+      <text x="102" y="110" text-anchor="middle" font-size="14" fill="#526071">
+        <tspan x="102" dy="0">Build publication-</tspan>
+        <tspan x="102" dy="21">staging with paper,</tspan>
+        <tspan x="102" dy="21">code, data, licenses,</tspan>
+        <tspan x="102" dy="21">and environment notes.</tspan>
+      </text>
+      <text x="102" y="197" text-anchor="middle" font-size="12" font-weight="700" fill="#0f766e">staged candidate</text>
+    </g>
+
+    <g transform="translate(510 118)" filter="url(#shadow)">
+      <rect width="204" height="220" rx="10" fill="#ffffff" stroke="#cdd6e3"/>
+      <rect width="204" height="10" rx="5" fill="#f59e0b"/>
+      <circle cx="30" cy="42" r="17" fill="#fff6df"/>
+      <text x="30" y="48" text-anchor="middle" font-size="16" font-weight="700" fill="#b45309">3</text>
+      <text x="102" y="74" text-anchor="middle" font-size="20" font-weight="700" fill="#172033">define-paper-agent</text>
+      <text x="102" y="110" text-anchor="middle" font-size="14" fill="#526071">
+        <tspan x="102" dy="0">Draft AGENTS.md,</tspan>
+        <tspan x="102" dy="21">CLAUDE.md, README,</tspan>
+        <tspan x="102" dy="21">reader guidance, and</tspan>
+        <tspan x="102" dy="21">paper-specific limits.</tspan>
+      </text>
+      <text x="102" y="197" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">paper agent docs</text>
+    </g>
+
+    <g transform="translate(746 118)" filter="url(#shadow)">
+      <rect width="204" height="220" rx="10" fill="#ffffff" stroke="#cdd6e3"/>
+      <rect width="204" height="10" rx="5" fill="#8b5cf6"/>
+      <circle cx="30" cy="42" r="17" fill="#f1ecff"/>
+      <text x="30" y="48" text-anchor="middle" font-size="16" font-weight="700" fill="#6d28d9">4</text>
+      <text x="102" y="74" text-anchor="middle" font-size="20" font-weight="700" fill="#172033">validate-publication</text>
+      <text x="102" y="110" text-anchor="middle" font-size="14" fill="#526071">
+        <tspan x="102" dy="0">Check structure, paths,</tspan>
+        <tspan x="102" dy="21">privacy, consistency,</tspan>
+        <tspan x="102" dy="21">reproduction status,</tspan>
+        <tspan x="102" dy="21">and reader usability.</tspan>
+      </text>
+      <text x="102" y="197" text-anchor="middle" font-size="12" font-weight="700" fill="#6d28d9">validation report</text>
+    </g>
+
+    <g transform="translate(982 118)" filter="url(#shadow)">
+      <rect width="204" height="220" rx="10" fill="#ffffff" stroke="#cdd6e3"/>
+      <rect width="204" height="10" rx="5" fill="#ef4444"/>
+      <circle cx="30" cy="42" r="17" fill="#ffecec"/>
+      <text x="30" y="48" text-anchor="middle" font-size="16" font-weight="700" fill="#b91c1c">5</text>
+      <text x="102" y="74" text-anchor="middle" font-size="20" font-weight="700" fill="#172033">release-outcome</text>
+      <text x="102" y="110" text-anchor="middle" font-size="14" fill="#526071">
+        <tspan x="102" dy="0">Run final author</tspan>
+        <tspan x="102" dy="21">review and freeze,</tspan>
+        <tspan x="102" dy="21">then release or record</tspan>
+        <tspan x="102" dy="21">a dev-sandbox outcome.</tspan>
+      </text>
+      <text x="102" y="197" text-anchor="middle" font-size="12" font-weight="700" fill="#b91c1c">approved outcome</text>
+    </g>
+  </g>
+
+  <text x="640" y="380" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14" fill="#526071">Each step can also be called directly when resuming, debugging, or testing part of the APP workflow.</text>
+</svg>
