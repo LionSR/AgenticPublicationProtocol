@@ -21,34 +21,47 @@ When there are many sessions, parallelize the work. Launch subagents to extract 
 
 ### 1. Gather all sessions
 
-Ask the researcher which platform they used: Claude Code or Codex.
+**Pick the platform.** This skill reads history from both Claude Code and Codex. Ask the researcher which they used. If they are unsure, check which store exists and is non-empty — and note the research may have happened in a different tool than the one now running this skill, so check both:
 
-Find the extraction script (bundled with the plugin):
 ```bash
-EXTRACT_SCRIPT=$(find ~/.claude/plugins -name extract_sessions.py 2>/dev/null | head -1)
+ls ~/.claude/projects   # Claude Code — one directory per project
+ls ~/.codex/sessions    # Codex — dated subfolders (presence means history exists)
 ```
 
-If not found (e.g. running outside Claude Code):
+This is just a quick existence check; the `list` command below is what actually shows the sessions. Use the chosen platform as `<source>` (`claude` or `codex`) in every command below, and keep the same source for listing and extracting.
+
+**Find the extraction script.** It ships with the plugin, so search wherever the host installed it — under Claude Code or Codex:
+```bash
+EXTRACT_SCRIPT=$(find ~/.claude/plugins ~/.codex/plugins -name extract_sessions.py 2>/dev/null | head -1)
+```
+
+If it is not in either root (e.g. a manual or dev checkout), download it:
 ```bash
 curl -sO https://raw.githubusercontent.com/LionSR/AgenticPublicationProtocol/main/skills/extract-chat-context/scripts/extract_sessions.py
 EXTRACT_SCRIPT=./extract_sessions.py
 ```
 
-List all sessions for the project:
+**List the sessions.** By default the list is scoped to the **current working directory**, so run this skill from the working repo where the research happened:
 ```bash
-python "$EXTRACT_SCRIPT" list --source claude        # current project
-python "$EXTRACT_SCRIPT" list --source claude --project all  # all projects (if needed)
-python "$EXTRACT_SCRIPT" list --source codex          # Codex
+python "$EXTRACT_SCRIPT" list --source <source>                # this repo's sessions
+python "$EXTRACT_SCRIPT" list --source <source> --project all  # every session on the machine
+python "$EXTRACT_SCRIPT" list --source <source> --project <id> # a specific repo (Codex: a path; Claude: a dash-key)
 ```
 
-Show the session list to the researcher. **By default, include all sessions for the project.** Only narrow the selection if the researcher asks to exclude specific ones or there are clearly unrelated sessions.
+Each row is `timestamp | session_id | preview`; Codex adds the directory **name** (basename) the session ran in after the timestamp. Use the timestamp, the directory name, and the first-message preview to confirm each session belongs to this paper — and when two repos share a basename, lean on the timestamp and preview to tell them apart.
+
+**Finding the right history** when scoping is unclear or you are not in the original repo (a fresh clone, `publication-staging/`, or a moved directory):
+- **Claude Code** keys each project by its working-directory path with `/` replaced by `-`. The default list shows only the current repo; use `--project all`, or `--project <key>` (the dash-encoded path, e.g. `-Users-me-old-repo`) for the original path.
+- **Codex** keeps all sessions in one store, tagged with the directory each ran in. The default filters to the current directory; if that comes back empty the script says to retry with `--project all` (then pick by directory + timestamp + preview) or `--project <path>` (a real filesystem path). Archived sessions are not listed by default — add `--sessions-root ~/.codex/archived_sessions` to reach them.
+
+Show the session list to the researcher. **By default, include every session the list shows for this repo.** Narrow only if the researcher asks to exclude specific ones or some are clearly unrelated. On Codex, where sessions from all repos share one store, first confirm the listed directory names match this research before including them.
 
 ### 2. Extract sessions
 
-Extract all included sessions to JSON (parallelize across batches if many):
+Extract all included sessions to JSON (use the same `<source>` you listed with; parallelize across batches if many):
 
 ```bash
-python "$EXTRACT_SCRIPT" extract --source claude --session <id>
+python "$EXTRACT_SCRIPT" extract --source <source> --session <id>
 ```
 
 Outputs structured JSON with normalized user/assistant turns, system tags stripped.
