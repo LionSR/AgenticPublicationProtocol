@@ -16,35 +16,25 @@ This paper is published with an AI agent ([Agentic Publication Protocol](https:/
 
 ## Figures
 
-Authoritative figure reproduction map: `code/figure-reproduction/README.md`.
-
-| Figure | Paper artifact | Script | Status | Time |
-|--------|----------------|--------|--------|------|
-| Fig 1 (description) | `paper/figures/fig1.png` | `python code/figure-reproduction/fig01_example.py` | reproduced | ~5s |
-| Fig 2 (description) | `paper/figures/fig2.png` | `python code/figure-reproduction/fig02_example.py` | reproduced | ~10s |
+Authoritative figure/table reproduction map: `code/figure-reproduction/README.md`.
 
 ## Reproducing results
 
 ### Setup
 
-[copy the concise setup from AGENTS.md; point to `environment/README.md` for details when present]
-
-Example Python layout:
-
-```sh
-python -m venv .venv
-.venv/bin/pip install -r environment/requirements.txt
-```
-
-Run Python commands with `.venv/bin/python ...`. The `.venv/` directory is intentionally gitignored and should be recreated locally from the included dependency files.
+Use `environment/README.md` for the tested platform, dependency files, setup commands, runner prefixes, and external software requirements, when executable tooling is present.
 
 ### Run figures
 
-[Use the commands in `code/figure-reproduction/README.md`. Run them with the environment prefix documented above and in `environment/README.md`. Generated outputs are written under `code/figure-reproduction/generated/` unless the figure map says otherwise. They are local run artifacts and are gitignored by default unless the figure map explicitly documents that generated outputs are intentionally committed.]
+Use the commands in `code/figure-reproduction/README.md`. Generated outputs are written under the location documented there.
 
 ### Full experiment
 
-[how to run from scratch, if applicable]
+[Point to the relevant code README, script, notebook, or paper-specific skill. Warn readers about heavy, manual, licensed, or platform-specific requirements.]
+
+## Data
+
+Use `data/README.md` for dataset provenance, access/download instructions, local destinations, and which datasets are required for the default workflow, when the publication uses datasets.
 
 ## Citation
 

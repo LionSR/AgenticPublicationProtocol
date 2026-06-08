@@ -11,7 +11,7 @@ The manuscript, primary code, and data are the ground truth. Supplementary mater
 **What to check:**
 - Stated numbers, figure/table references, dataset names, and result summaries in AGENTS.md and README — verify they do not conflict with the paper
 - Key results listed in AGENTS.md — verify the numbers, claims, and scope match the paper when the claim is concrete enough to check
-- "What You Can Do" section — are the described capabilities actually supported by the code and files in the repo?
+- Reader-help instructions and canonical pointers in AGENTS.md — are the described capabilities actually supported by the code and files in the repo?
 - `supplementary/know-how.md` — does it contradict anything in the paper?
 - `supplementary/authors-note.md` — does it contain factual claims that contradict the paper or could mislead a reader agent?
 - Skills — do any skill descriptions make claims about the paper's findings?
@@ -65,7 +65,7 @@ The publication checklist is a skill-internal artifact of `/publish-paper` and i
 For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as a release-outcome blocker only if the researcher explicitly deferred licensing for the sandbox test. It is still an error for real publication mode and still means the staged tree is not release-ready.
 
 **File paths:**
-- Every path in AGENTS.md Repository Structure must resolve to a real file or directory
+- Every path in AGENTS.md must resolve to a real file or directory
 - Every path in README must resolve
 - Every path in `supplementary/` references must resolve
 - Every script and output path in `code/figure-reproduction/README.md` must resolve, except outputs for blocked/manual items
@@ -80,7 +80,7 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 **Commands:**
 - Figure reproduction commands in `code/figure-reproduction/README.md` should be syntactically valid (parseable by the shell)
 - Install commands should reference real package files (e.g., `environment/requirements.txt` exists)
-- If `environment/README.md` exists, setup commands in AGENTS.md, README, and figure-reproduction commands should use the documented environment or runner prefix (`.venv/bin/python`, `uv run`, project-local Julia depot, conda env, `Rscript`, `octave`, `matlab -batch`, `wolframscript`, etc.) unless the environment README says no activation/prefix is required.
+- If `environment/README.md` exists, setup commands in README and figure-reproduction commands should use the documented environment or runner prefix (`.venv/bin/python`, `uv run`, project-local Julia depot, conda env, `Rscript`, `octave`, `matlab -batch`, `wolframscript`, etc.) unless the environment README says no activation/prefix is required. AGENTS.md should point to `environment/README.md`; if it includes setup commands despite the concise-template guidance, they must also match.
 - Installed environment directories such as `.venv/`, `.julia_depot/`, `node_modules/`, conda env folders, and package caches should be gitignored rather than committed. Dependency manifests, lockfiles, setup scripts, and `environment/README.md` should be committed.
 - If reproduction requires external licensed or manually installed software such as VASP, MATLAB, Mathematica, COMSOL, Gaussian, or commercial solvers, `environment/README.md` should document the software name, version if known, required components, access/license requirement, expected executable/command, and whether validation could run it. Absence of the software in the validation environment is a blocker to record, not a reason to omit the requirement.
 - Don't run heavy commands unless explicitly approved — check they parse and reference real files, and require heavy commands to be marked as such
@@ -95,7 +95,7 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 - A blocked/manual item must document the attempted source scripts/notebooks, attempted command if any, and concrete blocker.
 - A `blocked-dependency` item must name the dependency, resolver/network/platform/licensing blocker, and the command attempted or the reason no command could be attempted.
 - If the figure-to-code mapping was ambiguous, the figure map should record the researcher clarification or state that clarification is still needed.
-- `AGENTS.md` must reference `code/figure-reproduction/README.md` and summarize the figure/table statuses.
+- `AGENTS.md` must reference `code/figure-reproduction/README.md` when generated figures/tables exist. Detailed figure/table statuses should live in that README rather than being duplicated in AGENTS.md.
 - README should either link to the same map or duplicate a compatible summary.
 - Each paper figure/table should map to a distinct direct script when feasible. Grouped wrappers are allowed when explicitly documented: the map must say the script is a grouped wrapper and list every paper artifact and generated output covered by the command. Flag duplicate scripts as `warning` unless this grouped-wrapper documentation is present. This is an explicit exception to the severity convention: splitting may be non-trivial and the decision belongs to the researcher.
 
@@ -148,17 +148,17 @@ When a generated artifact is intentionally included, the publication should expl
 | Paper title | Frontmatter + identity | Heading | Exact |
 | Authors | Frontmatter | Under heading | Exact |
 | Paper summary | Paper Summary section | 1-2 sentence summary | Compatible (README is shorter) |
-| Environment setup | Environment Setup section | Setup section | Compatible; same setup commands and runner prefixes |
-| Figure reproduction | "Reproduce figures" section | "Figures" section | Compatible summary; both point to `code/figure-reproduction/README.md` when present |
+| Environment setup | Pointer to environment docs | Setup section | Both point to `environment/README.md`; commands, if duplicated, match canonical docs |
+| Figure reproduction | Pointer to figure map | "Figures" section | Both point to `code/figure-reproduction/README.md` when present |
 | Citation | Citation section | Citation section | Identical BibTeX |
-| Computational reqs | Computational Requirements | Setup section | Compatible |
+| Computational reqs | Pointer to environment/figure docs | Setup section | Compatible with canonical docs |
 
 **Internal consistency:**
 - `paper_format` in frontmatter matches the actual paper file type
 - Computational requirements match what the code actually needs (e.g., don't say "any laptop" if code imports CUDA)
 - Environment setup instructions match actual dependency files and command evidence. Flag stale or impossible setup commands, missing `environment/README.md`, or figure commands that bypass the documented environment.
 - `version` in frontmatter matches the git tag per the normalization rule in [PROTOCOL.md § Versioning](../../PROTOCOL.md#versioning): for `vMAJOR.MINOR.PATCH` tags, `version` has no leading `v` (tag `v1.0.0` → `version: "1.0.0"`); for non-semver tags, `version` matches the tag exactly.
-- Validation status language in AGENTS.md, README, `code/figure-reproduction/README.md`, and `supplementary/validation-report.md` should agree. Flag stale statements such as "commands have not yet been validated" when the validation report records successful runs. Also flag overly broad statements such as "fully validated" when release blockers, blocked figures, or manual-only items remain.
+- Validation status language in README, `code/figure-reproduction/README.md`, and `supplementary/validation-report.md` should agree. If AGENTS.md includes validation or reproduction status despite the concise-template guidance, it must also agree. Flag stale statements such as "commands have not yet been validated" when the validation report records successful runs. Also flag overly broad statements such as "fully validated" when release blockers, blocked figures, or manual-only items remain.
 
 ## Verified APP publication manifest
 
@@ -201,7 +201,7 @@ This is not a referee or prose-quality check. Do not flag wording simply because
 
 **Reader-agent usability checks:**
 - The paper source designated as ground truth is easy to identify.
-- AGENTS.md explains what the agent can do with concrete paths or commands where needed.
+- AGENTS.md explains how the agent should help readers and points to concrete canonical paths; commands may live in those canonical docs.
 - README gives enough setup context for a reader to start using the paper agent.
 - Environment setup is reproducible: installed env directories are not required to be committed, but manifests/lockfiles/setup commands are present and documented.
 - Figure/table reproduction instructions cover the figures/tables the publication claims are reproducible.

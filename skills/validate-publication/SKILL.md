@@ -25,7 +25,7 @@ Invoke with `--stage <name>` to validate specific artifacts. Omit for a full val
 | Stage | When | What's checked |
 |-------|------|----------------|
 | `structure` | After organizing files (phase 3) | Folder structure, file paths, sensitive files, data links, `.gitignore` |
-| `agents-md` | After creating AGENTS.md (phase 4) | APP metadata, ground-truth hierarchy, paths, commands, clear factual consistency |
+| `agents-md` | After creating AGENTS.md (phase 4) | APP metadata, ground-truth hierarchy, canonical pointers, reader-help behavior, clear factual consistency |
 | `full` | Step 4 of `/publish-paper`, pre-release review, or standalone | All of the above + README consistency, confidentiality sweep, validation report consistency, local reader-agent usability, and release manifest verification when validating a public tagged release |
 
 ## Process
@@ -68,7 +68,7 @@ Only run at stages: `agents-md`, `full`.
 
 **Check 2: Path, structure, and command validity**
 
-- Verify every file path in `AGENTS.md` Repository Structure exists in the repo.
+- Verify every file path in `AGENTS.md` exists in the repo.
 - Verify every file path in README exists.
 - Check that commands in the figure/table reproduction sections are syntactically valid.
 - For papers with generated figures/tables, verify `code/figure-reproduction/README.md` exists, is referenced from `AGENTS.md`, and is compatible with README.
@@ -104,9 +104,9 @@ Run at all stages.
 Cross-check information across files:
 
 - `AGENTS.md` paper summary vs README description — should be compatible.
-- Figure/table reproduction information in `AGENTS.md` vs README — commands and paths should match.
-- Figure/table reproduction information in `AGENTS.md` and README vs `code/figure-reproduction/README.md` — the code README is authoritative.
-- Validation/reproduction status language in `AGENTS.md` and README vs the validation report and figure map — stale phrases such as "not yet validated" should be flagged when validation evidence says commands were run, and overly strong "fully validated" language should be flagged when blockers remain.
+- Figure/table reproduction pointers in AGENTS.md and README should both lead to the canonical figure map when generated figures/tables exist.
+- Figure/table reproduction information in README vs `code/figure-reproduction/README.md` — the code README is authoritative. AGENTS.md should point to that README rather than duplicate its detailed status table.
+- Validation/reproduction status language in README, `code/figure-reproduction/README.md`, and the validation report should agree. If AGENTS.md includes validation or reproduction status despite the concise-template guidance, it must also agree. Flag stale phrases such as "not yet validated" when validation evidence says commands were run, and overly strong statements such as "fully validated" when blockers remain.
 - Citation in `AGENTS.md` vs README — should be identical when both exist.
 - Computational requirements vs actual code — for example, do not claim "runs on any laptop" if the code requires CUDA.
 - Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.

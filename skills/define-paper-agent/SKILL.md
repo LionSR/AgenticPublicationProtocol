@@ -7,7 +7,7 @@ description: Draft and iterate the APP paper-agent documentation in publication-
 
 Use this after `prepare-staging`. The output is author-reviewed paper-agent documentation inside `publication-staging/`.
 
-Assume the author may not know APP. Explain that `AGENTS.md` tells future reader agents how to represent the paper and use the staged files.
+Assume the author may not know APP. Explain that `AGENTS.md` tells future reader agents how to represent the paper, where to find authoritative information, and how to behave as a helpful paper assistant.
 
 ## Process
 
@@ -20,25 +20,29 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
 3. Draft `publication-staging/AGENTS.md` from `template/AGENTS.md`:
    - required frontmatter;
    - identity and ground-truth hierarchy;
-   - paper summary and key results in author intent;
-   - repository structure with staging-root paths;
-   - concrete "What You Can Do" commands;
-   - environment setup matching `environment/README.md`;
-   - figure/table reproduction summary pointing to `code/figure-reproduction/README.md`;
-   - computational requirements and heavy-command warnings;
+   - 1-2 concise paper-summary paragraphs and key results in author intent;
+   - brief canonical pointers with staging-root paths;
+   - reader-help operating mode: answer science first, inspect direct evidence, cite concrete files/sections/commands, and label evidence level when useful;
+   - pointer to `environment/README.md` for setup commands, runner prefixes, tested platform, computational requirements, and external software;
+   - pointer to `code/figure-reproduction/README.md` for figure/table commands, inputs, outputs, statuses, runtimes, and blockers;
+   - pointer to `data/README.md` for dataset provenance, download/access instructions, local destinations, and dataset-to-result mapping;
+   - heavy-command, network, licensed-software, and destructive-action warnings in concise policy form only;
    - citation;
    - supplementary materials and skills when present.
+   Keep `AGENTS.md` brief: target under 100 lines and exceed 120 lines only for a concrete reason. Do not duplicate figure tables, dataset catalogs, setup commands, validation summaries, or computational requirement tables when the information belongs in a canonical README.
 4. Create `publication-staging/CLAUDE.md` as `@AGENTS.md`.
 5. Self-check:
    - every path exists from staging root;
-   - setup commands and runner prefixes match `environment/README.md`;
-   - figure/table statuses match `code/figure-reproduction/README.md`;
-   - no stale "not validated" or overbroad "fully validated" claims;
+   - AGENTS.md points to the canonical docs that contain detailed setup, data, reproduction, validation, and license information;
+   - `environment/README.md` contains setup commands, runner prefixes, tested platform, computational requirements, and external software requirements when executable code exists;
+   - `code/figure-reproduction/README.md` contains figure/table statuses, commands, inputs, outputs, runtimes, and blockers when generated figures/tables exist;
+   - `data/README.md` contains dataset details when the publication uses any dataset, local or external;
+   - no duplicated details in AGENTS.md that could become stale relative to the canonical docs;
+   - no stale "not validated" or overbroad "fully validated" claims in AGENTS.md or README;
    - licensing language matches `LICENSE` or sandbox deferral.
 6. Invoke `/validate-publication --stage agents-md`.
 7. Walk the author through `AGENTS.md` section by section. Revise until the author agrees it reflects their intent.
-8. Draft `publication-staging/README.md` from `template/README.md`. Keep setup, citation, reproduction, and validation status compatible with `AGENTS.md`.
+8. Draft `publication-staging/README.md` from `template/README.md`. Keep it human-facing and compatible with AGENTS.md, but use canonical README pointers instead of duplicating detailed setup, data, reproduction, and validation content.
 9. Show README to the author and revise.
 
 Do not invent author voice. Do not imply that optional supplementary material is ground truth.
-
