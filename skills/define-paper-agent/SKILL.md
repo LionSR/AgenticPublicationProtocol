@@ -20,6 +20,10 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
 3. Ensure the canonical reproduction/data docs support concrete reader checks:
    - add or verify a compact "Quick claim checks" subsection in `code/figure-reproduction/README.md`, `data/README.md`, or the most relevant canonical doc;
    - cover 2-5 headline or likely-reader claims, especially claims tied to figures, tables, reported ratios, thresholds, hierarchy gaps, or qualitative conclusions;
+   - include the paper's primary benchmark or headline numerical result when one exists. Do not
+     substitute easier adjacent checks, such as secondary cached figures or shape checks, for the
+     main reported ratio, threshold crossing, ordering, or table value unless the exact check is
+     unavailable in the staged material;
    - format each quick check so a future reader agent can answer without hunting:
      claim or reader question; exact paper figure/table/equation/section; direct staged anchors
      such as script, notebook, data, cached output, or generated figure paths; a lightweight command
@@ -31,6 +35,9 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - if the source repo contains a stronger cheap check than the staged docs currently expose,
      copy the relevant script/data or summarize the exact staged-accessible path in the canonical docs
      during staging-doc drafting, rather than expecting the paper agent to rediscover it later;
+   - when the exact headline check is unavailable or ambiguous, say so in the quick check and give
+     the strongest partial check plus the missing file, dependency, or provenance ambiguity. Do not
+     let the absence of the exact check disappear behind a different successful check;
    - keep this out of `AGENTS.md` except for a pointer; the detailed commands and values belong in the canonical docs.
 4. Draft `publication-staging/AGENTS.md` from `template/AGENTS.md`:
    - required frontmatter;
@@ -62,6 +69,9 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - for each quick claim check, a reader agent should be able to produce at least one concrete
      paper anchor and one concrete staged artifact anchor, and should be able to say whether it
      observed the expected signature, only saw cached/provenance evidence, or is blocked;
+   - compare the quick checks against the `Key Results` and figure/table map. Every primary
+     numerical claim should either have an exact staged quick check, a clearly labeled partial
+     staged check, or an explicit blocker/ambiguity entry;
    - no duplicated details in AGENTS.md that could become stale relative to the canonical docs;
    - no stale "not validated" or overbroad "fully validated" claims in AGENTS.md or README;
    - licensing language matches `LICENSE` or sandbox deferral.

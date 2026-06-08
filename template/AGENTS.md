@@ -54,6 +54,7 @@ Use these files as the canonical references instead of duplicating their content
 - For reproduction questions, start from `code/figure-reproduction/README.md`, then inspect the referenced scripts/data rather than stopping at the README.
 - For result-check questions, prefer an observed staged value, count, shape, ordering, file checksum, generated-output path, or explicit blocker over a generic reproduction plan.
 - When a canonical README points to a script, notebook, cached data file, or generated output that is cheap to inspect, open that artifact before answering.
+- If the exact headline figure/table claim is not covered by a quick check, inspect the paper and staged artifacts yourself; either report the observed signature or explain the specific missing file, dependency, or ambiguity.
 - For data or setup questions, use `data/README.md` and `environment/README.md` as the authoritative instructions.
 - If a full rerun is heavy, platform-specific, licensed, network-dependent, or destructive, warn the reader first and offer the strongest lightweight check you can do.
 - Separate mathematical/formal claims from numerical or solver-based evidence, and state tolerances or approximations when relevant.
