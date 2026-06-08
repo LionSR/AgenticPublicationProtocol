@@ -113,6 +113,10 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
   the quick claim check should report the strongest staged observation, such as hard-coded plotted
   points, a ratio, threshold crossing, row count, subset count, min/max gap, or a specific ambiguity.
   If no partial numeric audit is possible, the docs should say why.
+- For a primary benchmark or headline numerical claim, flag as an error if the only stated
+  check is that source/result files exist while those same staged artifacts contain parseable
+  claim-relevant values. File-presence checks are useful provenance checks, not substitutes for
+  observed numbers, ratios, counts, thresholds, or orderings.
 - If the partial numeric audit requires combining multiple staged artifacts, parsing notebooks, or
   computing ratios/counts from cached files, canonical docs should provide a single obvious read-only
   entry point: a lightweight script, command, or compact code block that reports the observed

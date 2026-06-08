@@ -79,6 +79,9 @@ Only run at stages: `agents-md`, `full`.
   These entries should identify the paper anchor, direct staged artifact, lightweight command or
   inspection path, expected observed signature, evidence level, and exact blocker/ambiguity when
   the headline check is not available.
+- If a staged primary-claim artifact contains parseable numeric evidence, do not accept a
+  quick check whose expected signature is only that files exist. Require an observed value,
+  ratio, threshold, count, ordering, or explicit statement that no such partial audit is possible.
 - If a primary benchmark check requires combining multiple staged artifacts, parsing a notebook, or
   computing ratios/counts from cached files, verify there is a single obvious read-only entry point
   for a reader agent, such as a lightweight script, command, or compact code block in the canonical

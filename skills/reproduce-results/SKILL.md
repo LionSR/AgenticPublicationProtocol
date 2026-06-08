@@ -48,6 +48,17 @@ Assume the author may not know APP. Explain that this step checks the existing p
    - follow `figure-reproduction.md`;
    - write wrappers against the original working layout first;
    - record commands, generated outputs, and blockers;
+   - when a full fresh rerun is blocked but saved outputs, notebooks, plotted-data files,
+     logs, tables, cached benchmark text files, or generated summaries exist, perform the
+     strongest read-only partial numeric audit available before assigning the final status.
+     Extract observed values, ratios, threshold crossings, counts, orderings, or explicit
+     ambiguities from those artifacts. Do not collapse this to "files exist" when the
+     cached artifact contains the number a reader is likely to ask about;
+   - for primary benchmark or headline claims that require combining cached artifacts,
+     parsing notebooks, or computing a reported ratio/count, create a compact private
+     checker or documented one-liner under `working/reproduction/scripts/` when feasible.
+     The checker should report the observed signature from the original working layout so
+     `prepare-staging` can migrate it into a reader-facing quick check;
    - use final APP statuses: `reproduced`, `runs-but-differs`, `blocked-missing-data`, `blocked-heavy-compute`, `blocked-broken-code`, `blocked-dependency`, `manual-only`.
 7. Check analytic derivations:
    - follow `derivation-checks.md`;
@@ -61,6 +72,19 @@ working/reproduction/reproduction-report.md
 ```
 
 Include canonical paper, prior state, author decisions, key results, figure/table map, derivation checks, data/environment findings, include/exclude/defer list, repo name, license decision, chat-context decision, commands attempted, outputs, blockers, and open questions.
+
+For every primary numerical, benchmark, or headline qualitative claim, include one of:
+
+- fresh reproduction evidence;
+- a partial cached audit with observed values/ratios/counts/orderings and the exact
+  source artifacts inspected;
+- a concrete reason no partial audit is possible.
+
+If full rerun is blocked but a partial cached audit was performed, say both things
+explicitly. Example: `blocked-heavy-compute for fresh rerun; partial cached audit
+observed A/B ratio 7.6x from notebook plotted points and benchmark text table`.
+This distinction is important because later reader agents need numeric anchors, not
+only workflow blockers.
 
 This report is private workflow context by default. `prepare-staging` decides what becomes reader-facing material.
 

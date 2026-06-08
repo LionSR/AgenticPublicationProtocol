@@ -31,3 +31,15 @@ Make scripts runnable from `publication-staging/`. Write generated outputs under
 
 For blocked/manual items, document source scripts inspected, attempted command, exact missing input/failure/manual step, and what a future reader needs.
 
+For primary numerical or benchmark claims with cached evidence, preserve the strongest
+partial audit from `working/reproduction/reproduction-report.md` even when the full
+rerun status remains blocked. If the reproduction step created a read-only checker or
+one-liner under `working/reproduction/scripts/`, migrate or adapt it into
+`publication-staging/code/figure-reproduction/` and document the staging-root command,
+inputs, and expected observed signature. A blocked full rerun should still leave a
+reader-facing way to inspect cached plotted values, benchmark tables, row counts,
+ratios, threshold crossings, or orderings when those artifacts are staged.
+
+Do not use a mere "file exists" check as the only quick check for a primary benchmark
+when the staged artifact contains claim-relevant numeric data. In that case, the README
+should name the observed value/ratio/count or point to the command that prints it.
