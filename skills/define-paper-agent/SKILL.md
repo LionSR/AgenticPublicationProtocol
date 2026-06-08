@@ -42,6 +42,10 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - when the exact headline check is unavailable or ambiguous, say so in the quick check and give
      the strongest partial check plus the missing file, dependency, or provenance ambiguity. Do not
      let the absence of the exact check disappear behind a different successful check;
+   - if a full rerun is blocked but cached plotted data, notebooks, logs, or generated-result files
+     exist, include a partial numeric audit of those artifacts when feasible. For example, inspect
+     hard-coded plotted points, cached benchmark text files, saved tables, generated JSON summaries,
+     or notebook constants and report the observed ratio, threshold, count, ordering, or ambiguity;
    - keep this out of `AGENTS.md` except for a pointer; the detailed commands and values belong in the canonical docs.
 4. Draft `publication-staging/AGENTS.md` from `template/AGENTS.md`:
    - required frontmatter;
@@ -53,6 +57,9 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - concrete-answer guidance: for result-check questions, do not stop at a reproduction plan when a
      cheap staged check is available. Inspect the referenced artifact and report the observed value,
      count, shape, ordering, or caveat in the answer;
+   - blocker guidance: "full rerun blocked" is not enough when staged cached plotted data exists.
+     In that case, inspect the cached or plotted artifact and report the strongest partial numeric
+     audit before explaining the blocker;
    - precision guidance: separate formal/mathematical claims from numerical or solver-based evidence, and state tolerances, approximations, cached-data status, or dependency blockers when relevant;
    - pointer to `environment/README.md` for setup commands, runner prefixes, tested platform, computational requirements, and external software;
    - pointer to `code/figure-reproduction/README.md` for figure/table commands, inputs, outputs, statuses, runtimes, and blockers;
@@ -76,6 +83,9 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - compare the quick checks against the `Key Results` and figure/table map. Every primary
      numerical claim should either have an exact staged quick check, a clearly labeled partial
      staged check, or an explicit blocker/ambiguity entry;
+   - any entry marked full-rerun blocked but backed by cached plotted data should still include
+     the best partial observed number, ratio, count, ordering, or a precise explanation of why
+     even a partial numeric audit is impossible;
    - no duplicated details in AGENTS.md that could become stale relative to the canonical docs;
    - no stale "not validated" or overbroad "fully validated" claims in AGENTS.md or README;
    - licensing language matches `LICENSE` or sandbox deferral.

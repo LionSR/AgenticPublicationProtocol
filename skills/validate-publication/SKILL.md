@@ -44,7 +44,7 @@ Read the publication repo or staging tree to understand what's being validated:
 - `supplementary/paper-agent-test.md` — fresh staging-root paper-agent smoke test, required during final `/publish-paper` validation
 - `APP_PUBLICATION.json` release asset — only when auditing a public tagged release, not when validating `publication-staging/`
 
-When running `--stage full` as Step 4 of the modular `/publish-paper` workflow, perform or ensure the fresh staging-root paper-agent smoke test before declaring full validation passed. Save it as `supplementary/paper-agent-test.md`. If the environment cannot launch a fresh agent session, write or require a `paper-agent-test: not performed` note and classify it as a release-outcome blocker rather than treating a documentation review as a smoke test.
+When running `--stage full` as Step 4 of the modular `/publish-paper` workflow, perform or ensure the fresh staging-root paper-agent smoke test before declaring full validation passed. Save it as `supplementary/paper-agent-test.md`. The smoke test must include at least one primary-benchmark/result-check question when the paper has a headline numerical or benchmark claim. If staged cached plotted data, notebooks, tables, logs, or generated summaries exist for that claim, the tested agent should report an observed value, ratio, count, ordering, or explicit ambiguity from those staged artifacts; a generic reproduction plan is not enough. If the environment cannot launch a fresh agent session, write or require a `paper-agent-test: not performed` note and classify it as a release-outcome blocker rather than treating a documentation review as a smoke test.
 
 ### 2. Run APP validation checks
 
@@ -118,6 +118,10 @@ Cross-check information across files:
 - Required APP files exist for the current validation stage.
 - `data/README.md` exists whenever the publication uses any dataset, local or external.
 - During full modular `/publish-paper` validation, `supplementary/paper-agent-test.md` exists and records a fresh agent session launched with the staged repo as its working directory. It should include representative Q&A showing the agent can identify ground truth, summarize the paper, point to real reproduction commands, and accurately report blockers. If this is missing or only a documentation review, classify it as a release-outcome blocker.
+- The paper-agent smoke test includes a primary-benchmark/result-check question when the paper has
+  a headline numerical or benchmark claim. Passing answers should inspect staged artifacts when
+  available and report observed values, ratios, counts, orderings, or explicit ambiguities rather
+  than only pointing to a plan or saying full rerun is blocked.
 - Setup, data access, and reproduction instructions are complete enough for a reader agent to know what can be run, what data is required, and what requires manual/human steps.
 
 This is a completeness/usability check, not a prose-quality review. Do not flag wording only because it sounds generic; flag missing information only when it blocks APP use.

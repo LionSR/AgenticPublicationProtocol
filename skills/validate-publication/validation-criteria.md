@@ -74,6 +74,11 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 **Paper-agent smoke test:**
 - During full modular `/publish-paper` validation, `supplementary/paper-agent-test.md` should exist and document a fresh agent session launched with the staged repo root as its working directory.
 - The test should include 3-5 questions and answers covering ground-truth identification, main contribution, at least one representative reproduction command, blocked/manual/dependency-limited figures or tables, and heavy/platform-specific warnings when relevant.
+- When the paper has a headline numerical or benchmark claim, one smoke-test question should ask
+  directly how to check that primary result. A passing answer should inspect staged artifacts when
+  available and report observed values, ratios, counts, orderings, or explicit ambiguities. A
+  generic reproduction plan or "full rerun is blocked" answer is insufficient if cached plotted
+  data, benchmark files, notebooks, tables, logs, or generated summaries are staged.
 - The test passes only if the fresh agent answers from staged files, uses paths and commands that resolve inside staging, and accurately reports reproduction limitations.
 - If the environment could not launch a fresh agent session, the report should say `paper-agent-test: not performed` and classify this as a release-outcome blocker. A documentation-only review may be useful, but it is not a paper-agent smoke test.
 
@@ -103,6 +108,11 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
   level, and blocker/ambiguity if the exact headline check is unavailable. Missing or obviously
   incomplete headline checks are `warning` at `agents-md`; at `full`, they are `error` when the
   staged package otherwise claims to support checking that headline result.
+- A full-rerun blocker does not excuse omitting a partial numeric audit when staged cached plotted
+  data, notebooks, tables, logs, generated summaries, or benchmark text files exist. In that case,
+  the quick claim check should report the strongest staged observation, such as hard-coded plotted
+  points, a ratio, threshold crossing, row count, subset count, min/max gap, or a specific ambiguity.
+  If no partial numeric audit is possible, the docs should say why.
 - For broad claims across a sweep or dataset, such as "always", "consistently", "outperforms",
   "beats", "lower than", or "in most cases", quick claim checks should include an aggregate
   over the staged corpus when feasible, for example number of files/rows checked, number of
