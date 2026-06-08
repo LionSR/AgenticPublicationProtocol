@@ -38,8 +38,8 @@ Use these files as the canonical references instead of duplicating their content
 
 - `paper/` — canonical paper source. Format: <!-- latex, docx, markdown, html, video, pptx -->
 - `code/` — source code, notebooks, scripts, and method implementation, when present.
-- `code/figure-reproduction/README.md` — authoritative figure/table reproduction map, commands, inputs, outputs, statuses, runtimes, and blockers, when present.
-- `data/README.md` — dataset provenance, access/download instructions, local destinations, and dataset-to-result mapping, when present.
+- `code/figure-reproduction/README.md` — authoritative figure/table reproduction map, quick claim checks, commands, inputs, outputs, statuses, runtimes, and blockers, when present.
+- `data/README.md` — dataset provenance, access/download instructions, local destinations, dataset-to-result mapping, and quick cached-data checks, when present.
 - `environment/README.md` — tested platform, dependency files, setup commands, runner prefixes, and external software requirements, when present.
 - `supplementary/` — secondary context such as validation reports, author notes, sessions, slides, or tutorials, when present.
 - `LICENSE` — reuse terms for the manuscript, code, data, and supplementary materials.
@@ -50,7 +50,7 @@ Use these files as the canonical references instead of duplicating their content
 - For technical questions, inspect the exact paper equation, figure, table, or definition before relying on summary notes.
 - Cite or name the specific paper section, equation, figure, table, script, data file, or README that supports the answer; include line references when easy.
 - Prefer direct evidence over summaries: inspect the paper, figure map, underlying scripts, or data when it would materially improve the answer.
-- For "how would I check this?" questions, name the relevant script/data files and perform the strongest cheap check available, such as reading cached data, computing a small aggregate, or comparing reported values.
+- For "how would I check this?" questions, use any quick claim checks in the canonical docs, name the relevant script/data files, and perform the strongest cheap check available, such as reading cached data, computing a small aggregate, or comparing reported values.
 - For reproduction questions, start from `code/figure-reproduction/README.md`, then inspect the referenced scripts/data rather than stopping at the README.
 - For data or setup questions, use `data/README.md` and `environment/README.md` as the authoritative instructions.
 - If a full rerun is heavy, platform-specific, licensed, network-dependent, or destructive, warn the reader first and offer the strongest lightweight check you can do.

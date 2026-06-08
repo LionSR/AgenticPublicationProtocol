@@ -17,7 +17,12 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - `PROTOCOL.md` `AGENTS.md` schema;
    - templates under `template/`.
 2. Ask the author for the core message they want readers to take away before drafting summary/key-results text.
-3. Draft `publication-staging/AGENTS.md` from `template/AGENTS.md`:
+3. Ensure the canonical reproduction/data docs support concrete reader checks:
+   - add or verify a compact "Quick claim checks" subsection in `code/figure-reproduction/README.md`, `data/README.md`, or the most relevant canonical doc;
+   - cover 2-5 headline or likely-reader claims, especially claims tied to figures, tables, reported ratios, thresholds, hierarchy gaps, or qualitative conclusions;
+   - for each quick check, give the exact paper figure/table/equation, script or data file, lightweight command or inspection path when feasible, expected value or qualitative signature, evidence level, and blocker if a full rerun is not cheap;
+   - keep this out of `AGENTS.md` except for a pointer; the detailed commands and values belong in the canonical docs.
+4. Draft `publication-staging/AGENTS.md` from `template/AGENTS.md`:
    - required frontmatter;
    - identity and ground-truth hierarchy;
    - 1-2 concise paper-summary paragraphs and key results in author intent;
@@ -32,20 +37,21 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - citation;
    - supplementary materials and skills when present.
    Keep `AGENTS.md` brief: target under 100 lines and exceed 120 lines only for a concrete reason. Do not duplicate figure tables, dataset catalogs, setup commands, validation summaries, or computational requirement tables when the information belongs in a canonical README. Concision should not remove the most useful direct entry points for reader checks.
-4. Create `publication-staging/CLAUDE.md` as `@AGENTS.md`.
-5. Self-check:
+5. Create `publication-staging/CLAUDE.md` as `@AGENTS.md`.
+6. Self-check:
    - every path exists from staging root;
    - AGENTS.md points to the canonical docs that contain detailed setup, data, reproduction, validation, and license information;
    - `environment/README.md` contains setup commands, runner prefixes, tested platform, computational requirements, and external software requirements when executable code exists;
    - `code/figure-reproduction/README.md` contains figure/table statuses, commands, inputs, outputs, runtimes, and blockers when generated figures/tables exist;
    - `data/README.md` contains dataset details when the publication uses any dataset, local or external;
+   - canonical docs contain quick claim checks for the most important checkable results, with exact script/data paths and expected values or signatures where feasible;
    - AGENTS.md gives future reader agents enough direct pointers to inspect exact equations, scripts, and cached data without hunting through the whole tree;
    - no duplicated details in AGENTS.md that could become stale relative to the canonical docs;
    - no stale "not validated" or overbroad "fully validated" claims in AGENTS.md or README;
    - licensing language matches `LICENSE` or sandbox deferral.
-6. Invoke `/validate-publication --stage agents-md`.
-7. Walk the author through `AGENTS.md` section by section. Revise until the author agrees it reflects their intent.
-8. Draft `publication-staging/README.md` from `template/README.md`. Keep it human-facing and compatible with AGENTS.md, but use canonical README pointers instead of duplicating detailed setup, data, reproduction, and validation content.
-9. Show README to the author and revise.
+7. Invoke `/validate-publication --stage agents-md`.
+8. Walk the author through `AGENTS.md` section by section. Revise until the author agrees it reflects their intent.
+9. Draft `publication-staging/README.md` from `template/README.md`. Keep it human-facing and compatible with AGENTS.md, but use canonical README pointers instead of duplicating detailed setup, data, reproduction, and validation content.
+10. Show README to the author and revise.
 
 Do not invent author voice. Do not imply that optional supplementary material is ground truth.
