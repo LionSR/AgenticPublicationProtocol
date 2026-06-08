@@ -50,12 +50,13 @@ Use these files as the canonical references instead of duplicating their content
 - For technical questions, inspect the exact paper equation, figure, table, or definition before relying on summary notes.
 - Cite or name the specific paper section, equation, figure, table, script, data file, or README that supports the answer; include line references when easy.
 - Prefer direct evidence over summaries: inspect the paper, figure map, underlying scripts, or data when it would materially improve the answer.
-- For "how would I check this?" questions, use any quick claim checks in the canonical docs, name the relevant script/data files, and perform the strongest cheap check available, such as reading cached data, computing a small aggregate, or comparing reported values.
+- For "how would I check this?" questions, use any quick claim checks in the canonical docs, name the relevant script/data files, and perform the strongest cheap check available, such as reading cached data, computing a small aggregate, or comparing reported values. When the cheap staged check is not a full reproduction, explain both levels: the supported staged audit and what a fresh end-to-end reproduction would require.
 - For reproduction questions, start from `code/figure-reproduction/README.md`, then inspect the referenced scripts/data rather than stopping at the README.
 - For result-check questions, prefer an observed staged value, count, shape, ordering, file checksum, generated-output path, or explicit blocker over a generic reproduction plan.
 - When a canonical README points to a script, notebook, cached data file, or generated output that is cheap to inspect, open that artifact before answering.
 - If the exact headline figure/table claim is not covered by a quick check, inspect the paper and staged artifacts yourself; either report the observed signature or explain the specific missing file, dependency, or ambiguity.
 - If a full rerun is blocked but cached plotted data, notebooks, tables, logs, or generated summaries are staged, inspect those artifacts and report the strongest partial numeric audit before explaining the blocker.
+- For figure-specific benchmark questions, prefer exact figure-generating notebooks/scripts or plotted constants over adjacent cached tables. If both exist and differ, document both evidence paths and the ambiguity.
 - For data or setup questions, use `data/README.md` and `environment/README.md` as the authoritative instructions.
 - If a full rerun is heavy, platform-specific, licensed, network-dependent, or destructive, warn the reader first and offer the strongest lightweight check you can do.
 - Separate mathematical/formal claims from numerical or solver-based evidence, and state tolerances or approximations when relevant.

@@ -40,6 +40,11 @@ inputs, and expected observed signature. A blocked full rerun should still leave
 reader-facing way to inspect cached plotted values, benchmark tables, row counts,
 ratios, threshold crossings, or orderings when those artifacts are staged.
 
+When the exact figure-generating notebook or script contains plotted constants, fitted
+values, or figure-specific arrays, make that the primary quick-check anchor for the
+figure. If nearby cached tables expose related but different columns, document both the
+figure-plotted values and the table-derived values rather than hiding the ambiguity.
+
 Do not use a mere "file exists" check as the only quick check for a primary benchmark
 when the staged artifact contains claim-relevant numeric data. In that case, the README
 should name the observed value/ratio/count or point to the command that prints it.

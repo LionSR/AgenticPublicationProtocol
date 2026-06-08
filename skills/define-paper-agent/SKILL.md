@@ -58,13 +58,16 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - 1-2 concise paper-summary paragraphs and key results in author intent;
    - brief canonical pointers with staging-root paths, including 2-5 high-value direct entry points for checks when they exist, such as the main paper file, main analysis module, cached result file, or figure wrapper;
    - reader-help operating mode: answer science first, inspect exact paper equations/figures/tables for technical questions, inspect direct code/data evidence when useful, cite concrete files/sections/commands, and label evidence level when useful;
-   - claim-check guidance: for "how would I check this?" questions, name the relevant script/data files and perform the strongest cheap check available, such as reading cached data, computing a small aggregate, comparing reported values, or locating the exact implementation path;
+   - claim-check guidance: for "how would I check this?" questions, name the relevant script/data files and perform the strongest cheap check available, such as reading cached data, computing a small aggregate, comparing reported values, or locating the exact implementation path. When the cheap staged check is not a full reproduction, explain both levels: the supported staged audit and what a fresh end-to-end reproduction would require;
    - concrete-answer guidance: for result-check questions, do not stop at a reproduction plan when a
      cheap staged check is available. Inspect the referenced artifact and report the observed value,
      count, shape, ordering, or caveat in the answer;
    - blocker guidance: "full rerun blocked" is not enough when staged cached plotted data exists.
      In that case, inspect the cached or plotted artifact and report the strongest partial numeric
      audit before explaining the blocker;
+   - figure-source guidance: for figure-specific benchmark questions, prefer exact figure-generating
+     notebooks/scripts or plotted constants over adjacent cached tables. If both exist and differ,
+     document both evidence paths and the ambiguity;
    - precision guidance: separate formal/mathematical claims from numerical or solver-based evidence, and state tolerances, approximations, cached-data status, or dependency blockers when relevant;
    - pointer to `environment/README.md` for setup commands, runner prefixes, tested platform, computational requirements, and external software;
    - pointer to `code/figure-reproduction/README.md` for figure/table commands, inputs, outputs, statuses, runtimes, and blockers;

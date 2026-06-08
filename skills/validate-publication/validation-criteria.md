@@ -117,6 +117,10 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
   check is that source/result files exist while those same staged artifacts contain parseable
   claim-relevant values. File-presence checks are useful provenance checks, not substitutes for
   observed numbers, ratios, counts, thresholds, or orderings.
+- If a headline figure-specific quick check uses a related cached table while an exact
+  figure-generating notebook/script or plotted-data artifact is staged, the docs should identify
+  the exact figure source. If the table-derived and figure-plotted values differ, the docs should
+  report both paths and the ambiguity.
 - If the partial numeric audit requires combining multiple staged artifacts, parsing notebooks, or
   computing ratios/counts from cached files, canonical docs should provide a single obvious read-only
   entry point: a lightweight script, command, or compact code block that reports the observed

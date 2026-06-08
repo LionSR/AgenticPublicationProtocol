@@ -22,6 +22,12 @@ aggregate pass/fail counts, orderings, signs, min/max values, or explicit uncert
 Do not treat artifact existence alone as a sufficient check when the artifact can be
 parsed for the claim-relevant number.
 
+Prefer the closest figure-generating artifact for headline figure claims. If a notebook
+hard-codes plotted points or uses constants that differ from adjacent cached tables,
+record the plotted values, the table-derived values, and the ambiguity. Do not let an
+easier adjacent table silently replace the exact plotted source for a figure-specific
+question.
+
 When the partial audit requires more than opening one file, prefer a small checker in
 `working/reproduction/scripts/` that prints the observed signature from the original
 working layout. Keep it read-only and avoid changing scientific content.
