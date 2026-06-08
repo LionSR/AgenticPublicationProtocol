@@ -95,6 +95,14 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
 - A blocked/manual item must document the attempted source scripts/notebooks, attempted command if any, and concrete blocker.
 - A `blocked-dependency` item must name the dependency, resolver/network/platform/licensing blocker, and the command attempted or the reason no command could be attempted.
 - If the figure-to-code mapping was ambiguous, the figure map should record the researcher clarification or state that clarification is still needed.
+- For papers with headline numerical or benchmark claims, `code/figure-reproduction/README.md`,
+  `data/README.md`, or an equivalent canonical doc should contain quick claim checks for the
+  primary claims. These checks should cover the exact headline result when staged artifacts support
+  it, not only easier adjacent figures. Each entry should name the paper anchor, staged artifact,
+  lightweight command or read-only inspection path, expected numeric/signature outcome, evidence
+  level, and blocker/ambiguity if the exact headline check is unavailable. Missing or obviously
+  incomplete headline checks are `warning` at `agents-md`; at `full`, they are `error` when the
+  staged package otherwise claims to support checking that headline result.
 - `AGENTS.md` must reference `code/figure-reproduction/README.md` when generated figures/tables exist. Detailed figure/table statuses should live in that README rather than being duplicated in AGENTS.md.
 - README should either link to the same map or duplicate a compatible summary.
 - Each paper figure/table should map to a distinct direct script when feasible. Grouped wrappers are allowed when explicitly documented: the map must say the script is a grouped wrapper and list every paper artifact and generated output covered by the command. Flag duplicate scripts as `warning` unless this grouped-wrapper documentation is present. This is an explicit exception to the severity convention: splitting may be non-trivial and the decision belongs to the researcher.
@@ -205,6 +213,9 @@ This is not a referee or prose-quality check. Do not flag wording simply because
 - README gives enough setup context for a reader to start using the paper agent.
 - Environment setup is reproducible: installed env directories are not required to be committed, but manifests/lockfiles/setup commands are present and documented.
 - Figure/table reproduction instructions cover the figures/tables the publication claims are reproducible.
+- Primary numerical or benchmark claims are easy for a reader agent to check: exact quick checks
+  exist in canonical docs, or the docs plainly say why the exact check is unavailable and give the
+  strongest staged partial check.
 - Data requirements are clear: what is included, what must be downloaded, what is too large or access-controlled, and what is optional.
 - Heavy commands are labeled with expected runtime/hardware or marked as manual/heavy.
 - Skills, if present, have descriptions and steps sufficient for an agent to run them.

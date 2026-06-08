@@ -74,6 +74,11 @@ Only run at stages: `agents-md`, `full`.
 - For papers with generated figures/tables, verify `code/figure-reproduction/README.md` exists, is referenced from `AGENTS.md`, and is compatible with README.
 - Verify every paper figure/table is listed in `code/figure-reproduction/README.md`; every listed script exists; every `reproduced` item has run evidence or a generated output path; every blocked/manual item has a concrete reason.
 - Verify every figure/table status is in the allowed final enum from `validation-criteria.md`. Flag `not-yet-run`, `todo`, `unknown`, blank, or other temporary statuses as final-validation errors.
+- For papers with headline numerical or benchmark claims, verify the canonical reproduction/data docs
+  include quick claim checks, or equivalent reader-facing check entries, for the primary claim(s).
+  These entries should identify the paper anchor, direct staged artifact, lightweight command or
+  inspection path, expected observed signature, evidence level, and exact blocker/ambiguity when
+  the headline check is not available.
 - Verify `data/README.md` exists whenever the publication uses any dataset; verify every dataset documented there resolves, with local files present or external links reachable via `curl -sIL`.
 - Check that each figure/table reproduction entry maps to a distinct script when feasible; flag duplicate scripts as warnings unless the figure map explicitly marks the script as a grouped wrapper and lists every artifact/output it covers.
 - When validating `publication-staging/`, verify commands and paths work with staging as the current working directory, and flag references to private parent-repo files.
