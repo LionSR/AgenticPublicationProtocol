@@ -46,6 +46,11 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
      exist, include a partial numeric audit of those artifacts when feasible. For example, inspect
      hard-coded plotted points, cached benchmark text files, saved tables, generated JSON summaries,
      or notebook constants and report the observed ratio, threshold, count, ordering, or ambiguity;
+   - when the partial numeric audit takes more than a simple file read, add or verify a lightweight
+     read-only claim-check script or documented one-liner under `code/figure-reproduction/` that
+     computes the staged observation directly. Prefer a small script when the check combines multiple
+     artifacts, parses notebooks, computes ratios, scans a cached corpus, or is likely to be asked by
+     a reader;
    - keep this out of `AGENTS.md` except for a pointer; the detailed commands and values belong in the canonical docs.
 4. Draft `publication-staging/AGENTS.md` from `template/AGENTS.md`:
    - required frontmatter;
@@ -80,6 +85,9 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - for each quick claim check, a reader agent should be able to produce at least one concrete
      paper anchor and one concrete staged artifact anchor, and should be able to say whether it
      observed the expected signature, only saw cached/provenance evidence, or is blocked;
+   - for each primary benchmark claim backed by staged cached artifacts, a reader agent should have
+     a single obvious entry point: a script, command, or short read-only code block that reports the
+     observed value/ratio/count without requiring notebook archaeology;
    - compare the quick checks against the `Key Results` and figure/table map. Every primary
      numerical claim should either have an exact staged quick check, a clearly labeled partial
      staged check, or an explicit blocker/ambiguity entry;

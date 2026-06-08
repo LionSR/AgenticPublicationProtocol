@@ -113,6 +113,11 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
   the quick claim check should report the strongest staged observation, such as hard-coded plotted
   points, a ratio, threshold crossing, row count, subset count, min/max gap, or a specific ambiguity.
   If no partial numeric audit is possible, the docs should say why.
+- If the partial numeric audit requires combining multiple staged artifacts, parsing notebooks, or
+  computing ratios/counts from cached files, canonical docs should provide a single obvious read-only
+  entry point: a lightweight script, command, or compact code block that reports the observed
+  value/ratio/count. "Inspect the notebook/data" alone is not sufficient for primary benchmarks
+  when the computation is nontrivial.
 - For broad claims across a sweep or dataset, such as "always", "consistently", "outperforms",
   "beats", "lower than", or "in most cases", quick claim checks should include an aggregate
   over the staged corpus when feasible, for example number of files/rows checked, number of

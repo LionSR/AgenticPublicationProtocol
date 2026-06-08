@@ -79,6 +79,10 @@ Only run at stages: `agents-md`, `full`.
   These entries should identify the paper anchor, direct staged artifact, lightweight command or
   inspection path, expected observed signature, evidence level, and exact blocker/ambiguity when
   the headline check is not available.
+- If a primary benchmark check requires combining multiple staged artifacts, parsing a notebook, or
+  computing ratios/counts from cached files, verify there is a single obvious read-only entry point
+  for a reader agent, such as a lightweight script, command, or compact code block in the canonical
+  docs. Do not accept "inspect the notebook/data" alone when the computation is nontrivial.
 - Verify `data/README.md` exists whenever the publication uses any dataset; verify every dataset documented there resolves, with local files present or external links reachable via `curl -sIL`.
 - Check that each figure/table reproduction entry maps to a distinct script when feasible; flag duplicate scripts as warnings unless the figure map explicitly marks the script as a grouped wrapper and lists every artifact/output it covers.
 - When validating `publication-staging/`, verify commands and paths work with staging as the current working directory, and flag references to private parent-repo files.
