@@ -51,6 +51,10 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
      computes the staged observation directly. Prefer a small script when the check combines multiple
      artifacts, parses notebooks, computes ratios, scans a cached corpus, or is likely to be asked by
      a reader;
+   - if staged supplementary experiment notes, design notes, lab reports, or follow-up notes explain
+     parameter choices, figure interpretation, known finite-size caveats, or next sanity checks, add
+     a compact pointer in the relevant canonical doc. Do not treat these notes as paper ground truth,
+     but make them easy for a reader agent to use when asked how to test or extend the result;
    - keep this out of `AGENTS.md` except for a pointer; the detailed commands and values belong in the canonical docs.
 4. Draft `publication-staging/AGENTS.md` from `template/AGENTS.md`:
    - required frontmatter;
@@ -72,6 +76,8 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - pointer to `environment/README.md` for setup commands, runner prefixes, tested platform, computational requirements, and external software;
    - pointer to `code/figure-reproduction/README.md` for figure/table commands, inputs, outputs, statuses, runtimes, and blockers;
    - pointer to `data/README.md` for dataset provenance, download/access instructions, local destinations, and dataset-to-result mapping;
+   - pointer to the most useful staged supplementary notes when they provide interpretation, parameter
+     rationale, limitations, or next-step experiment guidance not duplicated in canonical docs;
    - heavy-command, network, licensed-software, and destructive-action warnings in concise policy form only;
    - citation;
    - supplementary materials and skills when present.
@@ -84,6 +90,8 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - `code/figure-reproduction/README.md` contains figure/table statuses, commands, inputs, outputs, runtimes, and blockers when generated figures/tables exist;
    - `data/README.md` contains dataset details when the publication uses any dataset, local or external;
    - canonical docs contain quick claim checks for the most important checkable results, with exact script/data paths and expected values or signatures where feasible;
+   - staged supplementary notes that materially affect reader answers are referenced from AGENTS.md,
+     README.md, or the relevant canonical reproduction/data doc with their evidence level and scope;
    - AGENTS.md gives future reader agents enough direct pointers to inspect exact equations, scripts, and cached data without hunting through the whole tree;
    - for each quick claim check, a reader agent should be able to produce at least one concrete
      paper anchor and one concrete staged artifact anchor, and should be able to say whether it

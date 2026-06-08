@@ -28,7 +28,14 @@ Explain to the author that `publication-staging/` is a draft public repository i
    - extracted chat context;
    - `authors-note.md` drafted from author intent;
    - `know-how.md` or materials the author wants public/sandbox-visible;
+   - concise experiment notes, lab reports, design notes, or follow-up notes when they are
+     publication-safe and directly help readers interpret figures, reproduce checks, understand
+     parameter choices, or design next sanity checks;
    - slides, posters, tutorials, or paper-specific skills.
+   Select notes rather than copying whole scratch trees. Exclude virtual environments, caches,
+   build products, private paths, credentials, abandoned drafts, and notes whose status or authorship
+   is unclear. If a note is useful but too broad or private, create a short reader-facing summary in
+   `supplementary/` and cite the exact staged code/data/paper anchors it explains.
 9. Migrate reproduction wrappers:
    - follow `figure-wrapper-migration.md`;
    - create `publication-staging/code/figure-reproduction/README.md`;
@@ -47,4 +54,3 @@ Explain to the author that `publication-staging/` is a draft public repository i
    - remaining blockers or decisions before paper-agent drafting.
 
 Do not write process checklists into `publication-staging/`; keep workflow status in chat/internal notes.
-

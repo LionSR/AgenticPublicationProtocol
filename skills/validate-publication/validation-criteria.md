@@ -162,6 +162,14 @@ Extends `../extract-chat-context/confidentiality-checklist.md` to cover the enti
 
 Generated artifacts are allowed only when they are intentional publication artifacts, such as compiled paper PDFs, paper figures, shipped small datasets, or explicitly documented reproduction evidence. Generated reproduced figures are local run artifacts by default and should usually be gitignored under `code/figure-reproduction/generated/`. If generated reproduction outputs are committed, they should have a canonical location and be described by `AGENTS.md`, README, `data/README.md`, or `code/figure-reproduction/README.md`.
 
+Staged supplementary experiment notes, design notes, lab reports, or follow-up notes are allowed
+when they are publication-safe and directly help readers interpret figures, understand parameter
+choices, assess limitations, or design next sanity checks. They must be clearly secondary context,
+not paper ground truth, and should be referenced from AGENTS.md, README.md, or the relevant
+reproduction/data doc when they materially affect reader answers. Flag whole scratch trees,
+virtual environments, caches, build products, private paths, credentials, or unclear-authority
+notes as staging hygiene issues.
+
 **Flag as errors when present and not explicitly justified:**
 - `.ipynb_checkpoints/` directories or files.
 - Notebook execution caches that expose local paths, outputs, credentials, private URLs, or unpublished data.

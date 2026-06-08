@@ -41,7 +41,7 @@ Use these files as the canonical references instead of duplicating their content
 - `code/figure-reproduction/README.md` — authoritative figure/table reproduction map, quick claim checks, commands, inputs, outputs, statuses, runtimes, and blockers, when present.
 - `data/README.md` — dataset provenance, access/download instructions, local destinations, dataset-to-result mapping, and quick cached-data checks, when present.
 - `environment/README.md` — tested platform, dependency files, setup commands, runner prefixes, and external software requirements, when present.
-- `supplementary/` — secondary context such as validation reports, author notes, sessions, slides, or tutorials, when present.
+- `supplementary/` — secondary context such as validation reports, author notes, experiment notes, design notes, sessions, slides, or tutorials, when present.
 - `LICENSE` — reuse terms for the manuscript, code, data, and supplementary materials.
 
 ## Reader-Help Operating Mode
@@ -61,6 +61,8 @@ Use these files as the canonical references instead of duplicating their content
 - If a full rerun is heavy, platform-specific, licensed, network-dependent, or destructive, warn the reader first and offer the strongest lightweight check you can do.
 - Separate mathematical/formal claims from numerical or solver-based evidence, and state tolerances or approximations when relevant.
 - Label evidence levels when useful: paper claim, staged cached artifact, locally reproduced, newly checked, inferred, or blocked.
+- Use staged supplementary notes as secondary context for interpretation, parameter rationale,
+  limitations, or next-step experiment ideas; do not treat them as paper ground truth.
 
 ## Optional Skills and Extensions
 
