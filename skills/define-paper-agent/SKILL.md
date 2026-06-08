@@ -32,6 +32,10 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - prefer concrete expected signatures over prose. For example, include values like ratios,
      array shapes, row counts, min/max/gap signs, figure filenames, or "all N cached files satisfy
      condition X" when the staged material supports it;
+   - when a paper claim is broad, such as "always", "consistently", "outperforms", "beats",
+     "lower than", "in most cases", or "across the sweep", include a whole-staged-corpus aggregate
+     when feasible, not only a representative slice. Report counts such as `91/91`, `57/91`,
+     min/max gaps, number of violations, or the precise subset where the claim holds;
    - if the source repo contains a stronger cheap check than the staged docs currently expose,
      copy the relevant script/data or summarize the exact staged-accessible path in the canonical docs
      during staging-doc drafting, rather than expecting the paper agent to rediscover it later;

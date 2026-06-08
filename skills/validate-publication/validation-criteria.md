@@ -103,6 +103,11 @@ For developer-sandbox publish-paper runs, a missing `LICENSE` may be recorded as
   level, and blocker/ambiguity if the exact headline check is unavailable. Missing or obviously
   incomplete headline checks are `warning` at `agents-md`; at `full`, they are `error` when the
   staged package otherwise claims to support checking that headline result.
+- For broad claims across a sweep or dataset, such as "always", "consistently", "outperforms",
+  "beats", "lower than", or "in most cases", quick claim checks should include an aggregate
+  over the staged corpus when feasible, for example number of files/rows checked, number of
+  violations, count satisfying the comparison, or min/max gap. A single representative slice is
+  not enough unless the docs explicitly say only that slice is staged-checkable.
 - `AGENTS.md` must reference `code/figure-reproduction/README.md` when generated figures/tables exist. Detailed figure/table statuses should live in that README rather than being duplicated in AGENTS.md.
 - README should either link to the same map or duplicate a compatible summary.
 - Each paper figure/table should map to a distinct direct script when feasible. Grouped wrappers are allowed when explicitly documented: the map must say the script is a grouped wrapper and list every paper artifact and generated output covered by the command. Flag duplicate scripts as `warning` unless this grouped-wrapper documentation is present. This is an explicit exception to the severity convention: splitting may be non-trivial and the decision belongs to the researcher.
