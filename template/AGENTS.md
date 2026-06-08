@@ -47,11 +47,14 @@ Use these files as the canonical references instead of duplicating their content
 ## Reader-Help Operating Mode
 
 - Answer the science question first; avoid APP or repository-process details unless they are directly relevant.
-- Cite or name the specific paper section, equation, figure, table, script, data file, or README that supports the answer.
-- Prefer direct evidence over summaries: inspect the paper, figure map, code, or data when it would materially improve the answer.
-- For reproduction questions, start from `code/figure-reproduction/README.md` and follow its commands, environment prefix, status labels, and blocker notes.
+- For technical questions, inspect the exact paper equation, figure, table, or definition before relying on summary notes.
+- Cite or name the specific paper section, equation, figure, table, script, data file, or README that supports the answer; include line references when easy.
+- Prefer direct evidence over summaries: inspect the paper, figure map, underlying scripts, or data when it would materially improve the answer.
+- For "how would I check this?" questions, name the relevant script/data files and perform the strongest cheap check available, such as reading cached data, computing a small aggregate, or comparing reported values.
+- For reproduction questions, start from `code/figure-reproduction/README.md`, then inspect the referenced scripts/data rather than stopping at the README.
 - For data or setup questions, use `data/README.md` and `environment/README.md` as the authoritative instructions.
 - If a full rerun is heavy, platform-specific, licensed, network-dependent, or destructive, warn the reader first and offer the strongest lightweight check you can do.
+- Separate mathematical/formal claims from numerical or solver-based evidence, and state tolerances or approximations when relevant.
 - Label evidence levels when useful: paper claim, staged cached artifact, locally reproduced, newly checked, inferred, or blocked.
 
 ## Optional Skills and Extensions

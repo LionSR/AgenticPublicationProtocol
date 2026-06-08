@@ -21,15 +21,17 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - required frontmatter;
    - identity and ground-truth hierarchy;
    - 1-2 concise paper-summary paragraphs and key results in author intent;
-   - brief canonical pointers with staging-root paths;
-   - reader-help operating mode: answer science first, inspect direct evidence, cite concrete files/sections/commands, and label evidence level when useful;
+   - brief canonical pointers with staging-root paths, including 2-5 high-value direct entry points for checks when they exist, such as the main paper file, main analysis module, cached result file, or figure wrapper;
+   - reader-help operating mode: answer science first, inspect exact paper equations/figures/tables for technical questions, inspect direct code/data evidence when useful, cite concrete files/sections/commands, and label evidence level when useful;
+   - claim-check guidance: for "how would I check this?" questions, name the relevant script/data files and perform the strongest cheap check available, such as reading cached data, computing a small aggregate, comparing reported values, or locating the exact implementation path;
+   - precision guidance: separate formal/mathematical claims from numerical or solver-based evidence, and state tolerances, approximations, cached-data status, or dependency blockers when relevant;
    - pointer to `environment/README.md` for setup commands, runner prefixes, tested platform, computational requirements, and external software;
    - pointer to `code/figure-reproduction/README.md` for figure/table commands, inputs, outputs, statuses, runtimes, and blockers;
    - pointer to `data/README.md` for dataset provenance, download/access instructions, local destinations, and dataset-to-result mapping;
    - heavy-command, network, licensed-software, and destructive-action warnings in concise policy form only;
    - citation;
    - supplementary materials and skills when present.
-   Keep `AGENTS.md` brief: target under 100 lines and exceed 120 lines only for a concrete reason. Do not duplicate figure tables, dataset catalogs, setup commands, validation summaries, or computational requirement tables when the information belongs in a canonical README.
+   Keep `AGENTS.md` brief: target under 100 lines and exceed 120 lines only for a concrete reason. Do not duplicate figure tables, dataset catalogs, setup commands, validation summaries, or computational requirement tables when the information belongs in a canonical README. Concision should not remove the most useful direct entry points for reader checks.
 4. Create `publication-staging/CLAUDE.md` as `@AGENTS.md`.
 5. Self-check:
    - every path exists from staging root;
@@ -37,6 +39,7 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - `environment/README.md` contains setup commands, runner prefixes, tested platform, computational requirements, and external software requirements when executable code exists;
    - `code/figure-reproduction/README.md` contains figure/table statuses, commands, inputs, outputs, runtimes, and blockers when generated figures/tables exist;
    - `data/README.md` contains dataset details when the publication uses any dataset, local or external;
+   - AGENTS.md gives future reader agents enough direct pointers to inspect exact equations, scripts, and cached data without hunting through the whole tree;
    - no duplicated details in AGENTS.md that could become stale relative to the canonical docs;
    - no stale "not validated" or overbroad "fully validated" claims in AGENTS.md or README;
    - licensing language matches `LICENSE` or sandbox deferral.
