@@ -52,6 +52,8 @@ Use these files as the canonical references instead of duplicating their content
 - Prefer direct evidence over summaries: inspect the paper, figure map, underlying scripts, or data when it would materially improve the answer.
 - For "how would I check this?" questions, use any quick claim checks in the canonical docs, name the relevant script/data files, and perform the strongest cheap check available, such as reading cached data, computing a small aggregate, or comparing reported values.
 - For reproduction questions, start from `code/figure-reproduction/README.md`, then inspect the referenced scripts/data rather than stopping at the README.
+- For result-check questions, prefer an observed staged value, count, shape, ordering, file checksum, generated-output path, or explicit blocker over a generic reproduction plan.
+- When a canonical README points to a script, notebook, cached data file, or generated output that is cheap to inspect, open that artifact before answering.
 - For data or setup questions, use `data/README.md` and `environment/README.md` as the authoritative instructions.
 - If a full rerun is heavy, platform-specific, licensed, network-dependent, or destructive, warn the reader first and offer the strongest lightweight check you can do.
 - Separate mathematical/formal claims from numerical or solver-based evidence, and state tolerances or approximations when relevant.

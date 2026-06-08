@@ -20,7 +20,17 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
 3. Ensure the canonical reproduction/data docs support concrete reader checks:
    - add or verify a compact "Quick claim checks" subsection in `code/figure-reproduction/README.md`, `data/README.md`, or the most relevant canonical doc;
    - cover 2-5 headline or likely-reader claims, especially claims tied to figures, tables, reported ratios, thresholds, hierarchy gaps, or qualitative conclusions;
-   - for each quick check, give the exact paper figure/table/equation, script or data file, lightweight command or inspection path when feasible, expected value or qualitative signature, evidence level, and blocker if a full rerun is not cheap;
+   - format each quick check so a future reader agent can answer without hunting:
+     claim or reader question; exact paper figure/table/equation/section; direct staged anchors
+     such as script, notebook, data, cached output, or generated figure paths; a lightweight command
+     or read-only inspection path when feasible; expected numeric value, ratio, shape, count, threshold,
+     ordering, or qualitative signature; evidence level; and blocker if a full rerun is not cheap;
+   - prefer concrete expected signatures over prose. For example, include values like ratios,
+     array shapes, row counts, min/max/gap signs, figure filenames, or "all N cached files satisfy
+     condition X" when the staged material supports it;
+   - if the source repo contains a stronger cheap check than the staged docs currently expose,
+     copy the relevant script/data or summarize the exact staged-accessible path in the canonical docs
+     during staging-doc drafting, rather than expecting the paper agent to rediscover it later;
    - keep this out of `AGENTS.md` except for a pointer; the detailed commands and values belong in the canonical docs.
 4. Draft `publication-staging/AGENTS.md` from `template/AGENTS.md`:
    - required frontmatter;
@@ -29,6 +39,9 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - brief canonical pointers with staging-root paths, including 2-5 high-value direct entry points for checks when they exist, such as the main paper file, main analysis module, cached result file, or figure wrapper;
    - reader-help operating mode: answer science first, inspect exact paper equations/figures/tables for technical questions, inspect direct code/data evidence when useful, cite concrete files/sections/commands, and label evidence level when useful;
    - claim-check guidance: for "how would I check this?" questions, name the relevant script/data files and perform the strongest cheap check available, such as reading cached data, computing a small aggregate, comparing reported values, or locating the exact implementation path;
+   - concrete-answer guidance: for result-check questions, do not stop at a reproduction plan when a
+     cheap staged check is available. Inspect the referenced artifact and report the observed value,
+     count, shape, ordering, or caveat in the answer;
    - precision guidance: separate formal/mathematical claims from numerical or solver-based evidence, and state tolerances, approximations, cached-data status, or dependency blockers when relevant;
    - pointer to `environment/README.md` for setup commands, runner prefixes, tested platform, computational requirements, and external software;
    - pointer to `code/figure-reproduction/README.md` for figure/table commands, inputs, outputs, statuses, runtimes, and blockers;
@@ -46,6 +59,9 @@ Assume the author may not know APP. Explain that `AGENTS.md` tells future reader
    - `data/README.md` contains dataset details when the publication uses any dataset, local or external;
    - canonical docs contain quick claim checks for the most important checkable results, with exact script/data paths and expected values or signatures where feasible;
    - AGENTS.md gives future reader agents enough direct pointers to inspect exact equations, scripts, and cached data without hunting through the whole tree;
+   - for each quick claim check, a reader agent should be able to produce at least one concrete
+     paper anchor and one concrete staged artifact anchor, and should be able to say whether it
+     observed the expected signature, only saw cached/provenance evidence, or is blocked;
    - no duplicated details in AGENTS.md that could become stale relative to the canonical docs;
    - no stale "not validated" or overbroad "fully validated" claims in AGENTS.md or README;
    - licensing language matches `LICENSE` or sandbox deferral.
