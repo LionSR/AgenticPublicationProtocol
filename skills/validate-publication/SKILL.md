@@ -25,7 +25,7 @@ Invoke with `--stage <name>` to validate specific artifacts. Omit for a full val
 | Stage | When | What's checked |
 |-------|------|----------------|
 | `structure` | After organizing files (phase 3) | Folder structure, file paths, sensitive files, data links, `.gitignore` |
-| `agents-md` | After creating AGENTS.md (phase 4) | APP metadata, ground-truth hierarchy, paths, commands, clear factual consistency |
+| `agents-md` | After creating AGENTS.md (phase 4) | APP metadata, ground-truth hierarchy, canonical pointers, reader-help behavior, clear factual consistency |
 | `full` | Step 4 of `/publish-paper`, pre-release review, or standalone | All of the above + README consistency, confidentiality sweep, validation report consistency, local reader-agent usability, and release manifest verification when validating a public tagged release |
 
 ## Process
@@ -44,7 +44,7 @@ Read the publication repo or staging tree to understand what's being validated:
 - `supplementary/paper-agent-test.md` — fresh staging-root paper-agent smoke test, required during final `/publish-paper` validation
 - `APP_PUBLICATION.json` release asset — only when auditing a public tagged release, not when validating `publication-staging/`
 
-When running `--stage full` as Step 4 of the modular `/publish-paper` workflow, perform or ensure the fresh staging-root paper-agent smoke test before declaring full validation passed. Save it as `supplementary/paper-agent-test.md`. If the environment cannot launch a fresh agent session, write or require a `paper-agent-test: not performed` note and classify it as a release-outcome blocker rather than treating a documentation review as a smoke test.
+When running `--stage full` as Step 4 of the modular `/publish-paper` workflow, perform or ensure the fresh staging-root paper-agent smoke test before declaring full validation passed. Save it as `supplementary/paper-agent-test.md`. The smoke test must include at least one primary-benchmark/result-check question when the paper has a headline numerical or benchmark claim. If staged cached plotted data, notebooks, tables, logs, or generated summaries exist for that claim, the tested agent should report an observed value, ratio, count, ordering, or explicit ambiguity from those staged artifacts; a generic reproduction plan is not enough. If the environment cannot launch a fresh agent session, write or require a `paper-agent-test: not performed` note and classify it as a release-outcome blocker rather than treating a documentation review as a smoke test.
 
 ### 2. Run APP validation checks
 
@@ -68,12 +68,24 @@ Only run at stages: `agents-md`, `full`.
 
 **Check 2: Path, structure, and command validity**
 
-- Verify every file path in `AGENTS.md` Repository Structure exists in the repo.
+- Verify every file path in `AGENTS.md` exists in the repo.
 - Verify every file path in README exists.
 - Check that commands in the figure/table reproduction sections are syntactically valid.
 - For papers with generated figures/tables, verify `code/figure-reproduction/README.md` exists, is referenced from `AGENTS.md`, and is compatible with README.
 - Verify every paper figure/table is listed in `code/figure-reproduction/README.md`; every listed script exists; every `reproduced` item has run evidence or a generated output path; every blocked/manual item has a concrete reason.
 - Verify every figure/table status is in the allowed final enum from `validation-criteria.md`. Flag `not-yet-run`, `todo`, `unknown`, blank, or other temporary statuses as final-validation errors.
+- For papers with headline numerical or benchmark claims, verify the canonical reproduction/data docs
+  include quick claim checks, or equivalent reader-facing check entries, for the primary claim(s).
+  These entries should identify the paper anchor, direct staged artifact, lightweight command or
+  inspection path, expected observed signature, evidence level, and exact blocker/ambiguity when
+  the headline check is not available.
+- If a staged primary-claim artifact contains parseable numeric evidence, do not accept a
+  quick check whose expected signature is only that files exist. Require an observed value,
+  ratio, threshold, count, ordering, or explicit statement that no such partial audit is possible.
+- If a primary benchmark check requires combining multiple staged artifacts, parsing a notebook, or
+  computing ratios/counts from cached files, verify there is a single obvious read-only entry point
+  for a reader agent, such as a lightweight script, command, or compact code block in the canonical
+  docs. Do not accept "inspect the notebook/data" alone when the computation is nontrivial.
 - Verify `data/README.md` exists whenever the publication uses any dataset; verify every dataset documented there resolves, with local files present or external links reachable via `curl -sIL`.
 - Check that each figure/table reproduction entry maps to a distinct script when feasible; flag duplicate scripts as warnings unless the figure map explicitly marks the script as a grouped wrapper and lists every artifact/output it covers.
 - When validating `publication-staging/`, verify commands and paths work with staging as the current working directory, and flag references to private parent-repo files.
@@ -104,15 +116,19 @@ Run at all stages.
 Cross-check information across files:
 
 - `AGENTS.md` paper summary vs README description — should be compatible.
-- Figure/table reproduction information in `AGENTS.md` vs README — commands and paths should match.
-- Figure/table reproduction information in `AGENTS.md` and README vs `code/figure-reproduction/README.md` — the code README is authoritative.
-- Validation/reproduction status language in `AGENTS.md` and README vs the validation report and figure map — stale phrases such as "not yet validated" should be flagged when validation evidence says commands were run, and overly strong "fully validated" language should be flagged when blockers remain.
+- Figure/table reproduction pointers in AGENTS.md and README should both lead to the canonical figure map when generated figures/tables exist.
+- Figure/table reproduction information in README vs `code/figure-reproduction/README.md` — the code README is authoritative. AGENTS.md should point to that README rather than duplicate its detailed status table.
+- Validation/reproduction status language in README, `code/figure-reproduction/README.md`, and the validation report should agree. If AGENTS.md includes validation or reproduction status despite the concise-template guidance, it must also agree. Flag stale phrases such as "not yet validated" when validation evidence says commands were run, and overly strong statements such as "fully validated" when blockers remain.
 - Citation in `AGENTS.md` vs README — should be identical when both exist.
 - Computational requirements vs actual code — for example, do not claim "runs on any laptop" if the code requires CUDA.
 - Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.
 - Required APP files exist for the current validation stage.
 - `data/README.md` exists whenever the publication uses any dataset, local or external.
 - During full modular `/publish-paper` validation, `supplementary/paper-agent-test.md` exists and records a fresh agent session launched with the staged repo as its working directory. It should include representative Q&A showing the agent can identify ground truth, summarize the paper, point to real reproduction commands, and accurately report blockers. If this is missing or only a documentation review, classify it as a release-outcome blocker.
+- The paper-agent smoke test includes a primary-benchmark/result-check question when the paper has
+  a headline numerical or benchmark claim. Passing answers should inspect staged artifacts when
+  available and report observed values, ratios, counts, orderings, or explicit ambiguities rather
+  than only pointing to a plan or saying full rerun is blocked.
 - Setup, data access, and reproduction instructions are complete enough for a reader agent to know what can be run, what data is required, and what requires manual/human steps.
 
 This is a completeness/usability check, not a prose-quality review. Do not flag wording only because it sounds generic; flag missing information only when it blocks APP use.
