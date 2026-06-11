@@ -257,17 +257,29 @@ git push
 cd - && rm -rf /tmp/paper-page-publish
 ```
 
-Check if the repo has GitHub Pages enabled:
+Check the current Pages configuration:
 
 ```bash
 gh api repos/{owner}/{repo}/pages 2>/dev/null
 ```
 
-If not enabled, enable it:
+Three cases:
 
-```bash
-gh api repos/{owner}/{repo}/pages -X POST -f source.branch=gh-pages -f source.path=/
-```
+- Not enabled (404) — enable it on the new branch:
+
+  ```bash
+  gh api repos/{owner}/{repo}/pages -X POST -f 'source[branch]=gh-pages' -f 'source[path]=/'
+  ```
+
+- Enabled but with a different source (check `.source` in the response —
+  e.g. a leftover `main` + `/docs` setup) — switch it, or the new branch
+  will never be served:
+
+  ```bash
+  gh api repos/{owner}/{repo}/pages -X PUT -f 'source[branch]=gh-pages' -f 'source[path]=/'
+  ```
+
+- Already `gh-pages` + `/` — nothing to do.
 
 Or walk the researcher through the manual path: repo page on github.com →
 Settings → Pages → under "Build and deployment" choose Source: Deploy from a
