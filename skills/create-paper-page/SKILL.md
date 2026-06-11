@@ -21,9 +21,37 @@ A single-page site with:
 2. **Abstract** — from the paper
 3. **Highlights / Key results** — 3-5 bullet points with figures
 4. **Figures** — key figures from the paper, displayed large
-5. **Links** — paper PDF, arXiv, code repo, data
+5. **Links** — paper PDF/arXiv, the publication repo (the primary link), data
 6. **BibTeX** — copy-to-clipboard citation block
-7. **Agent badge** — indicates this paper has an AI agent (links to AGENTS.md)
+7. **Agent badge** — indicates this paper has an AI agent. It links to the
+   publication repo on GitHub, and the page states the usable action: clone
+   the repo and open it in an AI coding agent. Never link the raw `AGENTS.md`
+   file — see the linking rules below.
+
+## Page vs README — what goes where
+
+The page and the README serve different readers, so they must not be the same
+document. The page is for someone who has **not** cloned anything and is
+deciding in ~30 seconds whether the paper is interesting; the README is for
+someone who **has** cloned the repo and wants to work with it. Rule of thumb:
+the page sells and routes, the README operates.
+
+On the page:
+- Title, authors, abstract, 3-5 highlights, key figures
+- Links out: arXiv/PDF, publication repo, agent badge
+- BibTeX
+- One sentence on what the agent is and how to use it (clone + open)
+
+Not on the page (README/repo territory):
+- Repository layout and per-file descriptions
+- Reproduction commands, environment setup, toolchain versions
+- Reproduction status detail, validation reports, provenance
+- License text, agent behavioral instructions
+
+If a detail matters to someone who has not cloned the repo (e.g. "results
+reproduce from committed data on a laptop"), state it as a one-line highlight
+and link to the repo for the rest. If the generated page reads like the
+README with styling, cut it down.
 
 ## Process
 
@@ -62,6 +90,27 @@ docs/
 - Mobile-friendly — responsive layout
 - Fast — just HTML + CSS + images, no heavy dependencies
 
+**Linking rules — GitHub Pages serves only `docs/`:**
+
+The published site lives at `https://{username}.github.io/{repo-name}/` and
+can serve only files inside `docs/`. Relative links into the rest of the repo
+(`../paper/...`, `../AGENTS.md`) 404 on the live site. Pages also does not
+render markdown — a link to a `.md` file shows raw text or downloads the
+file, which is not usable (a downloaded `AGENTS.md` on its own does nothing;
+the agent works by opening the cloned repo).
+
+- The primary link target is the **publication repo on GitHub**
+  (`https://github.com/{owner}/{repo}`) — readers get the rendered README,
+  the code, and the clone URL in one place.
+- Files that should display in the browser (paper PDF, figures) — copy them
+  into `docs/assets/` and link relatively.
+- A specific repo file worth pointing at (e.g. a computations README) — use
+  the rendered GitHub URL: `https://github.com/{owner}/{repo}/blob/main/...`.
+- Agent badge → the publication repo URL, never a `.md` file.
+- For a local dev-sandbox preview (no public repo yet), relative links into
+  the staging tree are acceptable for browsing, but every such link must be
+  rewritten per these rules before a real release.
+
 **Structure of index.html:**
 
 ```html
@@ -85,10 +134,10 @@ docs/
             <sup>2</sup>Institution B
         </p>
         <nav class="links">
-            <a href="[arxiv-url]">Paper</a>
-            <a href="[repo-url]">Code</a>
-            <a href="[data-url]">Data</a>
-            <a href="AGENTS.md">🤖 Paper Agent</a>
+            <a href="[arxiv-url]">Paper</a>          <!-- or assets/paper.pdf copied into docs/ -->
+            <a href="[repo-url]">Code</a>            <!-- the publication repo on GitHub -->
+            <a href="[data-url]">Data</a>            <!-- only if data lives elsewhere -->
+            <a href="[repo-url]">🤖 Paper Agent</a>  <!-- repo URL, never AGENTS.md -->
         </nav>
     </header>
 
@@ -124,9 +173,13 @@ docs/
     </section>
 
     <footer>
-        <p>This paper is published with an
+        <p>This paper has an AI agent: clone
+        <a href="[repo-url]">the publication repo</a> and open it in an
+        AI coding agent (Claude Code, Codex, ...) — the agent reads
+        <code>AGENTS.md</code> and answers questions about the paper.
+        Published with the
         <a href="https://github.com/LionSR/AgenticPublicationProtocol">
-        AI agent</a> — clone the repo and talk to it.</p>
+        Agentic Publication Protocol</a>.</p>
     </footer>
 </body>
 </html>
@@ -148,6 +201,11 @@ Copy the featured figures from `paper/figures/` (or wherever they live) into `do
 
 ### 4. Enable GitHub Pages
 
+GitHub Pages is GitHub's free static hosting: it publishes the repo's `docs/`
+folder as a website. Two preconditions, worth stating to a researcher who has
+not used Pages before: the repo must be public (private repos need a paid
+plan), and `docs/` must be committed and pushed before enabling.
+
 Check if the repo has GitHub Pages enabled:
 
 ```bash
@@ -160,15 +218,20 @@ If not enabled, enable it:
 gh api repos/{owner}/{repo}/pages -X POST -f source.branch=main -f source.path=/docs
 ```
 
-Or tell the researcher to go to Settings → Pages → Source: Deploy from branch → `main` → `/docs`.
+Or walk the researcher through the manual path: repo page on github.com →
+Settings → Pages → under "Build and deployment" choose Source: Deploy from a
+branch → branch `main`, folder `/docs` → Save.
 
-The page will be available at `https://{username}.github.io/{repo-name}/`.
+The page will be available at `https://{username}.github.io/{repo-name}/`
+after a build that takes a minute or two (visible in the repo's Actions tab).
+Pushing to `main` afterwards updates the site automatically.
 
 ### 5. Verify
 
 - Open the page URL and check everything renders
+- Click every link **from the live Pages URL** — nothing may 404 or download
+  raw markdown; the agent badge must land on the publication repo
 - Test on mobile (responsive?)
-- Check all links work (paper PDF, arXiv, code repo)
 - Verify figures display correctly
 - Test the BibTeX copy button
 
