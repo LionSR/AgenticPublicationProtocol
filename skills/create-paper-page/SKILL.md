@@ -220,17 +220,21 @@ repo-specific variants. One precondition worth stating to a researcher who
 has not used Pages before: the repo must be public (private repos need a
 paid plan).
 
-Publish the site directory to the orphan branch:
+Publish the site directory to the orphan branch **from a fresh temporary
+clone, never from the working clone**: untracked files and gitignored
+artifacts in a working clone survive `git rm -rf .` and `git add -A` would
+sweep them into the public branch.
 
 ```bash
-cd <publication-repo>
+git clone <repo-url> /tmp/paper-page-publish
+cd /tmp/paper-page-publish
 git checkout --orphan gh-pages
 git rm -rf .
 cp -R <scratch-dir>/paper-page/. .
 git add -A
 git commit -m "Project page"
-git push -u origin gh-pages
-git checkout main
+git push origin gh-pages
+cd - && rm -rf /tmp/paper-page-publish
 ```
 
 Check if the repo has GitHub Pages enabled:
