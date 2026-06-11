@@ -73,25 +73,26 @@ Ask the researcher:
 
 ### 2. Generate the site
 
-Build the site in a scratch directory outside the publication tree (a temp
-dir or the private working repo). It is published from an orphan `gh-pages`
-branch in step 4 — never committed into the publication tree itself:
+Create the site under `supplementary/page/` in the publication tree:
 
 ```
-paper-page/
+supplementary/page/
 ├── index.html        ← the landing page
 ├── style.css         ← styling
 └── assets/
-    ├── figures/      ← featured figures (copied from paper/figures/)
+    ├── figures/      ← web-optimized derivatives of featured figures
     └── ...           ← any other assets (logos, photos)
 ```
 
-**Protocol consistency:** the APP repository layout (PROTOCOL.md) does not
-include a `docs/` directory, and the tagged release tree must stay exactly
-protocol-shaped. The page therefore lives on a separate orphan `gh-pages`
-branch, not on `main`. Likewise, never add non-protocol fields such as
-`page_url` to the `AGENTS.md` frontmatter — the page URL goes in `README.md`
-(step 6).
+**Protocol consistency:** `supplementary/` is part of the APP layout
+(PROTOCOL.md), so the page ships inside the publication tree and is
+versioned with the tagged release; it is supplementary material, not ground
+truth. Two rules still hold: never add non-protocol fields such as
+`page_url` to the `AGENTS.md` frontmatter — the page URL goes in
+`README.md` (step 6) — and do not commit exact duplicates of canonical
+files. Page figures are web-optimized derivatives (PNG/SVG conversions),
+and the paper PDF is linked (arXiv, or the rendered `blob/{tag}` URL, which
+GitHub shows in a PDF viewer) rather than copied into the site.
 
 **The HTML should be:**
 - Self-contained — no build step, no JavaScript framework, no npm
@@ -99,11 +100,12 @@ branch, not on `main`. Likewise, never add non-protocol fields such as
 - Mobile-friendly — responsive layout
 - Fast — just HTML + CSS + images, no heavy dependencies
 
-**Linking rules — the live site serves only the `gh-pages` branch:**
+**Linking rules — the live site serves only `supplementary/page/`:**
 
 The published site lives at `https://{username}.github.io/{repo-name}/` and
-can serve only files committed to the `gh-pages` branch. Relative links into
-the publication tree (`../paper/...`, `../AGENTS.md`) 404 on the live site.
+serves only the deployed artifact, i.e. the contents of
+`supplementary/page/`. Relative links that escape it
+(`../../paper/...`, `../../AGENTS.md`) 404 on the live site.
 Pages also does not render markdown — a link to a `.md` file shows raw text
 or downloads the file, which is not usable (a downloaded `AGENTS.md` on its
 own does nothing; the agent works by opening the cloned repo).
@@ -111,8 +113,9 @@ own does nothing; the agent works by opening the cloned repo).
 - The primary link target is the **publication repo on GitHub**
   (`https://github.com/{owner}/{repo}`) — readers get the rendered README,
   the code, and the clone URL in one place.
-- Files that should display in the browser (paper PDF, figures) — copy them
-  into the site's `assets/` and link relatively.
+- Figures — web-optimized derivatives in the site's `assets/` linked
+  relatively. The paper PDF — link arXiv or the rendered `blob/{tag}` URL
+  (GitHub shows PDFs in a viewer); do not duplicate it into the site.
 - A specific repo file worth pointing at (e.g. a computations README) — use
   the rendered GitHub URL, pinned to the release tag:
   `https://github.com/{owner}/{repo}/blob/{tag}/...`. PROTOCOL.md says
@@ -120,11 +123,11 @@ own does nothing; the agent works by opening the cloned repo).
   immutable; do not hardcode a branch name (not every repo's default branch
   is `main`).
 - Agent badge → the publication repo URL, never a `.md` file.
-- For a local dev-sandbox preview (no public repo yet), relative links into
-  the staging tree are acceptable for browsing — but the preview must not
-  remain inside the staging tree at validation/release time (delete it or
-  keep it untracked), and every link must be rewritten per these rules
-  before a real release.
+- Local preview: serve the staging/repo root and open
+  `/supplementary/page/` — in-site assets resolve as on the live site. In a
+  dev-sandbox preview (no public repo yet), relative links escaping the
+  page directory are acceptable for browsing, but every such link must be
+  rewritten per these rules before a real release.
 
 **Structure of index.html:**
 
@@ -149,7 +152,7 @@ own does nothing; the agent works by opening the cloned repo).
             <sup>2</sup>Institution B
         </p>
         <nav class="links">
-            <a href="[arxiv-url]">Paper</a>          <!-- or assets/paper.pdf copied into the site -->
+            <a href="[arxiv-url]">Paper</a>          <!-- arXiv, or the rendered blob/{tag} PDF URL -->
             <a href="[repo-url]">Code</a>            <!-- the publication repo on GitHub -->
             <a href="[data-url]">Data</a>            <!-- only if data lives elsewhere -->
             <a href="[repo-url]">🤖 Paper Agent</a>  <!-- repo URL, never AGENTS.md -->
@@ -209,53 +212,51 @@ own does nothing; the agent works by opening the cloned repo).
 
 ### 3. Copy figures
 
-Copy the featured figures from `paper/figures/` (or wherever they live) into the site's `assets/figures/`. Use web-friendly formats:
+Copy the featured figures from `paper/figures/` (or wherever they live) into `supplementary/page/assets/figures/` as web-optimized derivatives. Use web-friendly formats:
 - Convert PDF figures to PNG or SVG if needed
 - Optimize image sizes (no 10MB PNGs)
 - Keep original filenames for traceability
 
-### 4. Publish to `gh-pages` and enable GitHub Pages
+### 4. Deploy with the GitHub Actions Pages source
 
-GitHub Pages is GitHub's free static hosting. The site lives on an orphan
-`gh-pages` branch — a branch with no shared history with `main` — so the
-publication tree and its tagged release stay protocol-shaped. Use exactly
-the branch name `gh-pages` (the conventional Pages branch); do not invent
-repo-specific variants. One precondition worth stating to a researcher who
-has not used Pages before: the repo must be public (private repos need a
-paid plan).
+GitHub Pages is GitHub's free static hosting. Its branch-based deployment
+can only serve the repo root or `/docs` — neither exists in the APP layout —
+so the page is deployed with the **GitHub Actions** source instead, which
+can publish any directory. PROTOCOL.md allows `.github/`, so commit
+`.github/workflows/paper-page.yml`:
 
-Publish the site directory **from a fresh temporary clone, never from the
-working clone**: untracked files and gitignored artifacts in a working clone
-survive `git rm -rf .` and `git add -A` would sweep them into the public
-branch.
-
-First publish (no `gh-pages` branch exists yet):
-
-```bash
-git clone <repo-url> /tmp/paper-page-publish
-cd /tmp/paper-page-publish
-git checkout --orphan gh-pages
-git rm -rf .
-cp -R <scratch-dir>/paper-page/. .
-git add -A
-git commit -m "Project page"
-git push origin gh-pages
-cd - && rm -rf /tmp/paper-page-publish
+```yaml
+name: Deploy paper page
+on:
+  push:
+    branches: [main]   # adjust if the default branch has another name
+    paths: ['supplementary/page/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: supplementary/page
+      - id: deployment
+        uses: actions/deploy-pages@v4
 ```
 
-Later updates (a `gh-pages` branch already exists — the orphan flow would
-fail to push against it; check out the existing branch instead):
-
-```bash
-git clone --branch gh-pages <repo-url> /tmp/paper-page-publish
-cd /tmp/paper-page-publish
-git rm -rf .
-cp -R <scratch-dir>/paper-page/. .
-git add -A
-git commit -m "Update project page"
-git push
-cd - && rm -rf /tmp/paper-page-publish
-```
+One precondition worth stating to a researcher who has not used Pages
+before: the repo must be public (private repos need a paid plan).
 
 Check the current Pages configuration:
 
@@ -265,30 +266,31 @@ gh api repos/{owner}/{repo}/pages 2>/dev/null
 
 Three cases:
 
-- Not enabled (404) — enable it on the new branch:
+- Not enabled (404) — enable with the Actions source:
 
   ```bash
-  gh api repos/{owner}/{repo}/pages -X POST -f 'source[branch]=gh-pages' -f 'source[path]=/'
+  gh api repos/{owner}/{repo}/pages -X POST -f build_type=workflow
   ```
 
-- Enabled but with a different source (check `.source` in the response —
-  e.g. a leftover `main` + `/docs` setup) — switch it, or the new branch
-  will never be served:
+- Enabled with a branch source (`.build_type` is `"legacy"` in the
+  response — e.g. a leftover `main` + `/docs` setup) — switch it, or the
+  workflow deploys will never be served:
 
   ```bash
-  gh api repos/{owner}/{repo}/pages -X PUT -f 'source[branch]=gh-pages' -f 'source[path]=/'
+  gh api repos/{owner}/{repo}/pages -X PUT -f build_type=workflow
   ```
 
-- Already `gh-pages` + `/` — nothing to do.
+- Already `workflow` — nothing to do.
 
 Or walk the researcher through the manual path: repo page on github.com →
-Settings → Pages → under "Build and deployment" choose Source: Deploy from a
-branch → branch `gh-pages`, folder `/ (root)` → Save.
+Settings → Pages → under "Build and deployment" choose Source: GitHub
+Actions.
 
-The page will be available at `https://{username}.github.io/{repo-name}/`
-after a build that takes a minute or two (visible in the repo's Actions tab).
-Later page updates are pushes to `gh-pages` only — they never touch the
-default branch or the tagged release.
+Trigger the first deploy by pushing the page (or `workflow_dispatch`). The
+page will be available at `https://{username}.github.io/{repo-name}/` after
+the run completes (a minute or two, visible in the repo's Actions tab).
+Pushes that touch `supplementary/page/**` redeploy automatically, and the
+tagged release snapshots the page source with the rest of the publication.
 
 ### 5. Verify
 
@@ -311,7 +313,7 @@ against that schema. The README link is the canonical pointer to the page.
 ### Customization
 
 The researcher may want:
-- **Different figures** — swap them in `assets/figures/` on the `gh-pages` branch
+- **Different figures** — swap them in `supplementary/page/assets/figures/`
 - **Video or demo** — embed a YouTube/video link in the highlights section
 - **More sections** — method overview, comparison tables, acknowledgments
 - **Custom domain** — they can configure this in GitHub Pages settings
