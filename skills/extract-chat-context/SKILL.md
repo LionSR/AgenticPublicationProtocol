@@ -15,7 +15,7 @@ Extract and curate conversation history from Claude Code or Codex sessions into 
 
 ## Parallelism
 
-When there are many sessions, parallelize the work. Launch subagents to extract and summarize batches of sessions concurrently rather than processing them one by one. For example, with 12 sessions, launch 3-4 subagents each handling a batch, then merge their summaries into the final `know-how.md`. This applies to both extraction (step 2) and summarization (step 3).
+When there are many sessions, parallelize the work. Launch subagents to extract and summarize batches of sessions concurrently rather than processing them one by one. For example, with 12 sessions, launch 3-4 subagents each handling a batch, then merge their summaries into the final `know-how.md`. This applies to extraction (step 2), summarization (step 3), and skill-candidate spotting (step 4): each batch subagent must report, alongside its summary, any recurring validated procedures it saw that could become agent skills, and the merge collects those into the step 4 candidate list — otherwise the main agent never reads the sessions and candidates are silently lost.
 
 ## Process
 
@@ -83,9 +83,11 @@ Show the draft to the researcher before finalizing — this document speaks for 
 
 ### 4. Consider extractable skills
 
-While reading the sessions, watch for recurring procedures a reader or agent
-might want to rerun — a parameter-sweep recipe, a data-preparation pipeline,
-a diagnostic check, a figure-regeneration workflow. These can become Agent
+While reading the sessions — or, when batches were delegated, while merging
+the subagent reports (see Parallelism) — watch for recurring procedures a
+reader or agent might want to rerun: a parameter-sweep recipe, a
+data-preparation pipeline, a diagnostic check, a figure-regeneration
+workflow. These can become Agent
 Skills ([agentskills.io](https://agentskills.io)) instead of, or in addition
 to, prose in `know-how.md`:
 
