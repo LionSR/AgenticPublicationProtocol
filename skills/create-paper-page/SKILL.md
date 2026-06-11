@@ -114,7 +114,11 @@ own does nothing; the agent works by opening the cloned repo).
 - Files that should display in the browser (paper PDF, figures) — copy them
   into the site's `assets/` and link relatively.
 - A specific repo file worth pointing at (e.g. a computations README) — use
-  the rendered GitHub URL: `https://github.com/{owner}/{repo}/blob/main/...`.
+  the rendered GitHub URL, pinned to the release tag:
+  `https://github.com/{owner}/{repo}/blob/{tag}/...`. PROTOCOL.md says
+  external references should point to a specific tag, and tag URLs are
+  immutable; do not hardcode a branch name (not every repo's default branch
+  is `main`).
 - Agent badge → the publication repo URL, never a `.md` file.
 - For a local dev-sandbox preview (no public repo yet), relative links into
   the staging tree are acceptable for browsing — but the preview must not
@@ -220,10 +224,12 @@ repo-specific variants. One precondition worth stating to a researcher who
 has not used Pages before: the repo must be public (private repos need a
 paid plan).
 
-Publish the site directory to the orphan branch **from a fresh temporary
-clone, never from the working clone**: untracked files and gitignored
-artifacts in a working clone survive `git rm -rf .` and `git add -A` would
-sweep them into the public branch.
+Publish the site directory **from a fresh temporary clone, never from the
+working clone**: untracked files and gitignored artifacts in a working clone
+survive `git rm -rf .` and `git add -A` would sweep them into the public
+branch.
+
+First publish (no `gh-pages` branch exists yet):
 
 ```bash
 git clone <repo-url> /tmp/paper-page-publish
@@ -234,6 +240,20 @@ cp -R <scratch-dir>/paper-page/. .
 git add -A
 git commit -m "Project page"
 git push origin gh-pages
+cd - && rm -rf /tmp/paper-page-publish
+```
+
+Later updates (a `gh-pages` branch already exists — the orphan flow would
+fail to push against it; check out the existing branch instead):
+
+```bash
+git clone --branch gh-pages <repo-url> /tmp/paper-page-publish
+cd /tmp/paper-page-publish
+git rm -rf .
+cp -R <scratch-dir>/paper-page/. .
+git add -A
+git commit -m "Update project page"
+git push
 cd - && rm -rf /tmp/paper-page-publish
 ```
 
@@ -255,8 +275,8 @@ branch → branch `gh-pages`, folder `/ (root)` → Save.
 
 The page will be available at `https://{username}.github.io/{repo-name}/`
 after a build that takes a minute or two (visible in the repo's Actions tab).
-Later page updates are pushes to `gh-pages` only — they never touch `main`
-or the tagged release.
+Later page updates are pushes to `gh-pages` only — they never touch the
+default branch or the tagged release.
 
 ### 5. Verify
 
@@ -269,7 +289,7 @@ or the tagged release.
 
 ### 6. Add the page link to README
 
-Add the page URL to `README.md` on `main`:
+Add the page URL to `README.md` on the default branch:
 `[Project Page](https://{username}.github.io/{repo-name}/)`
 
 Do not touch `AGENTS.md` for this: `page_url` is not a field in the
