@@ -73,10 +73,12 @@ Ask the researcher:
 
 ### 2. Generate the site
 
-Create a `docs/` directory (GitHub Pages default) with a static site:
+Build the site in a scratch directory outside the publication tree (a temp
+dir or the private working repo). It is published from an orphan `gh-pages`
+branch in step 4 — never committed into the publication tree itself:
 
 ```
-docs/
+paper-page/
 ├── index.html        ← the landing page
 ├── style.css         ← styling
 └── assets/
@@ -84,32 +86,41 @@ docs/
     └── ...           ← any other assets (logos, photos)
 ```
 
+**Protocol consistency:** the APP repository layout (PROTOCOL.md) does not
+include a `docs/` directory, and the tagged release tree must stay exactly
+protocol-shaped. The page therefore lives on a separate orphan `gh-pages`
+branch, not on `main`. Likewise, never add non-protocol fields such as
+`page_url` to the `AGENTS.md` frontmatter — the page URL goes in `README.md`
+(step 6).
+
 **The HTML should be:**
 - Self-contained — no build step, no JavaScript framework, no npm
 - Clean and readable — academic style, not startup landing page
 - Mobile-friendly — responsive layout
 - Fast — just HTML + CSS + images, no heavy dependencies
 
-**Linking rules — GitHub Pages serves only `docs/`:**
+**Linking rules — the live site serves only the `gh-pages` branch:**
 
 The published site lives at `https://{username}.github.io/{repo-name}/` and
-can serve only files inside `docs/`. Relative links into the rest of the repo
-(`../paper/...`, `../AGENTS.md`) 404 on the live site. Pages also does not
-render markdown — a link to a `.md` file shows raw text or downloads the
-file, which is not usable (a downloaded `AGENTS.md` on its own does nothing;
-the agent works by opening the cloned repo).
+can serve only files committed to the `gh-pages` branch. Relative links into
+the publication tree (`../paper/...`, `../AGENTS.md`) 404 on the live site.
+Pages also does not render markdown — a link to a `.md` file shows raw text
+or downloads the file, which is not usable (a downloaded `AGENTS.md` on its
+own does nothing; the agent works by opening the cloned repo).
 
 - The primary link target is the **publication repo on GitHub**
   (`https://github.com/{owner}/{repo}`) — readers get the rendered README,
   the code, and the clone URL in one place.
 - Files that should display in the browser (paper PDF, figures) — copy them
-  into `docs/assets/` and link relatively.
+  into the site's `assets/` and link relatively.
 - A specific repo file worth pointing at (e.g. a computations README) — use
   the rendered GitHub URL: `https://github.com/{owner}/{repo}/blob/main/...`.
 - Agent badge → the publication repo URL, never a `.md` file.
 - For a local dev-sandbox preview (no public repo yet), relative links into
-  the staging tree are acceptable for browsing, but every such link must be
-  rewritten per these rules before a real release.
+  the staging tree are acceptable for browsing — but the preview must not
+  remain inside the staging tree at validation/release time (delete it or
+  keep it untracked), and every link must be rewritten per these rules
+  before a real release.
 
 **Structure of index.html:**
 
@@ -134,7 +145,7 @@ the agent works by opening the cloned repo).
             <sup>2</sup>Institution B
         </p>
         <nav class="links">
-            <a href="[arxiv-url]">Paper</a>          <!-- or assets/paper.pdf copied into docs/ -->
+            <a href="[arxiv-url]">Paper</a>          <!-- or assets/paper.pdf copied into the site -->
             <a href="[repo-url]">Code</a>            <!-- the publication repo on GitHub -->
             <a href="[data-url]">Data</a>            <!-- only if data lives elsewhere -->
             <a href="[repo-url]">🤖 Paper Agent</a>  <!-- repo URL, never AGENTS.md -->
@@ -194,17 +205,33 @@ the agent works by opening the cloned repo).
 
 ### 3. Copy figures
 
-Copy the featured figures from `paper/figures/` (or wherever they live) into `docs/assets/figures/`. Use web-friendly formats:
+Copy the featured figures from `paper/figures/` (or wherever they live) into the site's `assets/figures/`. Use web-friendly formats:
 - Convert PDF figures to PNG or SVG if needed
 - Optimize image sizes (no 10MB PNGs)
 - Keep original filenames for traceability
 
-### 4. Enable GitHub Pages
+### 4. Publish to `gh-pages` and enable GitHub Pages
 
-GitHub Pages is GitHub's free static hosting: it publishes the repo's `docs/`
-folder as a website. Two preconditions, worth stating to a researcher who has
-not used Pages before: the repo must be public (private repos need a paid
-plan), and `docs/` must be committed and pushed before enabling.
+GitHub Pages is GitHub's free static hosting. The site lives on an orphan
+`gh-pages` branch — a branch with no shared history with `main` — so the
+publication tree and its tagged release stay protocol-shaped. Use exactly
+the branch name `gh-pages` (the conventional Pages branch); do not invent
+repo-specific variants. One precondition worth stating to a researcher who
+has not used Pages before: the repo must be public (private repos need a
+paid plan).
+
+Publish the site directory to the orphan branch:
+
+```bash
+cd <publication-repo>
+git checkout --orphan gh-pages
+git rm -rf .
+cp -R <scratch-dir>/paper-page/. .
+git add -A
+git commit -m "Project page"
+git push -u origin gh-pages
+git checkout main
+```
 
 Check if the repo has GitHub Pages enabled:
 
@@ -215,16 +242,17 @@ gh api repos/{owner}/{repo}/pages 2>/dev/null
 If not enabled, enable it:
 
 ```bash
-gh api repos/{owner}/{repo}/pages -X POST -f source.branch=main -f source.path=/docs
+gh api repos/{owner}/{repo}/pages -X POST -f source.branch=gh-pages -f source.path=/
 ```
 
 Or walk the researcher through the manual path: repo page on github.com →
 Settings → Pages → under "Build and deployment" choose Source: Deploy from a
-branch → branch `main`, folder `/docs` → Save.
+branch → branch `gh-pages`, folder `/ (root)` → Save.
 
 The page will be available at `https://{username}.github.io/{repo-name}/`
 after a build that takes a minute or two (visible in the repo's Actions tab).
-Pushing to `main` afterwards updates the site automatically.
+Later page updates are pushes to `gh-pages` only — they never touch `main`
+or the tagged release.
 
 ### 5. Verify
 
@@ -235,17 +263,19 @@ Pushing to `main` afterwards updates the site automatically.
 - Verify figures display correctly
 - Test the BibTeX copy button
 
-### 6. Update README and AGENTS.md
+### 6. Add the page link to README
 
-Add the page URL to:
-- README.md: `[Project Page](https://{username}.github.io/{repo-name}/)`
-- AGENTS.md frontmatter: add `page_url: "https://..."`
-- AGENTS.md body: mention the project page exists
+Add the page URL to `README.md` on `main`:
+`[Project Page](https://{username}.github.io/{repo-name}/)`
+
+Do not touch `AGENTS.md` for this: `page_url` is not a field in the
+PROTOCOL.md frontmatter schema, and validation checks the frontmatter
+against that schema. The README link is the canonical pointer to the page.
 
 ### Customization
 
 The researcher may want:
-- **Different figures** — swap them in `docs/assets/figures/`
+- **Different figures** — swap them in `assets/figures/` on the `gh-pages` branch
 - **Video or demo** — embed a YouTube/video link in the highlights section
 - **More sections** — method overview, comparison tables, acknowledgments
 - **Custom domain** — they can configure this in GitHub Pages settings

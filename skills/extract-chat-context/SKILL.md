@@ -81,7 +81,28 @@ Then distill all sessions into a single `supplementary/know-how.md` — a themat
 
 Show the draft to the researcher before finalizing — this document speaks for them.
 
-### 4. Ask about publishing more detail
+### 4. Consider extractable skills
+
+While reading the sessions, watch for recurring procedures a reader or agent
+might want to rerun — a parameter-sweep recipe, a data-preparation pipeline,
+a diagnostic check, a figure-regeneration workflow. These can become Agent
+Skills ([agentskills.io](https://agentskills.io)) instead of, or in addition
+to, prose in `know-how.md`:
+
+- **Paper-specific** procedures (running the paper's method, regenerating a
+  class of results) → propose bundling as `skills/<name>/SKILL.md` in the
+  publication repo, per the `skills/` section of PROTOCOL.md.
+- **Reusable across papers** (a general workflow or tool recipe) → propose
+  publishing it externally and referencing it from the
+  `recommended_external_skills` frontmatter field.
+
+Suggest candidates to the researcher with a one-line purpose each, and draft
+a `SKILL.md` (frontmatter `name` and `description`, step-by-step body) only
+for the ones they approve. A skill must encode a procedure the sessions
+actually validated — do not invent capabilities the research never
+exercised.
+
+### 5. Ask about publishing more detail
 
 After showing the summary, ask the researcher if they also want to publish more detailed session records:
 
@@ -91,7 +112,7 @@ After showing the summary, ask the researcher if they also want to publish more 
 
 For cleaned and full session formatting, see `session-formats.md`.
 
-### 5. Confidentiality and privacy screening
+### 6. Confidentiality and privacy screening
 
 **Mandatory before anything is published.** Scan all output files for content that should not be made public.
 
@@ -108,11 +129,11 @@ See `confidentiality-checklist.md` for the extended reference with full pattern 
 
 Report every flagged item to the researcher. Do not silently remove content. Err on the side of over-flagging. After the researcher resolves all flags, do a final pass to confirm nothing was missed.
 
-### 6. Researcher review
+### 7. Researcher review
 
 Show the final output to the researcher before it's committed. They may want to remove content, rephrase for clarity, add context that wasn't in the conversation, or delete entire sessions. Nothing goes into `supplementary/` without researcher approval.
 
-### 7. Wire into AGENTS.md and supplementary doc
+### 8. Wire into AGENTS.md and supplementary doc
 
 The research context appears in two places:
 
@@ -124,6 +145,8 @@ Practical knowledge and methodology insights are documented in [`supplementary/k
 ```
 
 If session transcripts were also published, add a link to `supplementary/sessions/`.
+If skills were bundled (step 4), list each under the optional Skills section
+of AGENTS.md with a one-line description.
 
 **In `supplementary/know-how.md`** — the full thematic summary from step 3. This is what the agent reads when asked "why did you do X?"
 
