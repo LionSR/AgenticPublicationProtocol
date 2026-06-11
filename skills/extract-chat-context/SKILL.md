@@ -28,6 +28,13 @@ ls ~/.claude/projects   # Claude Code — one directory per project
 ls ~/.codex/sessions    # Codex — dated subfolders (presence means history exists)
 ```
 
+> **Version caveat.** These store locations and their JSONL layouts are
+> internal to Claude Code and the Codex CLI, not stable APIs; this skill and
+> `extract_sessions.py` track the formats current as of mid-2026. If a newer
+> tool version has moved or reshaped its session store (empty listings,
+> parse errors on files that clearly exist), inspect the store layout
+> directly and adapt — and update this skill and the script.
+
 This is just a quick existence check; the `list` command below is what actually shows the sessions. Use the chosen platform as `<source>` (`claude` or `codex`) in every command below, and keep the same source for listing and extracting.
 
 **Find the extraction script.** It ships with the plugin, so search wherever the host installed it — under Claude Code or Codex:
