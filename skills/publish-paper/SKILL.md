@@ -53,6 +53,7 @@ Keep this roadmap in chat/internal notes, not in `publication-staging/`.
    - If any result has a blocked, manual-only, or runs-but-differs status, stop and ask the author how to proceed before starting `/prepare-staging`.
    - Do not quietly continue past reproduction blockers. Warn that significant blockers or failed reproduction will likely become validation issues unless resolved, explicitly deferred, or accepted by the author for a dev-sandbox/partial outcome.
 2. `/prepare-staging`
+   - Asks the author the publication identity questions — target repo, release tag, whether the paper cites the publication — and lets the author add any link to the source manuscript before the paper is staged.
    - Builds `publication-staging/` from the reproduction report and author decisions.
    - Runs `/validate-publication --stage structure`.
 3. `/define-paper-agent`
@@ -62,6 +63,7 @@ Keep this roadmap in chat/internal notes, not in `publication-staging/`.
    - Finds substantive APP issues before release.
    - Requires the final validation report and staging-root paper-agent test.
 5. `/release-outcome`
+   - Confirms the repo, tag, and any in-paper link the author settled during staging; changing them at this point forces full re-validation.
    - Performs only lightweight final release guards, author approval, freeze, and final outcome.
    - If a substantive issue appears, route back to the owning step.
 

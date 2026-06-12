@@ -16,15 +16,19 @@ Explain to the author that `publication-staging/` is a draft public repository i
    - first release: create from scratch;
    - revision: start from previous public release or coherent existing staging, whichever is cleaner;
    - preserve/summarize any old staging before replacing generated files.
-3. Show the author the copy plan and get confirmation before copying.
-4. Organize approved files under APP layout:
+3. Ask the author the publication identity questions and record the answers:
+   - the target public repo: an existing repo, or a name for a new one (no required naming convention; suggest candidates such as `<papername>.app` — dots are valid in GitHub repo names). Only the name is needed now; creating the repo can wait until release.
+   - the intended release tag (per `PROTOCOL.md`, a publication is `(repo URL, tag)`; the tag is predictable before release, the commit SHA is not). `AGENTS.md` `version` must later match this tag.
+   - whether the paper should cite the publication. If yes, give the author the exact link to add — the repo URL, or preferably the tag URL `https://github.com/<owner>/<repo>/releases/tag/<tag>`, never a commit URL — and let the author edit the source manuscript before the paper is staged. Do not edit the manuscript yourself unless the author explicitly confirms the exact change after seeing it.
+4. Show the author the copy plan and get confirmation before copying.
+5. Organize approved files under APP layout:
    - `paper/`, `code/`, `data/`, `environment/`, `supplementary/`, `skills/`;
    - exactly one canonical public location per file;
    - no private parent-repo dependencies or absolute private paths.
-5. Create `data/README.md` whenever any dataset is used, local or external.
-6. Prepare the environment following `environment.md`.
-7. Create/copy `LICENSE` following `licensing.md`.
-8. Copy only approved supplementary materials:
+6. Create `data/README.md` whenever any dataset is used, local or external.
+7. Prepare the environment following `environment.md`.
+8. Create/copy `LICENSE` following `licensing.md`.
+9. Copy only approved supplementary materials:
    - extracted chat context;
    - `authors-note.md` drafted from author intent;
    - `know-how.md` or materials the author wants public/sandbox-visible;
@@ -36,18 +40,18 @@ Explain to the author that `publication-staging/` is a draft public repository i
    build products, private paths, credentials, abandoned drafts, and notes whose status or authorship
    is unclear. If a note is useful but too broad or private, create a short reader-facing summary in
    `supplementary/` and cite the exact staged code/data/paper anchors it explains.
-9. Migrate reproduction wrappers:
+10. Migrate reproduction wrappers:
    - follow `figure-wrapper-migration.md`;
    - create `publication-staging/code/figure-reproduction/README.md`;
    - rerun scripts from staging root when safe.
-10. Run `/validate-publication --stage structure` with `publication-staging/` as effective root.
-11. Verify from staging root when safe:
+11. Run `/validate-publication --stage structure` with `publication-staging/` as effective root.
+12. Verify from staging root when safe:
    - environment setup;
    - paper compilation;
    - figure/table scripts marked `reproduced`;
    - tests, notebooks, imports;
    - parent/private path checks.
-12. Give the author a plain-language staging summary:
+13. Give the author a plain-language staging summary:
    - what is in each top-level folder;
    - what stayed outside staging;
    - what is ground truth (`paper/`, staged code/data) versus optional context (`supplementary/`);

@@ -120,6 +120,7 @@ Cross-check information across files:
 - Figure/table reproduction information in README vs `code/figure-reproduction/README.md` — the code README is authoritative. AGENTS.md should point to that README rather than duplicate its detailed status table.
 - Validation/reproduction status language in README, `code/figure-reproduction/README.md`, and the validation report should agree. If AGENTS.md includes validation or reproduction status despite the concise-template guidance, it must also agree. Flag stale phrases such as "not yet validated" when validation evidence says commands were run, and overly strong statements such as "fully validated" when blockers remain.
 - Citation in `AGENTS.md` vs README — should be identical when both exist.
+- When a real release is planned: `AGENTS.md` `version` matches the release tag the author settled during `prepare-staging`, and any in-paper publication link matches the settled repo URL or tag URL exactly. Flag a mismatch as an error; it would otherwise surface as a post-validation change at the release gate.
 - Computational requirements vs actual code — for example, do not claim "runs on any laptop" if the code requires CUDA.
 - Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.
 - Required APP files exist for the current validation stage.
