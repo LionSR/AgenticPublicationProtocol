@@ -14,11 +14,11 @@ It is not a second validator. If final review finds a substantive issue, stop an
 For real publication mode, settle the public repo and any in-paper link before the release gate, because the paper cannot cite a repo that does not exist yet:
 
 1. Ask the author which public repo will host the release: an existing repo, or a new one created now. The repo may start empty and private and become public at release time. There is no required naming convention; suggest candidates and let the author choose (for example `<papername>.app` — dots are valid in GitHub repo names).
-2. Choose the intended release tag with the author now (see `release-real.md` step 1). The tag is predictable before release; the commit SHA is not.
+2. Choose the intended release tag with the author now (see `release-real.md` step 1), and check that `AGENTS.md` `version` matches it under the tag normalization rule. The tag is predictable before release; the commit SHA is not.
 3. Ask whether the paper should reference the publication. The stable link targets are the repo URL, or preferably the tag URL `https://github.com/<owner>/<repo>/releases/tag/<tag>`. Never promise a commit URL in the paper.
-4. If the paper needs the link added or changed, update the paper sources and rebuild affected paper artifacts in `publication-staging/` now, then rerun `/validate-publication --stage full` before proceeding — the gate below requires no changes after full validation.
+4. If any staged file must change as a result — the paper needs the link added or changed, or `AGENTS.md` `version` must be updated to match the chosen tag — make the change and rebuild affected artifacts in `publication-staging/` now, then rerun `/validate-publication --stage full` before proceeding — the gate below requires no changes after full validation.
 
-If the author declines an in-paper link, or the link is already correct, nothing changes and validation stands.
+Only when nothing had to change — the author declined an in-paper link or it is already correct, and `AGENTS.md` `version` already matches the chosen tag — does validation stand.
 
 ## Lightweight Release Gate
 
