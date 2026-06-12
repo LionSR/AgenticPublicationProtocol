@@ -11,15 +11,12 @@ Explain to the author that `publication-staging/` is a draft public repository i
 
 ## Process
 
-1. Read `working/reproduction/reproduction-report.md`.
-2. Create or revise `publication-staging/`:
+1. Read `working/reproduction/reproduction-report.md`. It records the publication repo name and intended release version/tag from the `reproduce-results` author interview; confirm them if missing or stale.
+2. Ask whether the paper should cite the publication, before any paper file is staged. If yes, give the author the exact link to add — the repo URL, or preferably the tag URL `https://github.com/<owner>/<repo>/releases/tag/<tag>` built from the recorded repo and tag, never a commit URL (the commit SHA does not exist yet) — and let the author edit the source manuscript now. Do not edit the manuscript yourself unless the author explicitly confirms the exact change after seeing it. Only the repo name is needed for the link; creating the repo can wait until release.
+3. Create or revise `publication-staging/`:
    - first release: create from scratch;
    - revision: start from previous public release or coherent existing staging, whichever is cleaner;
    - preserve/summarize any old staging before replacing generated files.
-3. Ask the author the publication identity questions and record the answers:
-   - the target public repo: an existing repo, or a name for a new one (no required naming convention; suggest candidates such as `<papername>.app` — dots are valid in GitHub repo names). Only the name is needed now; creating the repo can wait until release.
-   - the intended release tag (per `PROTOCOL.md`, a publication is `(repo URL, tag)`; the tag is predictable before release, the commit SHA is not). `AGENTS.md` `version` must later match this tag.
-   - whether the paper should cite the publication. If yes, give the author the exact link to add — the repo URL, or preferably the tag URL `https://github.com/<owner>/<repo>/releases/tag/<tag>`, never a commit URL — and let the author edit the source manuscript before the paper is staged. Do not edit the manuscript yourself unless the author explicitly confirms the exact change after seeing it.
 4. Show the author the copy plan and get confirmation before copying.
 5. Organize approved files under APP layout:
    - `paper/`, `code/`, `data/`, `environment/`, `supplementary/`, `skills/`;

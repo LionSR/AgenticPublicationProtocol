@@ -11,7 +11,7 @@ It is not a second validator. If final review finds a substantive issue, stop an
 
 ## Publication Repo And Paper Link
 
-For real publication mode, the public repo, release tag, and any in-paper link were settled with the author during `prepare-staging`, so the paper and `AGENTS.md` carried them through full validation. Confirm them here — do not decide them here:
+For real publication mode, the public repo and release tag were settled in the `reproduce-results` author interview (recorded in the reproduction report), and any in-paper link was applied during `prepare-staging`, so the paper and `AGENTS.md` carried them through full validation. Confirm them here — do not decide them here:
 
 1. Confirm the target repo. If it does not exist yet, the author can create it now; it may start empty and private and become public at release time.
 2. Confirm the exact tag, and that `AGENTS.md` `version` matches it under the tag normalization rule.

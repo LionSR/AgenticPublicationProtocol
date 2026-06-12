@@ -29,7 +29,7 @@ Assume the author may not know APP. Explain that this step checks the existing p
    - key results and contribution in the author's words;
    - figure/table mapping confirmation;
    - include/exclude/defer file decisions;
-   - publication repo name;
+   - publication repo name and intended release version/tag (suggest candidates such as `<papername>.app` if undecided; per `PROTOCOL.md` a publication is `(repo URL, tag)` and `AGENTS.md` `version` must later match the tag);
    - license/reuse terms or explicit dev-sandbox-only deferment;
    - reader perspective and desired supplementary materials.
 4. Ask explicitly about chat context:
@@ -71,7 +71,7 @@ Assume the author may not know APP. Explain that this step checks the existing p
 working/reproduction/reproduction-report.md
 ```
 
-Include canonical paper, prior state, author decisions, key results, figure/table map, derivation checks, data/environment findings, include/exclude/defer list, repo name, license decision, chat-context decision, commands attempted, outputs, blockers, and open questions.
+Include canonical paper, prior state, author decisions, key results, figure/table map, derivation checks, data/environment findings, include/exclude/defer list, repo name and intended release version/tag, license decision, chat-context decision, commands attempted, outputs, blockers, and open questions.
 
 For every primary numerical, benchmark, or headline qualitative claim, include one of:
 
