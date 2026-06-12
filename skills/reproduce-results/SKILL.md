@@ -29,9 +29,19 @@ Assume the author may not know APP. Explain that this step checks the existing p
    - key results and contribution in the author's words;
    - figure/table mapping confirmation;
    - include/exclude/defer file decisions;
-   - publication repo name;
+   - publication GitHub `owner/repo` and intended release tag;
    - license/reuse terms or explicit dev-sandbox-only deferment;
    - reader perspective and desired supplementary materials.
+
+   From the selected `owner/repo` and tag, derive the canonical release URL as
+   `https://github.com/<owner>/<repo>/releases/tag/<tag>`. Record the normalized
+   publication version using the APP tag rule: tag `v1.2.3` gives version
+   `1.2.3`; non-semver tags use the tag exactly. Remind the author that if they
+   want the published repo URL included in the paper, the paper URL should match
+   this derived release URL. If the author asks you to add or update that URL in
+   the paper, confirm the exact placement and text, make only that requested URL
+   edit, and avoid unrelated paper changes.
+
 4. Ask explicitly about chat context:
    - tell the author publication-safe chat/session context can capture reasoning, design decisions, failed attempts, debugging notes, or methodology choices;
    - ask whether they want to include any;
@@ -71,7 +81,7 @@ Assume the author may not know APP. Explain that this step checks the existing p
 working/reproduction/reproduction-report.md
 ```
 
-Include canonical paper, prior state, author decisions, key results, figure/table map, derivation checks, data/environment findings, include/exclude/defer list, repo name, license decision, chat-context decision, commands attempted, outputs, blockers, and open questions.
+Include canonical paper, prior state, author decisions, key results, figure/table map, derivation checks, data/environment findings, include/exclude/defer list, selected publication `owner/repo`, selected release tag, normalized version, derived release URL, whether the author wants that URL included in the paper, license decision, chat-context decision, commands attempted, outputs, blockers, and open questions.
 
 For every primary numerical, benchmark, or headline qualitative claim, include one of:
 

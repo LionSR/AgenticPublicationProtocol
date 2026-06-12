@@ -124,6 +124,16 @@ Cross-check information across files:
 - Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.
 - Required APP files exist for the current validation stage.
 - `data/README.md` exists whenever the publication uses any dataset, local or external.
+- During full modular `/publish-paper` validation, read the selected publication
+  target from workflow context or `working/reproduction/reproduction-report.md`
+  when available. From the recorded `owner/repo` and release tag, derive
+  `https://github.com/<owner>/<repo>/releases/tag/<tag>`. Scan the canonical
+  paper source for URLs that appear to be the APP publication or public repo URL.
+  If the paper includes a publication URL for the selected repo, it must match the
+  derived release URL; if the paper has no such URL, treat this as neutral rather
+  than an error. Do not flag unrelated GitHub URLs such as protocol repos,
+  development repos, dependency repos, or citations unless surrounding text
+  identifies them as the publication repo URL.
 - During full modular `/publish-paper` validation, `supplementary/paper-agent-test.md` exists and records a fresh agent session launched with the staged repo as its working directory. It should include representative Q&A showing the agent can identify ground truth, summarize the paper, point to real reproduction commands, and accurately report blockers. If this is missing or only a documentation review, classify it as a release-outcome blocker.
 - The paper-agent smoke test includes a primary-benchmark/result-check question when the paper has
   a headline numerical or benchmark claim. Passing answers should inspect staged artifacts when
