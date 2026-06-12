@@ -9,6 +9,17 @@ Use this after `/validate-publication --stage full`. This skill performs final a
 
 It is not a second validator. If final review finds a substantive issue, stop and return to `prepare-staging`, `define-paper-agent`, or `validate-publication`.
 
+## Publication Repo And Paper Link
+
+For real publication mode, settle the public repo and any in-paper link before the release gate, because the paper cannot cite a repo that does not exist yet:
+
+1. Ask the author which public repo will host the release: an existing repo, or a new one created now. The repo may start empty and private and become public at release time. There is no required naming convention; suggest candidates and let the author choose (for example `<papername>.app` — dots are valid in GitHub repo names).
+2. Choose the intended release tag with the author now (see `release-real.md` step 1). The tag is predictable before release; the commit SHA is not.
+3. Ask whether the paper should reference the publication. The stable link targets are the repo URL, or preferably the tag URL `https://github.com/<owner>/<repo>/releases/tag/<tag>`. Never promise a commit URL in the paper.
+4. If the paper needs the link added or changed, update the paper sources and rebuild affected paper artifacts in `publication-staging/` now, then rerun `/validate-publication --stage full` before proceeding — the gate below requires no changes after full validation.
+
+If the author declines an in-paper link, or the link is already correct, nothing changes and validation stands.
+
 ## Lightweight Release Gate
 
 Before any release action:

@@ -62,6 +62,7 @@ Keep this roadmap in chat/internal notes, not in `publication-staging/`.
    - Finds substantive APP issues before release.
    - Requires the final validation report and staging-root paper-agent test.
 5. `/release-outcome`
+   - For real publication, first settles the public repo (existing or created now) and the intended tag with the author, and adds the repo/tag link to the paper if the author wants one — before the freeze.
    - Performs only lightweight final release guards, author approval, freeze, and final outcome.
    - If a substantive issue appears, route back to the owning step.
 
