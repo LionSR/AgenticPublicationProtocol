@@ -59,9 +59,11 @@ Keep this roadmap in chat/internal notes, not in `publication-staging/`.
    - Creates and iterates `AGENTS.md`, `CLAUDE.md`, and README.
    - Runs `/validate-publication --stage agents-md`.
 4. `/validate-publication --stage full`
+   - For real publication, first settles the publication identity with the author — target repo (existing or named new one), release tag, and any in-paper link added to the source manuscript — so these are validated rather than changed after validation.
    - Finds substantive APP issues before release.
    - Requires the final validation report and staging-root paper-agent test.
 5. `/release-outcome`
+   - Confirms the repo, tag, and any in-paper link settled before validation; changing them at this point forces full re-validation.
    - Performs only lightweight final release guards, author approval, freeze, and final outcome.
    - If a substantive issue appears, route back to the owning step.
 

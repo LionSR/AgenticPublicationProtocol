@@ -9,6 +9,16 @@ Use this after `/validate-publication --stage full`. This skill performs final a
 
 It is not a second validator. If final review finds a substantive issue, stop and return to `prepare-staging`, `define-paper-agent`, or `validate-publication`.
 
+## Publication Repo And Paper Link
+
+For real publication mode, the public repo, release tag, and any in-paper link were settled with the author before full validation (see `validate-publication`), so the paper and `AGENTS.md` carried them through validation. Confirm them here — do not decide them here:
+
+1. Confirm the target repo. If it does not exist yet, the author can create it now; it may start empty and private and become public at release time.
+2. Confirm the exact tag, and that `AGENTS.md` `version` matches it under the tag normalization rule.
+3. If the paper cites the publication, confirm the link matches the repo and tag exactly.
+
+If any of these must change now — a different tag, a missing or wrong link — the files that carry them (paper sources, `AGENTS.md`) change too. Update the source materials, restage, and rerun `/validate-publication --stage full` before the gate. Treat this as the exception, not the normal path.
+
 ## Lightweight Release Gate
 
 Before any release action:

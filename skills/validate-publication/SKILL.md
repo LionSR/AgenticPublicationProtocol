@@ -28,6 +28,16 @@ Invoke with `--stage <name>` to validate specific artifacts. Omit for a full val
 | `agents-md` | After creating AGENTS.md (phase 4) | APP metadata, ground-truth hierarchy, canonical pointers, reader-help behavior, clear factual consistency |
 | `full` | Step 4 of `/publish-paper`, pre-release review, or standalone | All of the above + README consistency, confidentiality sweep, validation report consistency, local reader-agent usability, and release manifest verification when validating a public tagged release |
 
+## Before full validation: settle the publication identity
+
+When `--stage full` runs ahead of a planned real publication, first settle the publication identity with the author, so it is validated here rather than changed after validation (any post-validation change forces a costly full re-validation):
+
+1. The target public repo: an existing repo, or a name for a new one. No required naming convention; suggest candidates such as `<papername>.app` (dots are valid in GitHub repo names) and let the author choose. Only the name is needed now; creating the repo can wait until release.
+2. The exact release tag. Per `PROTOCOL.md`, a publication is `(repo URL, tag)` and the tag is predictable before release, while the commit SHA is not. Ensure `AGENTS.md` `version` matches the tag under the normalization rule.
+3. Whether the paper cites the publication. If yes, the author adds the link to the source manuscript now — the repo URL, or preferably the tag URL `https://github.com/<owner>/<repo>/releases/tag/<tag>`; never a commit URL — and the staged copy of the paper is re-imported and recompiled before validation runs.
+
+Skip this section for dev-sandbox runs and for standalone audits of already-published repos, where the identity already exists.
+
 ## Process
 
 ### 1. Gather context
@@ -120,6 +130,7 @@ Cross-check information across files:
 - Figure/table reproduction information in README vs `code/figure-reproduction/README.md` — the code README is authoritative. AGENTS.md should point to that README rather than duplicate its detailed status table.
 - Validation/reproduction status language in README, `code/figure-reproduction/README.md`, and the validation report should agree. If AGENTS.md includes validation or reproduction status despite the concise-template guidance, it must also agree. Flag stale phrases such as "not yet validated" when validation evidence says commands were run, and overly strong statements such as "fully validated" when blockers remain.
 - Citation in `AGENTS.md` vs README — should be identical when both exist.
+- When a real release is planned: `AGENTS.md` `version` matches the intended release tag, and any in-paper publication link matches the intended repo URL or tag URL exactly. Flag a mismatch as an error; it would otherwise surface as a post-validation change at the release gate.
 - Computational requirements vs actual code — for example, do not claim "runs on any laptop" if the code requires CUDA.
 - Ground truth hierarchy explicitly stated in `AGENTS.md` identity section.
 - Required APP files exist for the current validation stage.
