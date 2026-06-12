@@ -21,9 +21,37 @@ A single-page site with:
 2. **Abstract** — from the paper
 3. **Highlights / Key results** — 3-5 bullet points with figures
 4. **Figures** — key figures from the paper, displayed large
-5. **Links** — paper PDF, arXiv, code repo, data
+5. **Links** — paper PDF/arXiv, the publication repo (the primary link), data
 6. **BibTeX** — copy-to-clipboard citation block
-7. **Agent badge** — indicates this paper has an AI agent (links to AGENTS.md)
+7. **Agent badge** — indicates this paper has an AI agent. It links to the
+   publication repo on GitHub, and the page states the usable action: clone
+   the repo and open it in an AI coding agent. Never link the raw `AGENTS.md`
+   file — see the linking rules below.
+
+## Page vs README — what goes where
+
+The page and the README serve different readers, so they must not be the same
+document. The page is for someone who has **not** cloned anything and is
+deciding in ~30 seconds whether the paper is interesting; the README is for
+someone who **has** cloned the repo and wants to work with it. Rule of thumb:
+the page sells and routes, the README operates.
+
+On the page:
+- Title, authors, abstract, 3-5 highlights, key figures
+- Links out: arXiv/PDF, publication repo, agent badge
+- BibTeX
+- One sentence on what the agent is and how to use it (clone + open)
+
+Not on the page (README/repo territory):
+- Repository layout and per-file descriptions
+- Reproduction commands, environment setup, toolchain versions
+- Reproduction status detail, validation reports, provenance
+- License text, agent behavioral instructions
+
+If a detail matters to someone who has not cloned the repo (e.g. "results
+reproduce from committed data on a laptop"), state it as a one-line highlight
+and link to the repo for the rest. If the generated page reads like the
+README with styling, cut it down.
 
 ## Process
 
@@ -45,22 +73,61 @@ Ask the researcher:
 
 ### 2. Generate the site
 
-Create a `docs/` directory (GitHub Pages default) with a static site:
+Create the site under `supplementary/page/` in the publication tree:
 
 ```
-docs/
+supplementary/page/
 ├── index.html        ← the landing page
 ├── style.css         ← styling
 └── assets/
-    ├── figures/      ← featured figures (copied from paper/figures/)
+    ├── figures/      ← web-optimized derivatives of featured figures
     └── ...           ← any other assets (logos, photos)
 ```
+
+**Protocol consistency:** `supplementary/` is part of the APP layout
+(PROTOCOL.md), so the page ships inside the publication tree and is
+versioned with the tagged release; it is supplementary material, not ground
+truth. Two rules still hold: never add non-protocol fields such as
+`page_url` to the `AGENTS.md` frontmatter — the page URL goes in
+`README.md` (step 6) — and do not commit exact duplicates of canonical
+files. Page figures are web-optimized derivatives (PNG/SVG conversions),
+and the paper PDF is linked (arXiv, or the rendered `blob/{tag}` URL, which
+GitHub shows in a PDF viewer) rather than copied into the site.
 
 **The HTML should be:**
 - Self-contained — no build step, no JavaScript framework, no npm
 - Clean and readable — academic style, not startup landing page
 - Mobile-friendly — responsive layout
 - Fast — just HTML + CSS + images, no heavy dependencies
+
+**Linking rules — the live site serves only `supplementary/page/`:**
+
+The published site lives at `https://{username}.github.io/{repo-name}/` and
+serves only the deployed artifact, i.e. the contents of
+`supplementary/page/`. Relative links that escape it
+(`../../paper/...`, `../../AGENTS.md`) 404 on the live site.
+Pages also does not render markdown — a link to a `.md` file shows raw text
+or downloads the file, which is not usable (a downloaded `AGENTS.md` on its
+own does nothing; the agent works by opening the cloned repo).
+
+- The primary link target is the **publication repo on GitHub**
+  (`https://github.com/{owner}/{repo}`) — readers get the rendered README,
+  the code, and the clone URL in one place.
+- Figures — web-optimized derivatives in the site's `assets/` linked
+  relatively. The paper PDF — link arXiv or the rendered `blob/{tag}` URL
+  (GitHub shows PDFs in a viewer); do not duplicate it into the site.
+- A specific repo file worth pointing at (e.g. a computations README) — use
+  the rendered GitHub URL, pinned to the release tag:
+  `https://github.com/{owner}/{repo}/blob/{tag}/...`. PROTOCOL.md says
+  external references should point to a specific tag, and tag URLs are
+  immutable; do not hardcode a branch name (not every repo's default branch
+  is `main`).
+- Agent badge → the publication repo URL, never a `.md` file.
+- Local preview: serve the staging/repo root and open
+  `/supplementary/page/` — in-site assets resolve as on the live site. In a
+  dev-sandbox preview (no public repo yet), relative links escaping the
+  page directory are acceptable for browsing, but every such link must be
+  rewritten per these rules before a real release.
 
 **Structure of index.html:**
 
@@ -85,10 +152,10 @@ docs/
             <sup>2</sup>Institution B
         </p>
         <nav class="links">
-            <a href="[arxiv-url]">Paper</a>
-            <a href="[repo-url]">Code</a>
-            <a href="[data-url]">Data</a>
-            <a href="AGENTS.md">🤖 Paper Agent</a>
+            <a href="[arxiv-url]">Paper</a>          <!-- arXiv, or the rendered blob/{tag} PDF URL -->
+            <a href="[repo-url]">Code</a>            <!-- the publication repo on GitHub -->
+            <a href="[data-url]">Data</a>            <!-- only if data lives elsewhere -->
+            <a href="[repo-url]">🤖 Paper Agent</a>  <!-- repo URL, never AGENTS.md -->
         </nav>
     </header>
 
@@ -124,9 +191,13 @@ docs/
     </section>
 
     <footer>
-        <p>This paper is published with an
+        <p>This paper has an AI agent: clone
+        <a href="[repo-url]">the publication repo</a> and open it in an
+        AI coding agent (Claude Code, Codex, ...) — the agent reads
+        <code>AGENTS.md</code> and answers questions about the paper.
+        Published with the
         <a href="https://github.com/LionSR/AgenticPublicationProtocol">
-        AI agent</a> — clone the repo and talk to it.</p>
+        Agentic Publication Protocol</a>.</p>
     </footer>
 </body>
 </html>
@@ -141,48 +212,108 @@ docs/
 
 ### 3. Copy figures
 
-Copy the featured figures from `paper/figures/` (or wherever they live) into `docs/assets/figures/`. Use web-friendly formats:
+Copy the featured figures from `paper/figures/` (or wherever they live) into `supplementary/page/assets/figures/` as web-optimized derivatives. Use web-friendly formats:
 - Convert PDF figures to PNG or SVG if needed
 - Optimize image sizes (no 10MB PNGs)
 - Keep original filenames for traceability
 
-### 4. Enable GitHub Pages
+### 4. Deploy with the GitHub Actions Pages source
 
-Check if the repo has GitHub Pages enabled:
+GitHub Pages is GitHub's free static hosting. Its branch-based deployment
+can only serve the repo root or `/docs` — neither exists in the APP layout —
+so the page is deployed with the **GitHub Actions** source instead, which
+can publish any directory. PROTOCOL.md allows `.github/`, so commit
+`.github/workflows/paper-page.yml`:
+
+```yaml
+name: Deploy paper page
+on:
+  push:
+    branches: [main]   # adjust if the default branch has another name
+    paths: ['supplementary/page/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: supplementary/page
+      - id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+One precondition worth stating to a researcher who has not used Pages
+before: the repo must be public (private repos need a paid plan).
+
+Check the current Pages configuration:
 
 ```bash
 gh api repos/{owner}/{repo}/pages 2>/dev/null
 ```
 
-If not enabled, enable it:
+Three cases:
 
-```bash
-gh api repos/{owner}/{repo}/pages -X POST -f source.branch=main -f source.path=/docs
-```
+- Not enabled (404) — enable with the Actions source:
 
-Or tell the researcher to go to Settings → Pages → Source: Deploy from branch → `main` → `/docs`.
+  ```bash
+  gh api repos/{owner}/{repo}/pages -X POST -f build_type=workflow
+  ```
 
-The page will be available at `https://{username}.github.io/{repo-name}/`.
+- Enabled with a branch source (`.build_type` is `"legacy"` in the
+  response — e.g. a leftover `main` + `/docs` setup) — switch it, or the
+  workflow deploys will never be served:
+
+  ```bash
+  gh api repos/{owner}/{repo}/pages -X PUT -f build_type=workflow
+  ```
+
+- Already `workflow` — nothing to do.
+
+Or walk the researcher through the manual path: repo page on github.com →
+Settings → Pages → under "Build and deployment" choose Source: GitHub
+Actions.
+
+Trigger the first deploy by pushing the page (or `workflow_dispatch`). The
+page will be available at `https://{username}.github.io/{repo-name}/` after
+the run completes (a minute or two, visible in the repo's Actions tab).
+Pushes that touch `supplementary/page/**` redeploy automatically, and the
+tagged release snapshots the page source with the rest of the publication.
 
 ### 5. Verify
 
 - Open the page URL and check everything renders
+- Click every link **from the live Pages URL** — nothing may 404 or download
+  raw markdown; the agent badge must land on the publication repo
 - Test on mobile (responsive?)
-- Check all links work (paper PDF, arXiv, code repo)
 - Verify figures display correctly
 - Test the BibTeX copy button
 
-### 6. Update README and AGENTS.md
+### 6. Add the page link to README
 
-Add the page URL to:
-- README.md: `[Project Page](https://{username}.github.io/{repo-name}/)`
-- AGENTS.md frontmatter: add `page_url: "https://..."`
-- AGENTS.md body: mention the project page exists
+Add the page URL to `README.md` on the default branch:
+`[Project Page](https://{username}.github.io/{repo-name}/)`
+
+Do not touch `AGENTS.md` for this: `page_url` is not a field in the
+PROTOCOL.md frontmatter schema, and validation checks the frontmatter
+against that schema. The README link is the canonical pointer to the page.
 
 ### Customization
 
 The researcher may want:
-- **Different figures** — swap them in `docs/assets/figures/`
+- **Different figures** — swap them in `supplementary/page/assets/figures/`
 - **Video or demo** — embed a YouTube/video link in the highlights section
 - **More sections** — method overview, comparison tables, acknowledgments
 - **Custom domain** — they can configure this in GitHub Pages settings

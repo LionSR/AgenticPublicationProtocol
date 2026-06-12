@@ -10,6 +10,11 @@ Reads session logs from:
 Both Codex on-disk formats are supported: the current 'session_meta'/'response_item'
 layout and the legacy top-level 'message' layout.
 
+These paths and JSONL layouts are internal to Claude Code and the Codex CLI and
+may change between versions; they were last verified against the tools current
+as of mid-2026. If listing or extraction fails on a newer version, inspect the
+raw store layout first and update this script.
+
 By default 'list' is scoped to the current working directory (Claude by project key,
 Codex by the directory each session recorded). Use --project all to list every
 session, or --project <path-or-key> to target a specific one.
