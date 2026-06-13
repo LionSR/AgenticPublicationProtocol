@@ -126,7 +126,7 @@ $publish-paper
 
 The `publish-paper` skill walks through the full workflow in order. It can span multiple sessions, and it may pause for author decisions between steps.
 
-![publish-paper five-step workflow](assets/readme/publish_paper_steps.svg)
+![publish-paper five-step workflow](assets/readme/publish_paper_steps.png)
 
 You can also call each step directly if you only need part of the workflow, want to resume from a known checkpoint, or are debugging a publication candidate. The step skills should be used in this order:
 
