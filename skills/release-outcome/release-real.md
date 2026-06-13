@@ -2,10 +2,10 @@
 
 Public release is irreversible. Ask for explicit confirmation before every remote action.
 
-1. Choose the exact tag with the author. Ensure `AGENTS.md` `version` matches the tag normalization rule.
+1. Confirm the recorded publication `owner/repo` and release tag with the author. Use the repo, tag, and normalized version recorded during `reproduce-results` unless the author explicitly changes them. If the author changes the repo or tag at this step, rerun validation before release because paper URL consistency may have changed. Ensure `AGENTS.md` `version` matches the tag normalization rule.
 2. Show a concrete publication summary:
    - source `publication-staging/`;
-   - repo name and public visibility;
+   - repo `owner/repo`, derived release URL, and public visibility;
    - version/tag;
    - included/excluded files;
    - validation status and report hash;
