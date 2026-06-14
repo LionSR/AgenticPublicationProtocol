@@ -1,6 +1,6 @@
 ---
 protocol: agentic-publication-protocol
-protocol_version: "0.1.0"
+protocol_version: "1.0.0"
 title: "YOUR PAPER TITLE"
 authors:
   - name: "Author One"

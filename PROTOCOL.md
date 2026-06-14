@@ -1,6 +1,6 @@
 # Agentic Publication Protocol (APP)
 
-**Version 0.1.0 — Draft**
+**Version 1.0.0**
 
 APP is a format for packaging a finished academic paper as a GitHub repository, enabling an AI agent to present and explain the work interactively. An APP publication is a public Git repository with a tagged release, an AGENTS.md file at the root, and a verifiable APP publication manifest attached to the release. A reader can clone the repository, open it in any agent that supports AGENTS.md, and immediately access an agent that acts as a representative of the authors. This agent can explain the paper, reproduce figures, run experiments, and answer questions grounded in the work.
 
@@ -100,7 +100,7 @@ The optional `skills/` directory contains agent capabilities shipped with the pa
 ```yaml
 ---
 protocol: agentic-publication-protocol
-protocol_version: "0.1.0"
+protocol_version: "1.0.0"
 title: "Your Paper Title"
 authors:
   - name: "Author Name"
@@ -117,8 +117,8 @@ recommended_external_skills:
     purpose: "Proofread manuscript prose before APP staging."
 app_extensions:
   - id: "org.example/field-publishing"
-    version: "0.1.0"
-    source: "https://github.com/example/app-extensions/tree/v0.1.0/field-publishing"
+    version: "1.0.0"
+    source: "https://github.com/example/app-extensions/tree/v1.0.0/field-publishing"
     required: false
 ---
 ```
@@ -205,7 +205,7 @@ The manifest **MUST** include:
 ```json
 {
   "protocol": "agentic-publication-protocol",
-  "protocol_version": "0.1.0",
+  "protocol_version": "1.0.0",
   "manifest_version": "1",
   "publication_type": "app-publication",
   "repo_url": "https://github.com/user/paper-repo",
@@ -215,7 +215,7 @@ The manifest **MUST** include:
   "app_publication_id": "app-v1:sha256:<hex-digest>",
   "validation": {
     "validated_by": "validate-publication",
-    "validator_protocol_version": "0.1.0",
+    "validator_protocol_version": "1.0.0",
     "stage": "full",
     "result": "passed",
     "validated_at": "YYYY-MM-DD",

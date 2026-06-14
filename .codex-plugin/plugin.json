@@ -1,6 +1,7 @@
 {
   "name": "paper-protocol",
   "description": "Publish academic papers as AI agents",
+  "version": "1.0.0",
   "author": {
     "name": "LionSR"
   },

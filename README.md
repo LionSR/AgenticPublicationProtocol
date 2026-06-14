@@ -1,6 +1,6 @@
 # Agentic Publication Protocol (APP)
 
-[![Protocol version](https://img.shields.io/badge/protocol-0.1.0--draft-orange)](PROTOCOL.md)
+[![Protocol version](https://img.shields.io/badge/protocol-1.0.0-blue)](PROTOCOL.md)
 [![Latest release](https://img.shields.io/github/v/release/LionSR/AgenticPublicationProtocol?include_prereleases&sort=semver)](https://github.com/LionSR/AgenticPublicationProtocol/releases)
 [![License: CC-BY-4.0 / MIT](https://img.shields.io/badge/license-CC--BY--4.0%20%2F%20MIT-blue)](#license)
 

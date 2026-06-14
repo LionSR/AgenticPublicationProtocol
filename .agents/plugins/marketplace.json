@@ -6,10 +6,11 @@
   "plugins": [
     {
       "name": "paper-protocol",
+      "version": "1.0.0",
       "source": {
         "source": "url",
         "url": "https://github.com/LionSR/AgenticPublicationProtocol.git",
-        "ref": "main"
+        "ref": "v1.0.0"
       },
       "policy": {
         "installation": "AVAILABLE",
