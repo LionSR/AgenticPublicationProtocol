@@ -188,6 +188,10 @@ APP publications may point to reusable skills or extensions hosted outside the p
 
 External skills are recommendations only. They are not part of an author-approved APP publication unless they are bundled into the tagged release and covered by the publication manifest.
 
+## Published APP papers
+
+The public list lives in [Discussion #36](https://github.com/LionSR/AgenticPublicationProtocol/discussions/36). Reply there with a release link (any wording). A GitHub Actions bot uses **GitHub Copilot** to read the comment, checks that the release has a valid `APP_PUBLICATION.json`, then **updates the discussion body** and **replies** (see `.github/workflows/app-discussion-bot.yml`). Requires repo secret `COPILOT_PAT`.
+
 ## Contributing
 
 Contributions to the protocol, templates, documentation, validation behavior, and official APP workflow skills are welcome. Reusable field-specific or authoring skills can also live in independent repositories and be referenced from APP publications. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the boundary between official APP repo changes and external skill contributions.
