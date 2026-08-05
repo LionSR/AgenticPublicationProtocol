@@ -2,11 +2,12 @@
 #   comment → Copilot understands it → verify APP release → update discussion body → reply
 #
 # Secrets:
-#   COPILOT_PAT — GitHub account with Copilot (inference + preferred for discussion edit)
-#   GITHUB_TOKEN — default Actions token (can post comments; often cannot edit discussion body)
+#   COPILOT_PAT — account with Copilot (optional inference; URL fallback works without it)
+#   APP_DISCUSSION_PAT — user PAT that can edit Discussion #36 body (required for list updates)
+#   GITHUB_TOKEN — posts bot replies; cannot edit a discussion started by a human
 #
-# updateDiscussion requires a user PAT (GITHUB_TOKEN as github-actions[bot] gets FORBIDDEN
-# when editing a discussion it did not create). Prefer COPILOT_PAT for mutations.
+# updateDiscussion: github-actions[bot] is FORBIDDEN on others' threads. Use APP_DISCUSSION_PAT
+# (classic: repo + write:discussion, or fine-grained: Discussions Read/Write on this repo).
 
 name: APP discussion bot
 
@@ -215,7 +216,8 @@ jobs:
           ))
           PY
 
-      # User PAT needed: github-actions[bot] cannot updateDiscussion on others' threads.
+      # Body edit needs a user PAT with discussions write (GITHUB_TOKEN cannot edit others' discussions;
+      # COPILOT_PAT may be inference-only / invalid for API). Set APP_DISCUSSION_PAT.
       - name: Update discussion body
         id: update
         if: |
@@ -224,7 +226,7 @@ jobs:
           steps.bot.outputs.should_update == 'true'
         continue-on-error: true
         env:
-          GH_TOKEN: ${{ secrets.COPILOT_PAT || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.APP_DISCUSSION_PAT || secrets.GITHUB_TOKEN }}
           DISCUSSION_ID: ${{ steps.ctx.outputs.discussion_id }}
         run: |
           set -euo pipefail
