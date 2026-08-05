@@ -115,13 +115,17 @@ def candidates_from_parsed(parsed: dict[str, Any]) -> list[tuple[str, str]]:
         tag = (c.get("tag") or "").strip()
         if not target:
             continue
-        ref = parse_ref(target if not tag else f"{target} {tag}".strip())
-        if ref and ref[1]:
-            out.append(ref)
-        elif ref and tag:
-            out.append((ref[0], tag))
-        elif ref:
-            out.append(ref)
+        # Prefer structured fields over string-smashing so full release URLs parse cleanly.
+        if tag and not re.search(r"/releases/tag/", target):
+            ref = parse_ref(target)
+            if ref:
+                out.append((ref[0], tag or ref[1]))
+                continue
+        ref = parse_ref(target)
+        if not ref:
+            continue
+        owner_repo, parsed_tag = ref
+        out.append((owner_repo, tag or parsed_tag))
     return out
 
 
@@ -329,19 +333,27 @@ def next_index(body: str) -> int:
 
 
 def already_listed(body: str, owner_repo: str, tag: str, pub_id: str) -> bool:
-    if owner_repo.lower() in body.lower() and tag in body:
+    """Prefer release URL match; avoid false positives from a shared tag like v1.0.0."""
+    body_l = body.lower()
+    release = f"github.com/{owner_repo.lower()}/releases/tag/{tag.lower()}"
+    if release in body_l:
+        return True
+    # Also match without scheme/host variants already normalized above
+    if f"{owner_repo.lower()}/releases/tag/{tag.lower()}" in body_l:
         return True
     if pub_id and pub_id in body:
         return True
-    release = f"github.com/{owner_repo}/releases/tag/{tag}".lower()
-    return release in body.lower()
+    return False
 
 
 def insert_entry(body: str, entry_md: str) -> str:
-    footer = "Published a paper with APP? Reply with the link to your release and we will add it here."
-    if footer in body:
-        return body.replace(footer, entry_md + footer)
-    # fallback append
+    footer = (
+        "Published a paper with APP? Reply with the link to your release "
+        "and we will add it here."
+    )
+    idx = body.find(footer)
+    if idx >= 0:
+        return body[:idx] + entry_md + body[idx:]
     return body.rstrip() + "\n\n" + entry_md
 
 

@@ -27,7 +27,6 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Published APP papers thread
   DISCUSSION_NUMBER: "36"
 
 jobs:
@@ -41,61 +40,85 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Untrusted comment/title must enter the shell only via env (not ${{ }} expansion in the script body).
       - name: Collect comment + discussion body
         id: ctx
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_NAME: ${{ github.event_name }}
+          ACTOR: ${{ github.actor }}
+          COMMENT_BODY: ${{ github.event.comment.body || inputs.comment || '' }}
+          COMMENT_AUTHOR: ${{ github.event.comment.user.login || github.actor }}
+          DISCUSSION_TITLE: ${{ github.event.discussion.title || '' }}
+          DISCUSSION_NODE_ID: ${{ github.event.discussion.node_id || '' }}
+          DISCUSSION_NUMBER_EVT: ${{ github.event.discussion.number || env.DISCUSSION_NUMBER }}
+          DRY_RUN_INPUT: ${{ inputs.dry_run || 'false' }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
         run: |
           set -euo pipefail
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            printf '%s' "${{ inputs.comment }}" > comment.txt
-            AUTHOR="${{ github.actor }}"
-            CONTEXT="workflow_dispatch dry-run"
+
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            AUTHOR="$ACTOR"
+            CONTEXT="workflow_dispatch"
             REPLY_MODE="none"
             DISCUSSION_ID=""
-            DRY_RUN="${{ inputs.dry_run }}"
+            DRY_RUN="${DRY_RUN_INPUT:-true}"
           else
-            # Skip bots
-            AUTHOR="${{ github.event.comment.user.login }}"
+            AUTHOR="$COMMENT_AUTHOR"
+            # Skip bots (including this workflow's own replies as github-actions[bot])
             if [[ "$AUTHOR" == *"[bot]"* ]] || [[ "$AUTHOR" == github-actions* ]]; then
-              echo "skip=true" >> "$GITHUB_OUTPUT"
+              {
+                echo "skip=true"
+                echo "skip_reason=bot"
+              } >> "$GITHUB_OUTPUT"
               exit 0
             fi
-            printf '%s' "${{ github.event.comment.body }}" > comment.txt
-            CONTEXT="Discussion #${{ github.event.discussion.number }}: ${{ github.event.discussion.title }}"
+            CONTEXT="Discussion #${DISCUSSION_NUMBER_EVT}: ${DISCUSSION_TITLE}"
             REPLY_MODE="discussion"
-            DISCUSSION_ID="${{ github.event.discussion.node_id }}"
+            DISCUSSION_ID="$DISCUSSION_NODE_ID"
             DRY_RUN="false"
           fi
 
-          REPO_NAME="${GITHUB_REPOSITORY#*/}"
-          # Always load current discussion body from API (source of truth for the list)
+          # Write comment via Python so binary/odd bytes cannot break the shell script.
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          Path("comment.txt").write_text(os.environ.get("COMMENT_BODY") or "", encoding="utf-8")
+          PY
+
+          # Live discussion body is the list of record
           gh api graphql -f query='
             query($owner:String!,$name:String!,$number:Int!) {
               repository(owner:$owner,name:$name) {
                 discussion(number:$number) { id body }
               }
-            }' -f owner="${{ github.repository_owner }}" \
+            }' -f owner="$REPO_OWNER" \
               -f name="$REPO_NAME" \
-              -F number=${{ env.DISCUSSION_NUMBER }} \
+              -F number="${DISCUSSION_NUMBER}" \
               --jq '.data.repository.discussion.body' > discussion_body.md
 
-          if [ -z "$DISCUSSION_ID" ]; then
+          if [ -z "${DISCUSSION_ID}" ]; then
             DISCUSSION_ID=$(gh api graphql -f query='
               query($owner:String!,$name:String!,$number:Int!) {
                 repository(owner:$owner,name:$name) {
                   discussion(number:$number) { id }
                 }
-              }' -f owner="${{ github.repository_owner }}" \
+              }' -f owner="$REPO_OWNER" \
                 -f name="$REPO_NAME" \
-                -F number=${{ env.DISCUSSION_NUMBER }} \
+                -F number="${DISCUSSION_NUMBER}" \
                 --jq '.data.repository.discussion.id')
           fi
 
+          # Multiline-safe outputs (context may contain newlines from a weird title)
           {
             echo "skip=false"
-            echo "author=$AUTHOR"
-            echo "context=$CONTEXT"
+            echo "author<<EOF"
+            echo "$AUTHOR"
+            echo "EOF"
+            echo "context<<EOF"
+            printf '%s\n' "$CONTEXT"
+            echo "EOF"
             echo "reply_mode=$REPLY_MODE"
             echo "discussion_id=$DISCUSSION_ID"
             echo "dry_run=$DRY_RUN"
@@ -103,7 +126,7 @@ jobs:
 
       - name: Skip bots
         if: steps.ctx.outputs.skip == 'true'
-        run: echo "Skipping bot comment"
+        run: echo "Skipping (${{ steps.ctx.outputs.skip_reason }})"
 
       - uses: actions/setup-node@v4
         if: steps.ctx.outputs.skip != 'true'
@@ -146,6 +169,7 @@ jobs:
             cp "${{ steps.parse.outputs.response-file }}" parsed.json.txt
           else
             echo '{}' > parsed.json.txt
+            echo "Copilot parse unavailable; using URL fallback from comment only."
           fi
 
           python3 scripts/app_discussion_bot.py \
@@ -157,13 +181,17 @@ jobs:
           python3 - <<'PY'
           import json, os
           from pathlib import Path
-          r = json.loads(Path("result.json").read_text())
-          Path("reply.md").write_text((r.get("reply") or "") + "\n", encoding="utf-8")
+          r = json.loads(Path("result.json").read_text(encoding="utf-8"))
+          Path("reply.md").write_text((r.get("reply") or "").rstrip() + "\n", encoding="utf-8")
           Path("new_body.md").write_text(r.get("new_body") or "", encoding="utf-8")
-          with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
               fh.write(f"should_update={str(bool(r.get('should_update'))).lower()}\n")
               fh.write(f"should_reply={str(bool(r.get('should_reply'))).lower()}\n")
-          print(json.dumps({k: r.get(k) for k in ('action','should_update','should_reply','added_count','reply')}, indent=2))
+          print(json.dumps(
+              {k: r.get(k) for k in ("action", "should_update", "should_reply", "added_count", "reply")},
+              indent=2,
+              ensure_ascii=False,
+          ))
           PY
 
       - name: Update discussion body
@@ -191,7 +219,6 @@ jobs:
           DISCUSSION_ID: ${{ steps.ctx.outputs.discussion_id }}
         run: |
           set -euo pipefail
-          # Don't post empty replies
           if [ ! -s reply.md ] || [ "$(tr -d '[:space:]' < reply.md)" = "" ]; then
             echo "Empty reply; skip"
             exit 0
