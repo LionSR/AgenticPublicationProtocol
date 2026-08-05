@@ -126,7 +126,7 @@ jobs:
             author: ${{ steps.ctx.outputs.author }}
           file_input: |
             comment: comment.txt
-          model: gpt-4.1
+          model: gpt-5.5
         env:
           COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_PAT }}
 
