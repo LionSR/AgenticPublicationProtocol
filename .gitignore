@@ -2,3 +2,6 @@
 *.txt
 .claude/
 .DS_Store
+
+# Keep agent prompt files tracked
+!.github/prompts/**

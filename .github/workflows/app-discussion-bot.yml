@@ -168,7 +168,7 @@ jobs:
         continue-on-error: true
         uses: actions/ai-inference@v1
         with:
-          system-prompt-file: .github/prompts/parse-app-submission-system.txt
+          system-prompt-file: .github/prompts/parse-app-submission-system.md
           prompt-file: runtime-parse-prompt.txt
           model: gpt-5.5
         env:
