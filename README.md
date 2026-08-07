@@ -190,7 +190,12 @@ External skills are recommendations only. They are not part of an author-approve
 
 ## Published APP papers
 
-The public list lives in [Discussion #36](https://github.com/LionSR/AgenticPublicationProtocol/discussions/36). Reply there with a release link (any wording). A GitHub Actions bot uses **GitHub Copilot** to read the comment, checks that the release has a valid `APP_PUBLICATION.json`, then **updates the discussion body** and **replies** (see `.github/workflows/app-discussion-bot.yml`). Optional `COPILOT_PAT` (Copilot parse); required `APP_DISCUSSION_PAT` (user token that can edit Discussion #36) for list updates.
+Browse the growing list of papers published with APP in [Discussion #36](https://github.com/LionSR/AgenticPublicationProtocol/discussions/36). Each entry links to the paper's release, its authors, and a summary of the work.
+
+**Published a paper with APP? Add it to the list in two steps:**
+
+1. Make sure your release is a fully validated, author-approved APP publication (it carries a valid `APP_PUBLICATION.json`).
+2. Reply to [Discussion #36](https://github.com/LionSR/AgenticPublicationProtocol/discussions/36) with a link to your release — any wording works. A bot verifies your release and adds it to the list automatically.
 
 ## Contributing
 
