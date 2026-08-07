@@ -105,6 +105,7 @@ title: "Your Paper Title"
 authors:
   - name: "Author Name"
     affiliation: "Institution"
+    github: "username"          # optional; GitHub handle for tagging/discovery
 arxiv_id: "XXXX.XXXXX"       # optional
 paper_format: "latex"          # latex, docx, markdown, html, video, pptx, pdf
 version: "1.0.0"               # matches the git tag, without the leading v
@@ -128,7 +129,7 @@ app_extensions:
 | `protocol` | yes | Always the literal string `agentic-publication-protocol`. |
 | `protocol_version` | yes | APP version this publication targets. |
 | `title` | yes | Paper title. |
-| `authors` | yes | List of `{name, affiliation}` entries. |
+| `authors` | yes | List of `{name, affiliation}` entries; each **MAY** include an optional `github` handle. |
 | `arxiv_id` | no | arXiv identifier, if applicable. |
 | `paper_format` | yes | Format of the canonical document in `paper/`. |
 | `version` | yes | Publication version. Matches the git tag, without the leading `v` (tag `v1.0.0` → `"1.0.0"`). |

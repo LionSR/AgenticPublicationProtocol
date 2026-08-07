@@ -5,6 +5,7 @@ title: "YOUR PAPER TITLE"
 authors:
   - name: "Author One"
     affiliation: "Institution"
+    github: "username"  # optional; GitHub handle for tagging/discovery
   - name: "Author Two"
     affiliation: "Institution"
 arxiv_id: ""

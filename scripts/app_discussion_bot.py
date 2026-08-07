@@ -200,11 +200,14 @@ def fetch_agents_bits(owner_repo: str, tag: str, token: str | None) -> dict[str,
             for block in re.split(r"\n\s*-\s+name:\s*", fm)[1:]:
                 nm = re.match(r"[\"']?(.*?)[\"']?\s*(?:\n|$)", block)
                 am = re.search(r"affiliation:\s*[\"']?(.*?)[\"']?\s*(?:\n|$)", block)
+                gm = re.search(r"github:\s*[\"']?([@\w.-]+)[\"']?\s*(?:\n|$)", block)
                 if nm:
+                    handle = (gm.group(1) if gm else "").strip().lstrip("@")
                     authors.append(
                         {
                             "name": nm.group(1).strip(),
                             "affiliation": am.group(1).strip() if am else "",
+                            "github": handle,
                         }
                     )
             if authors:
@@ -282,20 +285,30 @@ def verify(owner_repo: str, tag: str, token: str | None) -> dict[str, Any]:
     }
 
 
+def _author_bit(a: Any) -> str:
+    """Render one author as bold name + optional GitHub handle + affiliation."""
+    if not isinstance(a, dict):
+        return f"**{a}**"
+    name = a.get("name", "")
+    handle = (a.get("github") or "").strip().lstrip("@")
+    aff = a.get("affiliation") or ""
+    bit = f"**{name}**"
+    if handle:
+        bit += f" [@{handle}](https://github.com/{handle})"
+    if aff:
+        bit += f" ({aff})"
+    return bit
+
+
 def format_authors(authors: list[Any]) -> str:
-    bits = []
-    for a in authors:
-        if isinstance(a, dict):
-            name = a.get("name", "")
-            aff = a.get("affiliation") or ""
-            bits.append(f"**{name}**" + (f" ({aff})" if aff else ""))
-        else:
-            bits.append(f"**{a}**")
-    # Discussion style for multi-author: "A, B (shared aff)" sometimes; keep one per line if affs differ
+    bits = [_author_bit(a) for a in authors]
     if len(bits) == 1:
         return bits[0]
-    # If same affiliation, compact
-    if all(isinstance(a, dict) for a in authors):
+    # Compact to "A, B (shared aff)" only when no per-author handles are present,
+    # otherwise keep one author per line so each handle stays unambiguous.
+    if all(isinstance(a, dict) for a in authors) and not any(
+        (a.get("github") or "").strip() for a in authors
+    ):
         affs = {(a.get("affiliation") or "") for a in authors}
         if len(affs) == 1 and next(iter(affs)):
             names = ", ".join(a.get("name", "") for a in authors)
