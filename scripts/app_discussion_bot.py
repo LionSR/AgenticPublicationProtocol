@@ -320,7 +320,13 @@ def format_entry(n: int, paper: dict[str, Any]) -> str:
     lines.append("\n".join(meta))
     lines.append("")
     if paper.get("summary"):
+        # Fold the long abstract/summary so the list stays scannable.
+        lines.append("<details>")
+        lines.append("<summary>Summary</summary>")
+        lines.append("")
         lines.append(paper["summary"].strip())
+        lines.append("")
+        lines.append("</details>")
         lines.append("")
     lines.append("---")
     lines.append("")
