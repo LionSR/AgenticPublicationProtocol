@@ -125,13 +125,10 @@ def candidates_from_parsed(parsed: dict[str, Any]) -> list[tuple[str, str]]:
         if not ref:
             continue
         owner_repo, parsed_tag = ref
-        resolved_tag = tag or parsed_tag
-        # A repo mention with no tag isn't a verifiable candidate -- surfacing it
-        # would send an empty-tag request straight to the releases API and dump
-        # a raw HTTP error on the commenter instead of asking for the release link.
-        if not resolved_tag:
-            continue
-        out.append((owner_repo, resolved_tag))
+        # Tag may be empty (bare repo mention, no specific release given) --
+        # verify() auto-resolves the latest release carrying an
+        # APP_PUBLICATION.json asset in that case.
+        out.append((owner_repo, tag or parsed_tag))
     return out
 
 
@@ -139,7 +136,7 @@ def candidates_from_comment(comment: str) -> list[tuple[str, str]]:
     out: list[tuple[str, str]] = []
     for m in re.finditer(r"https?://github\.com/[^\s<>)\]\"']+", comment or ""):
         ref = parse_ref(m.group(0).rstrip(".,;"))
-        if ref and ref[1]:
+        if ref:
             out.append(ref)
     return out
 
@@ -237,9 +234,33 @@ def fetch_agents_bits(owner_repo: str, tag: str, token: str | None) -> dict[str,
     return meta
 
 
+def resolve_latest_app_release(owner_repo: str, token: str | None) -> str | None:
+    """Find the most recent release carrying an APP_PUBLICATION.json asset.
+
+    Used when a commenter gives a bare repo link with no specific tag, so
+    they don't have to go dig up the exact release URL themselves.
+    """
+    releases = http_json(f"{GITHUB_API}/repos/{owner_repo}/releases", token)
+    for release in releases or []:
+        for a in release.get("assets") or []:
+            if a.get("name") == "APP_PUBLICATION.json":
+                return release.get("tag_name")
+    return None
+
+
 def verify(owner_repo: str, tag: str, token: str | None) -> dict[str, Any]:
     errors: list[str] = []
     try:
+        if not tag:
+            resolved = resolve_latest_app_release(owner_repo, token)
+            if not resolved:
+                return {
+                    "ok": False,
+                    "errors": [
+                        f"no release with an APP_PUBLICATION.json asset found for {owner_repo}"
+                    ],
+                }
+            tag = resolved
         manifest = download_manifest(owner_repo, tag, token)
         commit, tree = resolve_commit_tree(owner_repo, tag, token)
     except Exception as e:
@@ -492,23 +513,26 @@ def main() -> int:
     for owner_repo, tag in unique:
         vr = verify(owner_repo, tag, args.token)
         results.append(vr)
+        # verify() may auto-resolve an empty input tag to the latest
+        # qualifying release -- use that resolved tag for display, not the
+        # (possibly still-empty) tag we started the loop with.
+        display_tag = vr.get("tag") or tag
+        label = f"{owner_repo}@{display_tag}" if display_tag else owner_repo
         if not vr["ok"]:
             replies.append(
-                f"**{owner_repo}@{tag}**: not added — "
+                f"**{label}**: not added — "
                 + "; ".join(vr.get("errors") or ["verification failed"])
             )
             continue
-        if already_listed(new_body, owner_repo, tag, vr.get("app_publication_id", "")):
-            replies.append(
-                f"**{owner_repo}@{tag}**: already on the list — thanks!"
-            )
+        if already_listed(new_body, owner_repo, display_tag, vr.get("app_publication_id", "")):
+            replies.append(f"**{label}**: already on the list — thanks!")
             continue
         n = next_index(new_body)
         entry = format_entry(n, vr)
         new_body = insert_entry(new_body, entry)
         added.append(vr)
         replies.append(
-            f"**{owner_repo}@{tag}**: verified APP publication — added as **#{n}** "
+            f"**{label}**: verified APP publication — added as **#{n}** "
             f"({vr.get('title')})."
         )
 
