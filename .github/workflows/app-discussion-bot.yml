@@ -129,12 +129,12 @@ jobs:
         run: echo "Skipping (${{ steps.ctx.outputs.skip_reason }})"
 
       - uses: actions/setup-node@v4
-        if: steps.ctx.outputs.skip != 'true'
+        if: steps.ctx.outputs.skip != 'true' && secrets.COPILOT_PAT != ''
         with:
           node-version: "22"
 
       - name: Install Copilot CLI
-        if: steps.ctx.outputs.skip != 'true'
+        if: steps.ctx.outputs.skip != 'true' && secrets.COPILOT_PAT != ''
         run: npm install -g @github/copilot
 
       # Build a plain-text prompt at runtime so multi-line comments never break YAML.
@@ -164,14 +164,14 @@ jobs:
           PY
 
       - name: Parse comment (GitHub Copilot)
-        if: steps.ctx.outputs.skip != 'true'
+        if: steps.ctx.outputs.skip != 'true' && secrets.COPILOT_PAT != ''
         id: parse
         continue-on-error: true
         uses: actions/ai-inference@v3
         with:
           system-prompt-file: .github/prompts/parse-app-submission-system.md
           prompt-file: runtime-parse-prompt.txt
-          model: gpt-5.5
+          model: gpt-5
         env:
           COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_PAT }}
 
