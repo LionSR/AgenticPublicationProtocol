@@ -138,6 +138,10 @@ def candidates_from_comment(comment: str) -> list[tuple[str, str]]:
     return out
 
 
+def has_github_link(comment: str) -> bool:
+    return re.search(r"https?://github\.com/[^\s<>)\]\"']+", comment or "") is not None
+
+
 def resolve_commit_tree(owner_repo: str, tag: str, token: str | None) -> tuple[str, str]:
     ref = http_json(f"{GITHUB_API}/repos/{owner_repo}/git/ref/tags/{tag}", token)
     obj = ref["object"]
@@ -405,7 +409,14 @@ def main() -> int:
             "unclear": "question",
         }.get(intent, "")
     if not action:
-        action = "submit" if cands else "ignore"
+        if cands:
+            action = "submit"
+        elif has_github_link(comment):
+            # A GitHub link with no usable release tag reads as an attempted
+            # submission missing details, not silence-worthy chit-chat.
+            action = "question"
+        else:
+            action = "ignore"
     # URL present ⇒ treat as submit even if model said ignore
     if cands and action == "ignore":
         action = "submit"
