@@ -2,6 +2,8 @@
 *.txt
 .claude/
 .DS_Store
+__pycache__/
+*.pyc
 
 # Keep agent prompt files tracked
 !.github/prompts/**
