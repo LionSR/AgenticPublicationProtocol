@@ -125,7 +125,13 @@ def candidates_from_parsed(parsed: dict[str, Any]) -> list[tuple[str, str]]:
         if not ref:
             continue
         owner_repo, parsed_tag = ref
-        out.append((owner_repo, tag or parsed_tag))
+        resolved_tag = tag or parsed_tag
+        # A repo mention with no tag isn't a verifiable candidate -- surfacing it
+        # would send an empty-tag request straight to the releases API and dump
+        # a raw HTTP error on the commenter instead of asking for the release link.
+        if not resolved_tag:
+            continue
+        out.append((owner_repo, resolved_tag))
     return out
 
 
