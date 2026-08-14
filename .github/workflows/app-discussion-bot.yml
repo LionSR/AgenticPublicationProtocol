@@ -171,7 +171,7 @@ jobs:
         with:
           system-prompt-file: .github/prompts/parse-app-submission-system.md
           prompt-file: runtime-parse-prompt.txt
-          model: gpt-5.5
+          model: ""
         env:
           COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_PAT }}
 
