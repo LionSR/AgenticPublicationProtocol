@@ -163,16 +163,6 @@ jobs:
           Path("runtime-parse-prompt.txt").write_text(prompt, encoding="utf-8")
           PY
 
-      - name: DEBUG raw Copilot CLI invocation
-        if: steps.ctx.outputs.skip != 'true'
-        continue-on-error: true
-        env:
-          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_PAT }}
-        run: |
-          set +e
-          copilot -p "say hi" -s --no-ask-user
-          echo "EXIT_CODE=$?"
-
       - name: Parse comment (GitHub Copilot)
         if: steps.ctx.outputs.skip != 'true'
         id: parse
