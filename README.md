@@ -65,22 +65,34 @@ New skills, reference files, and templates appear after update; you do not need 
 
 ### Codex
 
-These are shell commands. Run them in your **terminal** (your normal shell prompt), not inside Codex. First register the marketplace, then install the plugin:
+APP is not in the built-in Codex plugin directory. You install it in two steps: add this repo as a marketplace, then enable the `paper-protocol` plugin from it. Either the terminal or the Codex app works.
+
+**Terminal.** Run these in your shell, not inside Codex:
 
 ```bash
 codex plugin marketplace add LionSR/AgenticPublicationProtocol
 codex plugin add paper-protocol@paper-protocol
 ```
 
-`codex plugin add` may prompt you to authenticate on install. (`paper-protocol@paper-protocol` is `plugin-name@marketplace-name`, not a typo.) You can also install and toggle plugins interactively: open Codex, find `Agentic Publication Protocol` in the plugin browser, and press Space to enable it. Once enabled, its skills such as `$publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
+`paper-protocol@paper-protocol` means `plugin-name@marketplace-name`. `codex plugin add` may ask you to authenticate.
 
-To update an existing Codex install, run this in your terminal:
+**Codex app.**
+
+1. Open **Plugins** and click **Add → Add marketplace**.
+2. Enter `LionSR/AgenticPublicationProtocol` as the source. Leave Git ref and Sparse paths empty. Click **Add marketplace**.
+3. In the plugin list, search for `paper-protocol` and switch it on. Searching for `Agentic Publication Protocol` may return nothing.
+
+If you already added the marketplace from the terminal, skip steps 1 and 2.
+
+After the plugin is enabled, skills such as `$publish-paper` are available. See [Publish a paper](#publish-a-paper) for the next step.
+
+To update, run this in your terminal:
 
 ```bash
 codex plugin marketplace upgrade paper-protocol
 ```
 
-New skills, reference files, and templates appear after update; you do not need to reinstall the plugin.
+New skills, reference files, and templates appear after the update. You do not need to reinstall the plugin.
 
 ### Manual install
 
