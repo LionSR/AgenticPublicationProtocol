@@ -72,7 +72,15 @@ codex plugin marketplace add LionSR/AgenticPublicationProtocol
 codex plugin add paper-protocol@paper-protocol
 ```
 
-`codex plugin add` may prompt you to authenticate on install. (`paper-protocol@paper-protocol` is `plugin-name@marketplace-name`, not a typo.) You can also install and toggle plugins interactively: open Codex, find `Agentic Publication Protocol` in the plugin browser, and press Space to enable it. Once enabled, its skills such as `$publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
+`codex plugin add` may prompt you to authenticate on install. (`paper-protocol@paper-protocol` is `plugin-name@marketplace-name`, not a typo.) Once enabled, its skills such as `$publish-paper` become available — see [Publish a paper](#publish-a-paper) for the next step.
+
+APP is not in the built-in Codex plugin directory, so it will not show up in the plugin browser until its marketplace has been added. To install from the Codex app instead of the terminal:
+
+1. Open **Plugins**, click **Add → Add marketplace**.
+2. Enter `LionSR/AgenticPublicationProtocol` as the source, leave Git ref and Sparse paths empty, and click **Add marketplace**.
+3. Back in the plugin list, search for `paper-protocol` (the display name `Agentic Publication Protocol` may not match the search) and switch it on.
+
+If you already ran `codex plugin marketplace add` in the terminal, the app should already list the plugin, so skip steps 1–2. The plugin can also be toggled in the Codex terminal plugin browser (press Space to enable it).
 
 To update an existing Codex install, run this in your terminal:
 
