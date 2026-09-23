@@ -253,6 +253,8 @@ The recommended identifier format is:
 app-v1:sha256:<sha256(canonical-json-payload)>
 ```
 
+The canonical JSON payload is the manifest without `app_publication_id`, serialized as UTF-8 with keys sorted at every level, compact separators (`,` and `:`, no whitespace), non-ASCII characters left unescaped, and **no trailing newline** (equivalent to Python `json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)`). Verifiers **SHOULD** also accept the digest of the same payload followed by a single `\n`, since earlier reference tooling hashed `jq -c` output that ends in a newline.
+
 The manifest is valid only for the exact `(repo_url, tag, commit, tree)` it names. A loader verifies APP status by downloading the release manifest, checking that the local checkout matches the manifest commit and tree, recomputing `app_publication_id`, and confirming that validation passed and human approval is recorded.
 
 Repositories without a valid manifest can still be useful:

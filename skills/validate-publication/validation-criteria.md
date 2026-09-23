@@ -230,9 +230,9 @@ The manifest is required only for a public tagged release. It is not required du
 
 **ID recomputation:**
 - Remove `app_publication_id` from the manifest.
-- Canonicalize the remaining JSON with sorted keys and compact separators.
+- Canonicalize the remaining JSON with sorted keys and compact separators, UTF-8, no trailing newline.
 - SHA-256 hash the canonical JSON.
-- Compare `app-v1:sha256:<digest>` to `app_publication_id`.
+- Compare `app-v1:sha256:<digest>` to `app_publication_id`. Also accept the digest of the canonical JSON followed by a single `\n`, which earlier tooling produced.
 
 **Classification:**
 - Valid manifest: verified APP publication.

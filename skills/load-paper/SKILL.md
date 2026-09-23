@@ -120,15 +120,17 @@ jq -e --arg report "$REPORT_SHA" '.validation.validation_report_sha256 == $repor
 
 If the validation report is a release asset rather than committed in the repo, download that asset and hash it instead.
 
-Recompute the APP publication ID. Remove `app_publication_id` from the manifest, canonicalize the payload with sorted keys and compact JSON, hash it, and compare:
+Recompute the APP publication ID. Remove `app_publication_id` from the manifest, canonicalize the payload with sorted keys and compact JSON, hash it with no trailing newline, and compare:
 
 ```bash
-jq 'del(.app_publication_id)' /tmp/app-manifest/APP_PUBLICATION.json \
-  | jq -S -c . > /tmp/app-manifest/APP_PUBLICATION.payload.canonical.json
-COMPUTED_ID="app-v1:sha256:$(shasum -a 256 /tmp/app-manifest/APP_PUBLICATION.payload.canonical.json | awk '{print $1}')"
+CANONICAL=$(jq -S -c 'del(.app_publication_id)' /tmp/app-manifest/APP_PUBLICATION.json)
+COMPUTED_ID="app-v1:sha256:$(printf '%s' "$CANONICAL" | shasum -a 256 | awk '{print $1}')"
+LEGACY_ID="app-v1:sha256:$(printf '%s\n' "$CANONICAL" | shasum -a 256 | awk '{print $1}')"
 MANIFEST_ID=$(jq -r '.app_publication_id' /tmp/app-manifest/APP_PUBLICATION.json)
-test "$COMPUTED_ID" = "$MANIFEST_ID"
+test "$MANIFEST_ID" = "$COMPUTED_ID" || test "$MANIFEST_ID" = "$LEGACY_ID"
 ```
+
+`LEGACY_ID` covers manifests released with an earlier version of this recipe, which hashed the payload with a trailing newline. New manifests must use `COMPUTED_ID`.
 
 Also compare the manifest `repo_url` to the clone URL after normalizing common GitHub forms (`git@github.com:user/repo.git`, `https://github.com/user/repo`, `https://github.com/user/repo.git`). If they do not identify the same GitHub repo, do not mark the publication as verified.
 

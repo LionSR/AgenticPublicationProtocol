@@ -16,7 +16,7 @@ Public release is irreversible. Ask for explicit confirmation before every remot
    - commit SHA;
    - tree SHA;
    - validation report SHA-256.
-5. Create `APP_PUBLICATION.json` as a GitHub Release asset payload following `PROTOCOL.md` verified manifest schema. Compute `app_publication_id` from the canonical payload excluding the ID.
+5. Create `APP_PUBLICATION.json` as a GitHub Release asset payload following `PROTOCOL.md` verified manifest schema. Compute `app_publication_id` from the canonical payload excluding the ID, hashed with no trailing newline (for example `printf '%s' "$(jq -S -c 'del(.app_publication_id)' APP_PUBLICATION.json)" | shasum -a 256`).
 6. Create an annotated tag containing the APP ID, commit, and tree.
 7. Draft release notes and get author approval.
 8. Confirm before pushing. Push repo and tags.

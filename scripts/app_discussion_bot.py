@@ -179,12 +179,23 @@ def normalize_id(value: str) -> str:
     return value
 
 
-def recompute_id(manifest: dict[str, Any]) -> str:
+def canonical_payload(manifest: dict[str, Any]) -> str:
     payload = dict(manifest)
     payload.pop("app_publication_id", None)
-    canonical = json.dumps(
+    return json.dumps(
         payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False
     )
+
+
+def recompute_id(manifest: dict[str, Any]) -> str:
+    canonical = canonical_payload(manifest)
+    return "app-v1:sha256:" + hashlib.sha256(canonical.encode()).hexdigest()
+
+
+def legacy_recompute_id(manifest: dict[str, Any]) -> str:
+    # Earlier docs hashed `jq -S -c` output from a file, which ends in "\n".
+    # Manifests released that way are still valid; accept them too.
+    canonical = canonical_payload(manifest) + "\n"
     return "app-v1:sha256:" + hashlib.sha256(canonical.encode()).hexdigest()
 
 
@@ -288,8 +299,11 @@ def verify(owner_repo: str, tag: str, token: str | None) -> dict[str, Any]:
     if ha.get("approved") is not True:
         errors.append("not human-approved")
     mid = normalize_id(str(manifest.get("app_publication_id", "")))
-    if mid != recompute_id(manifest):
-        errors.append("app_publication_id recompute failed")
+    if mid not in (recompute_id(manifest), legacy_recompute_id(manifest)):
+        errors.append(
+            f"app_publication_id recompute failed (manifest `{mid}`, "
+            f"recomputed `{recompute_id(manifest)}`)"
+        )
 
     if errors:
         return {"ok": False, "errors": errors, "owner_repo": owner_repo, "tag": tag}
