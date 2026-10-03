@@ -184,6 +184,7 @@ The skills in this repository are grouped by how essential they are to the APP w
 
 | Skill | What it does |
 |-------|--------------|
+| `register-paper` | List a released paper in the [APP registry](https://agenticpapers.app/). Not required for APP compliance; may be offered after `publish-paper` succeeds. |
 | `create-paper-page` | Generate a GitHub Pages landing page for a published paper. Not required for APP compliance; may be offered after `publish-paper` succeeds. |
 
 **Reader and import utility**
