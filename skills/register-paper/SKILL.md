@@ -43,11 +43,13 @@ The registry accepts only tokens issued through this device flow. Do not store o
 
 ## After submission
 
-The response returns the issue number of the submission. Inspect the result with:
+The response returns the issue number of the submission. The registry repository is public, so read the result without authentication:
 
 ```bash
-gh issue view <number> --repo LionSR/app-registry --comments
+curl -s https://api.github.com/repos/LionSR/app-registry/issues/<number>/comments
 ```
+
+Read the last comment from the registry. If the GitHub CLI is authenticated, `gh issue view <number> --repo LionSR/app-registry --comments` shows the same comments.
 
 Each registry response comment concludes with an `app-registry-status` JSON block. The `state` field contains one of:
 - `accepted`: The paper is indexed. The block provides the assigned registry ID.
