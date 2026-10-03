@@ -1,54 +1,65 @@
 ---
 name: register-paper
-description: List a released APP paper in the APP registry at agenticpapers.app, on the author's behalf. Use after a real APP release exists on GitHub (public repo, tag, and APP_PUBLICATION.json release asset), when the author wants the paper listed, or when they ask to register or submit an existing APP release.
+description: Submit a released APP paper to the registry at agenticpapers.app on behalf of the author. Use after creating a verified GitHub release (public repository, tag, and APP_PUBLICATION.json asset), or when an author requests registration of an existing release.
 ---
 
 # Register Paper
 
-Submit a released APP paper to the [APP registry](https://agenticpapers.app/), which lists APP papers and checks each release before listing it. Listing is optional and not part of APP compliance.
+Submit a released APP paper to the [APP registry](https://agenticpapers.app/). The registry catalogs APP publications and verifies releases during submission. Listing is optional and distinct from protocol compliance.
 
 ## When to use
 
-- Offered by `release-outcome` after a real release succeeds and its release asset is verified.
-- Standalone, when an author asks to list an existing APP release.
+- Offered by `release-outcome` after a public release succeeds and its release asset is verified.
+- Standalone execution when an author requests registration of an existing release.
 
-Do not use in developer sandbox mode, and do not submit a release that does not exist yet. The registry needs all of:
+Do not use this skill in developer sandbox mode. Do not submit a release before publishing it. The registry requires:
 
-- a public GitHub repository;
-- a published release at a tag, for example `https://github.com/OWNER/REPO/releases/tag/v1.0.0`;
-- the `APP_PUBLICATION.json` asset attached to that release.
+- A public GitHub repository;
+- A published release at a specific tag (for example, `https://github.com/OWNER/REPO/releases/tag/v1.0.0`);
+- An `APP_PUBLICATION.json` asset attached to the release.
 
-If any is missing, stop and say which. Do not create or change the release here; that is `release-outcome`.
+If any prerequisite is missing, stop and report the missing item. Do not create or modify releases in this skill; use `release-outcome`.
 
-## Ask the author first
+## Request author approval
 
-Submitting opens a public issue on [LionSR/app-registry](https://github.com/LionSR/app-registry) in the author's name. Before submitting:
+Submission creates a public issue in [LionSR/app-registry](https://github.com/LionSR/app-registry) under the account of the submitting user. Complete these steps before submission:
 
 1. Confirm the release URL with the author.
-2. Ask them to read the [terms of use](https://agenticpapers.app/terms/) and confirm they agree.
-3. If the person signing in cannot push to the paper repository, ask whether they have the authors' permission to submit. Submit only if they confirm.
+2. Ask the author to read and accept the [terms of use](https://agenticpapers.app/terms/).
+3. If the authenticated user cannot push to the repository, confirm that the user has permission from the authors to submit.
 
-If the author declines, stop. They can submit later on the [Submit page](https://agenticpapers.app/submit/).
+If the author declines, abort the procedure. The author can submit later through the [submission portal](https://agenticpapers.app/submit/).
 
 ## Submit
 
-Follow the steps on [Register a paper with an agent](https://agenticpapers.app/agents/). That page has the current commands, with the registry's endpoint and sign-in client filled in. In short:
+Follow the instructions on [Register a paper with an agent](https://agenticpapers.app/agents/):
 
-1. Ask GitHub for a sign-in code for the registry (device flow).
-2. Ask the author to open `https://github.com/login/device`, sign in, and enter the code.
-3. Exchange the device code for a token, polling at the given interval.
-4. Send the release URL to the registry's `/submit` endpoint with `"accept_terms": true`, and `"authors_permission": true` only if step 3 above applies.
+1. Request an OAuth device code from GitHub for the registry client.
+2. Direct the author to open `https://github.com/login/device` and enter the user code.
+3. Poll the token endpoint until GitHub returns an access token.
+4. Send the release URL to the registry endpoint `/submit` with `"accept_terms": true`. Set `"authors_permission": true` when third-party submission applies.
 
-The registry accepts only tokens from this sign-in; other GitHub tokens, including `gh auth token`, are rejected. Do not store the token or write it to any file.
+The registry accepts only tokens issued through this device flow. Do not store or persist the access token in any file.
 
-## After submitting
+## After submission
 
-The reply names the submission issue. Read the outcome with:
+The response returns the issue number of the submission. Inspect the result with:
 
 ```bash
 gh issue view <number> --repo LionSR/app-registry --comments
 ```
 
-Each registry comment ends with a JSON block marked `app-registry-status`. Its `state` is one of `accepted` (listed; the block gives the registry ID), `awaiting-editor`, `checks-failed` (the `checks` list says which failed and why), `already-listed`, or `declined`. Tell the author the result and the issue link. If checks failed, explain what to fix; fixing means a new release, which goes back through `release-outcome`. The author can comment `/recheck` on the issue after fixing.
+Each registry response comment concludes with an `app-registry-status` JSON block. The `state` field contains one of:
+- `accepted`: The paper is indexed. The block provides the assigned registry ID.
+- `awaiting-editor`: The submission requires manual review by an editor.
+- `checks-failed`: Automated verification checks failed. The `checks` array describes each failure.
+- `already-listed`: The release is already registered.
+- `declined`: The registry rejected the submission.
 
-If the working repo has `.publications.md`, add the issue link, and the registry ID once listed, to the Notes column of that release's row.
+Inform the author of the status and issue URL.
+
+If verification checks fail:
+- For transient infrastructure failures (such as temporary rate limits or network errors), the author can post `/recheck` as a comment on the submission issue.
+- For publication errors (such as missing files, invalid manifests, or metadata discrepancies), resolve the issues and create a new tagged release via `release-outcome`. Submit the new release URL as a separate submission. Do not use `/recheck` to evaluate a different tag.
+
+When `.publications.md` exists in the local repository, record the submission issue URL and assigned registry ID in the `Notes` column of the release entry.
