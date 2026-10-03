@@ -202,12 +202,14 @@ External skills are recommendations only. They are not part of an author-approve
 
 ## Published APP papers
 
-Browse the growing list of papers published with APP in [Discussion #36](https://github.com/LionSR/AgenticPublicationProtocol/discussions/36). Each entry links to the paper's release, its authors, and a summary of the work.
+Browse papers published with APP in the [APP registry](https://agenticpapers.app/). Each entry links to the paper's release, its authors, and a summary of the work, and every version stays available. The same list is kept in [Discussion #36](https://github.com/LionSR/AgenticPublicationProtocol/discussions/36).
 
-**Published a paper with APP? Add it to the list in two steps:**
+**Published a paper with APP? Add it to the registry in two steps:**
 
 1. Make sure your release is a fully validated, author-approved APP publication (it carries a valid `APP_PUBLICATION.json`).
-2. Reply to [Discussion #36](https://github.com/LionSR/AgenticPublicationProtocol/discussions/36) with a link to your release — any wording works. A bot verifies your release and adds it to the list automatically.
+2. [Submit it to the registry](https://agenticpapers.app/submit/): sign in with GitHub, choose the repository and release, and submit. A coding agent can also submit for you; see [Register a paper with an agent](https://agenticpapers.app/agents/).
+
+The registry checks the release and lists it, or asks an editor to look first. You can follow and reply to the review on GitHub. You can also still reply to [Discussion #36](https://github.com/LionSR/AgenticPublicationProtocol/discussions/36) with a link to your release. The registry's source is [LionSR/app-registry](https://github.com/LionSR/app-registry).
 
 ## Contributing
 
