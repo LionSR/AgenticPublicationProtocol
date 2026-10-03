@@ -23,7 +23,8 @@ Public release is irreversible. Ask for explicit confirmation before every remot
 9. Confirm before creating GitHub Release. Attach `APP_PUBLICATION.json`.
 10. Verify the release asset downloads and matches the local manifest.
 11. Record the release in the working repo `.publications.md` using `template/publications.md`.
-12. Optionally offer `/create-paper-page`.
+12. Optionally offer `/register-paper` to list the release in the APP registry.
+13. Optionally offer `/create-paper-page`.
 
 Do not change the frozen staging tree during this step.
 
